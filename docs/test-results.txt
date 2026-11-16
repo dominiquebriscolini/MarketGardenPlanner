@@ -1,0 +1,47 @@
+Executed: 2026-11-16T12:39:28.910314+00:00
+Python: 3.11.9
+Command: py -3.11 -m unittest discover -s tests -v
+Scope: 14 previous tests + original acceptance cases 3-6 + 12 seasonal boundary tests
+All original acceptance cases 1-7 are automated.
+New agronomic numbers are synthetic test/example fixtures only. No real production validation.
+
+test_fact_validation_and_json_roundtrip (test_catalogue.CatalogueTests.test_fact_validation_and_json_roundtrip) ... ok
+test_layout_examples_match_core_convention (test_catalogue.CatalogueTests.test_layout_examples_match_core_convention) ... ok
+test_required_outputs_reject_typo (test_catalogue.CatalogueTests.test_required_outputs_reject_typo) ... ok
+test_ten_agreed_cultures_and_distinct_profiles (test_catalogue.CatalogueTests.test_ten_agreed_cultures_and_distinct_profiles) ... ok
+test_case_1_150_lettuce_heads_with_losses (test_original_acceptance.OriginalAcceptanceTests.test_case_1_150_lettuce_heads_with_losses) ... ok
+test_case_2_100_kg_carrots_positions_rows_seeds (test_original_acceptance.OriginalAcceptanceTests.test_case_2_100_kg_carrots_positions_rows_seeds) ... ok
+test_case_7_missing_yield_is_explicit_error (test_original_acceptance.OriginalAcceptanceTests.test_case_7_missing_yield_is_explicit_error) ... ok
+test_a01_model_and_provenance (test_phase1.Phase1AcceptanceTests.test_a01_model_and_provenance) ... ok
+test_a02_external_database_and_references (test_phase1.Phase1AcceptanceTests.test_a02_external_database_and_references) ... ok
+test_a03_plant_demand_and_rounding (test_phase1.Phase1AcceptanceTests.test_a03_plant_demand_and_rounding) ... ok
+test_a04_seed_demand_and_mass (test_phase1.Phase1AcceptanceTests.test_a04_seed_demand_and_mass) ... ok
+test_a05_row_metres_and_bed_area (test_phase1.Phase1AcceptanceTests.test_a05_row_metres_and_bed_area) ... ok
+test_a06_missing_values_never_invented (test_phase1.Phase1AcceptanceTests.test_a06_missing_values_never_invented) ... ok
+test_a07_validation_zero_and_integration_boundary (test_phase1.Phase1AcceptanceTests.test_a07_validation_zero_and_integration_boundary) ... ok
+test_case_3_50kg_tomatoes_uses_only_yield_in_target_period (test_seasonal_acceptance.SeasonalAcceptanceTests.test_case_3_50kg_tomatoes_uses_only_yield_in_target_period) ... ok
+test_case_4_lettuce_batches_14_days_apart (test_seasonal_acceptance.SeasonalAcceptanceTests.test_case_4_lettuce_batches_14_days_apart) ... ok
+test_case_5_radishes_then_lettuce_reuses_released_bed (test_seasonal_acceptance.SeasonalAcceptanceTests.test_case_5_radishes_then_lettuce_reuses_released_bed) ... ok
+test_case_6_insufficient_area_reports_achievable_kg_and_deficit (test_seasonal_acceptance.SeasonalAcceptanceTests.test_case_6_insufficient_area_reports_achievable_kg_and_deficit) ... ok
+test_continuous_yield_prorates_partial_weeks_and_never_extrapolates (test_seasonal_boundaries.SeasonalBoundaryTests.test_continuous_yield_prorates_partial_weeks_and_never_extrapolates) ... ok
+test_empty_and_undersized_beds_and_whole_bed_remainder (test_seasonal_boundaries.SeasonalBoundaryTests.test_empty_and_undersized_beds_and_whole_bed_remainder) ... ok
+test_existing_reservations_block_capacity_and_invalid_booking_is_rejected (test_seasonal_boundaries.SeasonalBoundaryTests.test_existing_reservations_block_capacity_and_invalid_booking_is_rejected) ... ok
+test_explicit_sowing_and_planting_windows_reject_dates (test_seasonal_boundaries.SeasonalBoundaryTests.test_explicit_sowing_and_planting_windows_reject_dates) ... ok
+test_incomplete_or_overlapping_yield_horizons_are_rejected (test_seasonal_boundaries.SeasonalBoundaryTests.test_incomplete_or_overlapping_yield_horizons_are_rejected) ... ok
+test_input_validation_and_deterministic_json_export (test_seasonal_boundaries.SeasonalBoundaryTests.test_input_validation_and_deterministic_json_export) ... ok
+test_missing_duration_or_yield_never_creates_production (test_seasonal_boundaries.SeasonalBoundaryTests.test_missing_duration_or_yield_never_creates_production) ... ok
+test_multicut_forecast_and_occupancy_continue_through_last_cut (test_seasonal_boundaries.SeasonalBoundaryTests.test_multicut_forecast_and_occupancy_continue_through_last_cut) ... ok
+test_piece_shares_sum_exactly_and_zero_targets_need_no_yield (test_seasonal_boundaries.SeasonalBoundaryTests.test_piece_shares_sum_exactly_and_zero_targets_need_no_yield) ... ok
+test_storage_is_one_bulk_harvest_and_releases_field (test_seasonal_boundaries.SeasonalBoundaryTests.test_storage_is_one_bulk_harvest_and_releases_field) ... ok
+test_time_shortage_reports_partial_achievable_production (test_seasonal_boundaries.SeasonalBoundaryTests.test_time_shortage_reports_partial_achievable_production) ... ok
+test_weekly_area_is_simultaneous_peak_not_sum_of_adjacent_uses (test_seasonal_boundaries.SeasonalBoundaryTests.test_weekly_area_is_simultaneous_peak_not_sum_of_adjacent_uses) ... ok
+
+----------------------------------------------------------------------
+Ran 30 tests in 0.041s
+
+OK
+
+Test exit code: 0
+Example command: py -3.11 examples/synthetic_scheduler.py
+Example exit code: 0
+Example verified: requested 50 kg, achieved 51 kg in window, deficit 0 kg (synthetic)

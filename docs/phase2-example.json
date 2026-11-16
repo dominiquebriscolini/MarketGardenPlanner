@@ -1,0 +1,225 @@
+{
+  "data_status": "SYNTHETIC DEMO ONLY",
+  "schedule": {
+    "batches": [
+      {
+        "plan": {
+          "id": "demo-50kg:1",
+          "target_id": "demo-50kg",
+          "profile_id": "demo-tomatoes",
+          "requested_quantity": 50.0,
+          "unit": "kg",
+          "plants": 17,
+          "sowing_date": "2026-04-16",
+          "transplant_date": "2026-05-07",
+          "first_harvest": "2026-07-06",
+          "harvest_end": "2026-07-27",
+          "occupancy": {
+            "start": "2026-05-07",
+            "end": "2026-07-29"
+          },
+          "required_area_m2": 12.0,
+          "feasible": true,
+          "reasons": [],
+          "warnings": [
+            "cleanup_days: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+            "core_input_missing:establishment_rate",
+            "core_input_missing:germination_rate",
+            "field_days_to_first_harvest: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+            "nursery_days: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+            "plant_spacing: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+            "planting_windows: not supplied; seasonal suitability not checked",
+            "row_spacing: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+            "sowing_windows: not supplied; seasonal suitability not checked",
+            "yield_periods[0].amount_per_plant: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+            "yield_periods[0].duration_days: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+            "yield_periods[0].offset_days: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+            "yield_periods[1].amount_per_plant: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+            "yield_periods[1].duration_days: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+            "yield_periods[1].offset_days: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+            "yield_periods[2].amount_per_plant: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+            "yield_periods[2].duration_days: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+            "yield_periods[2].offset_days: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)"
+          ]
+        },
+        "plants": 17,
+        "reservations": [
+          {
+            "bed_id": "A",
+            "batch_id": "demo-50kg:1",
+            "window": {
+              "start": "2026-05-07",
+              "end": "2026-07-29"
+            },
+            "plants": 17
+          }
+        ],
+        "allocated_area_m2": 12.0,
+        "unused_area_m2": 6.9,
+        "reasons": []
+      }
+    ],
+    "forecasts": [
+      {
+        "week_start": "2026-07-06",
+        "crop_id": "tomatoes",
+        "batch_id": "demo-50kg:1",
+        "target_id": "demo-50kg",
+        "unit": "kg",
+        "quantity": 17.0,
+        "credited_quantity": 17.0
+      },
+      {
+        "week_start": "2026-07-13",
+        "crop_id": "tomatoes",
+        "batch_id": "demo-50kg:1",
+        "target_id": "demo-50kg",
+        "unit": "kg",
+        "quantity": 34.0,
+        "credited_quantity": 34.0
+      },
+      {
+        "week_start": "2026-07-20",
+        "crop_id": "tomatoes",
+        "batch_id": "demo-50kg:1",
+        "target_id": "demo-50kg",
+        "unit": "kg",
+        "quantity": 51.0,
+        "credited_quantity": 0.0
+      }
+    ],
+    "crop_forecasts": [
+      {
+        "week_start": "2026-07-06",
+        "crop_id": "tomatoes",
+        "unit": "kg",
+        "quantity": 17.0,
+        "credited_quantity": 17.0
+      },
+      {
+        "week_start": "2026-07-13",
+        "crop_id": "tomatoes",
+        "unit": "kg",
+        "quantity": 34.0,
+        "credited_quantity": 34.0
+      },
+      {
+        "week_start": "2026-07-20",
+        "crop_id": "tomatoes",
+        "unit": "kg",
+        "quantity": 51.0,
+        "credited_quantity": 0.0
+      }
+    ],
+    "reservations": [
+      {
+        "bed_id": "A",
+        "batch_id": "demo-50kg:1",
+        "window": {
+          "start": "2026-05-07",
+          "end": "2026-07-29"
+        },
+        "plants": 17
+      }
+    ],
+    "area_weeks": [
+      {
+        "week_start": "2026-05-04",
+        "required_peak_m2": 12.0,
+        "reserved_peak_m2": 12.0
+      },
+      {
+        "week_start": "2026-05-11",
+        "required_peak_m2": 12.0,
+        "reserved_peak_m2": 12.0
+      },
+      {
+        "week_start": "2026-05-18",
+        "required_peak_m2": 12.0,
+        "reserved_peak_m2": 12.0
+      },
+      {
+        "week_start": "2026-05-25",
+        "required_peak_m2": 12.0,
+        "reserved_peak_m2": 12.0
+      },
+      {
+        "week_start": "2026-06-01",
+        "required_peak_m2": 12.0,
+        "reserved_peak_m2": 12.0
+      },
+      {
+        "week_start": "2026-06-08",
+        "required_peak_m2": 12.0,
+        "reserved_peak_m2": 12.0
+      },
+      {
+        "week_start": "2026-06-15",
+        "required_peak_m2": 12.0,
+        "reserved_peak_m2": 12.0
+      },
+      {
+        "week_start": "2026-06-22",
+        "required_peak_m2": 12.0,
+        "reserved_peak_m2": 12.0
+      },
+      {
+        "week_start": "2026-06-29",
+        "required_peak_m2": 12.0,
+        "reserved_peak_m2": 12.0
+      },
+      {
+        "week_start": "2026-07-06",
+        "required_peak_m2": 12.0,
+        "reserved_peak_m2": 12.0
+      },
+      {
+        "week_start": "2026-07-13",
+        "required_peak_m2": 12.0,
+        "reserved_peak_m2": 12.0
+      },
+      {
+        "week_start": "2026-07-20",
+        "required_peak_m2": 12.0,
+        "reserved_peak_m2": 12.0
+      },
+      {
+        "week_start": "2026-07-27",
+        "required_peak_m2": 12.0,
+        "reserved_peak_m2": 12.0
+      }
+    ],
+    "outcomes": [
+      {
+        "target_id": "demo-50kg",
+        "profile_id": "demo-tomatoes",
+        "unit": "kg",
+        "requested": 50,
+        "achieved": 51.0,
+        "deficit": 0.0,
+        "surplus": 1.0,
+        "reasons": []
+      }
+    ],
+    "warnings": [
+      "cleanup_days: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+      "core_input_missing:establishment_rate",
+      "core_input_missing:germination_rate",
+      "field_days_to_first_harvest: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+      "nursery_days: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+      "plant_spacing: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+      "planting_windows: not supplied; seasonal suitability not checked",
+      "row_spacing: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+      "sowing_windows: not supplied; seasonal suitability not checked",
+      "yield_periods[0].amount_per_plant: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+      "yield_periods[0].duration_days: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+      "yield_periods[0].offset_days: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+      "yield_periods[1].amount_per_plant: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+      "yield_periods[1].duration_days: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+      "yield_periods[1].offset_days: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+      "yield_periods[2].amount_per_plant: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+      "yield_periods[2].duration_days: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)",
+      "yield_periods[2].offset_days: synthetic (SYNTHETIC DEMO ONLY; not agronomic evidence)"
+    ]
+  }
+}

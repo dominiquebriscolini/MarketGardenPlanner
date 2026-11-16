@@ -1,0 +1,3024 @@
+{
+  "schema_version": 2,
+  "species": [
+    {
+      "id": "carrots",
+      "name": "Karotten",
+      "scientific_name": "Daucus carota"
+    },
+    {
+      "id": "lettuce",
+      "name": "Kopfsalat",
+      "scientific_name": "Lactuca sativa"
+    },
+    {
+      "id": "radishes",
+      "name": "Radieschen",
+      "scientific_name": "Raphanus sativus"
+    },
+    {
+      "id": "kohlrabi",
+      "name": "Kohlrabi",
+      "scientific_name": "Brassica oleracea"
+    },
+    {
+      "id": "beetroot",
+      "name": "Rote Bete",
+      "scientific_name": "Beta vulgaris"
+    },
+    {
+      "id": "spinach",
+      "name": "Spinat",
+      "scientific_name": "Spinacia oleracea"
+    },
+    {
+      "id": "bush-beans",
+      "name": "Buschbohnen",
+      "scientific_name": "Phaseolus vulgaris"
+    },
+    {
+      "id": "zucchini",
+      "name": "Zucchini",
+      "scientific_name": "Cucurbita pepo"
+    },
+    {
+      "id": "tomatoes",
+      "name": "Tomaten",
+      "scientific_name": "Solanum lycopersicum"
+    },
+    {
+      "id": "onions",
+      "name": "Zwiebeln",
+      "scientific_name": "Allium cepa"
+    }
+  ],
+  "varieties": [
+    {
+      "id": "kohlrabi-superschmelz",
+      "species_id": "kohlrabi",
+      "name": "Superschmelz"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "carrots-early-lwg",
+      "species_id": "carrots",
+      "variety_id": null,
+      "establishment": "direct",
+      "yield_per_plant": {
+        "value": null,
+        "unit": "kg/plant",
+        "source": null,
+        "status": "missing"
+      },
+      "germination_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "establishment_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "plant_spacing": {
+        "value": 0.02,
+        "unit": "m",
+        "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+        "status": "source_value"
+      },
+      "row_spacing": {
+        "value": 0.25,
+        "unit": "m",
+        "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+        "status": "source_value"
+      },
+      "seeds_per_gram": {
+        "value": null,
+        "unit": "seeds/g",
+        "source": null,
+        "status": "missing"
+      },
+      "facts": {
+        "nursery_success_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "field_survival_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_sowing_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_transplant_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "nursery_duration": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "sowing_window": {
+          "value": "Maerz",
+          "unit": "calendar_window",
+          "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "transplant_window": {
+          "value": null,
+          "unit": "calendar_window",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "harvest_window": {
+          "value": "Juni bis Juli",
+          "unit": "calendar_window",
+          "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "succession_interval": {
+          "value": 21,
+          "unit": "d",
+          "source": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers-in-minnesota",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": "Quellenintervall, kein automatisch eingeplanter Satz."
+        },
+        "time_based_yield_profile": {
+          "value": null,
+          "unit": "kg/plant/week",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "establishment_method": {
+          "value": "direct",
+          "unit": "method",
+          "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "yield_model": {
+          "value": "single_harvest",
+          "unit": "model",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Modellklassifikation; keine Ertragsmenge",
+          "note": ""
+        },
+        "luxembourg_validation": {
+          "value": null,
+          "unit": "validation",
+          "source": null,
+          "status": "missing",
+          "scope": "Luxemburg, Freiland",
+          "note": "Lokale Beobachtungen, Hoehenlage, Boden und Sorte fehlen."
+        },
+        "reference_yield": {
+          "value": 115,
+          "unit": "lb/100ft_row",
+          "source": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/crop-and-field-planning-tools-for-vegetable-farmers",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": "Originaleinheit/Bezugsbasis; keine automatische Umrechnung in yield_per_plant."
+        },
+        "example_bed_width": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "example_rows_per_bed": {
+          "value": 4,
+          "unit": "rows",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "required_width_for_example_rows": {
+          "value": 1.0,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "minimum_width_for_one_row": {
+          "value": 0.25,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        }
+      }
+    },
+    {
+      "id": "carrots-standard-bzl",
+      "species_id": "carrots",
+      "variety_id": null,
+      "establishment": "direct",
+      "yield_per_plant": {
+        "value": null,
+        "unit": "kg/plant",
+        "source": null,
+        "status": "missing"
+      },
+      "germination_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "establishment_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "plant_spacing": {
+        "value": 0.04,
+        "unit": "m",
+        "source": "https://www.landwirtschaft.de/garten/selbst-anbauen/gemuesesteckbriefe/moehren-selbst-im-garten-anbauen; Auswahl untere Bereichsgrenze; docs/agronomy-sources.md#planungsannahmen",
+        "status": "planning_assumption"
+      },
+      "row_spacing": {
+        "value": 0.25,
+        "unit": "m",
+        "source": "https://www.landwirtschaft.de/garten/selbst-anbauen/gemuesesteckbriefe/moehren-selbst-im-garten-anbauen",
+        "status": "source_value"
+      },
+      "seeds_per_gram": {
+        "value": null,
+        "unit": "seeds/g",
+        "source": null,
+        "status": "missing"
+      },
+      "facts": {
+        "nursery_success_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "field_survival_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_sowing_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_transplant_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "nursery_duration": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "sowing_window": {
+          "value": "Ende Februar/Anfang Maerz bis Juni",
+          "unit": "calendar_window",
+          "source": "https://www.landwirtschaft.de/garten/selbst-anbauen/gemuesesteckbriefe/moehren-selbst-im-garten-anbauen",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Nur bei Bodentemperatur ueber 7 Grad Celsius."
+        },
+        "transplant_window": {
+          "value": null,
+          "unit": "calendar_window",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "harvest_window": {
+          "value": null,
+          "unit": "calendar_window",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "succession_interval": {
+          "value": 21,
+          "unit": "d",
+          "source": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers-in-minnesota",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": "Quellenintervall, kein automatisch eingeplanter Satz."
+        },
+        "time_based_yield_profile": {
+          "value": null,
+          "unit": "kg/plant/week",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "establishment_method": {
+          "value": "direct",
+          "unit": "method",
+          "source": "https://www.landwirtschaft.de/garten/selbst-anbauen/gemuesesteckbriefe/moehren-selbst-im-garten-anbauen",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "yield_model": {
+          "value": "single_harvest",
+          "unit": "model",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Modellklassifikation; keine Ertragsmenge",
+          "note": ""
+        },
+        "luxembourg_validation": {
+          "value": null,
+          "unit": "validation",
+          "source": null,
+          "status": "missing",
+          "scope": "Luxemburg, Freiland",
+          "note": "Lokale Beobachtungen, Hoehenlage, Boden und Sorte fehlen."
+        },
+        "plant_spacing_range": {
+          "value": [
+            0.04,
+            0.07
+          ],
+          "unit": "m",
+          "source": "https://www.landwirtschaft.de/garten/selbst-anbauen/gemuesesteckbriefe/moehren-selbst-im-garten-anbauen",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "soil_temperature_threshold": {
+          "value": 7,
+          "unit": "degC",
+          "source": "https://www.landwirtschaft.de/garten/selbst-anbauen/gemuesesteckbriefe/moehren-selbst-im-garten-anbauen",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Quelle verlangt ueber diesem Wert."
+        },
+        "reference_yield": {
+          "value": 115,
+          "unit": "lb/100ft_row",
+          "source": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/crop-and-field-planning-tools-for-vegetable-farmers",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": "Originaleinheit/Bezugsbasis; keine automatische Umrechnung in yield_per_plant."
+        },
+        "example_bed_width": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "example_rows_per_bed": {
+          "value": 4,
+          "unit": "rows",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "required_width_for_example_rows": {
+          "value": 1.0,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "minimum_width_for_one_row": {
+          "value": 0.25,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        }
+      }
+    },
+    {
+      "id": "lettuce-butterhead-transplant",
+      "species_id": "lettuce",
+      "variety_id": null,
+      "establishment": "transplant",
+      "yield_per_plant": {
+        "value": null,
+        "unit": "kg/plant",
+        "source": null,
+        "status": "missing"
+      },
+      "germination_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "establishment_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "plant_spacing": {
+        "value": 0.3,
+        "unit": "m",
+        "source": "https://www.lwg.bayern.de/mam/cms06/gartenakademie/dateien/2111-2016.pdf",
+        "status": "source_value"
+      },
+      "row_spacing": {
+        "value": 0.3,
+        "unit": "m",
+        "source": "https://www.lwg.bayern.de/mam/cms06/gartenakademie/dateien/2111-2016.pdf",
+        "status": "source_value"
+      },
+      "seeds_per_gram": {
+        "value": null,
+        "unit": "seeds/g",
+        "source": null,
+        "status": "missing"
+      },
+      "facts": {
+        "nursery_success_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "field_survival_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_sowing_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_transplant_to_first_harvest": {
+          "value": [
+            40,
+            55
+          ],
+          "unit": "d",
+          "source": "https://www.hortipendium.de/Kopfsalat_im_Hausgarten",
+          "status": "source_value",
+          "scope": "Buttersalat; Beispielsaetze Mai bis 20. August, waermere deutsche Weinbauregionen",
+          "note": ""
+        },
+        "nursery_duration": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "sowing_window": {
+          "value": null,
+          "unit": "calendar_window",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "transplant_window": {
+          "value": "Mai bis August",
+          "unit": "calendar_window",
+          "source": "https://www.hortipendium.de/Kopfsalat_im_Hausgarten",
+          "status": "source_value",
+          "scope": "Waermere deutsche Weinbauregionen; Buttersalat ohne Fruehvlies",
+          "note": ""
+        },
+        "harvest_window": {
+          "value": "Etwa zwei Wochen je Satz; spaetestens bis Frost",
+          "unit": "calendar_window",
+          "source": "https://www.hortipendium.de/Kopfsalat_im_Hausgarten",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "succession_interval": {
+          "value": 14,
+          "unit": "d",
+          "source": "https://www.hortipendium.de/Kopfsalat_im_Hausgarten",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Pflanzintervall; garantiert kein gleiches Ernteintervall."
+        },
+        "time_based_yield_profile": {
+          "value": null,
+          "unit": "kg/plant/week",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "establishment_method": {
+          "value": "transplant",
+          "unit": "method",
+          "source": "https://www.hortipendium.de/Kopfsalat_im_Hausgarten",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "yield_model": {
+          "value": "single_harvest",
+          "unit": "model",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Modellklassifikation; keine Ertragsmenge",
+          "note": ""
+        },
+        "luxembourg_validation": {
+          "value": null,
+          "unit": "validation",
+          "source": null,
+          "status": "missing",
+          "scope": "Luxemburg, Freiland",
+          "note": "Lokale Beobachtungen, Hoehenlage, Boden und Sorte fehlen."
+        },
+        "reference_head_mass": {
+          "value": [
+            250,
+            500
+          ],
+          "unit": "g/head",
+          "source": "https://www.hortipendium.de/Kopfsalat_im_Hausgarten",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Erntegroessen, keine Garantie marktf?higer Produktion."
+        },
+        "example_bed_width": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "example_rows_per_bed": {
+          "value": 4,
+          "unit": "rows",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "required_width_for_example_rows": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "minimum_width_for_one_row": {
+          "value": 0.3,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        }
+      }
+    },
+    {
+      "id": "radishes-spring",
+      "species_id": "radishes",
+      "variety_id": null,
+      "establishment": "direct",
+      "yield_per_plant": {
+        "value": null,
+        "unit": "kg/plant",
+        "source": null,
+        "status": "missing"
+      },
+      "germination_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "establishment_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "plant_spacing": {
+        "value": 0.04,
+        "unit": "m",
+        "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+        "status": "source_value"
+      },
+      "row_spacing": {
+        "value": 0.15,
+        "unit": "m",
+        "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+        "status": "source_value"
+      },
+      "seeds_per_gram": {
+        "value": null,
+        "unit": "seeds/g",
+        "source": null,
+        "status": "missing"
+      },
+      "facts": {
+        "nursery_success_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "field_survival_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_sowing_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_transplant_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "nursery_duration": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "sowing_window": {
+          "value": "Maerz bis Mitte Mai",
+          "unit": "calendar_window",
+          "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "transplant_window": {
+          "value": null,
+          "unit": "calendar_window",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "harvest_window": {
+          "value": "Ende April bis Anfang Juni",
+          "unit": "calendar_window",
+          "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "succession_interval": {
+          "value": 7,
+          "unit": "d",
+          "source": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers-in-minnesota",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": "Quellenintervall, kein automatisch eingeplanter Satz."
+        },
+        "time_based_yield_profile": {
+          "value": null,
+          "unit": "kg/plant/week",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "establishment_method": {
+          "value": "direct",
+          "unit": "method",
+          "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "yield_model": {
+          "value": "single_harvest",
+          "unit": "model",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Modellklassifikation; keine Ertragsmenge",
+          "note": ""
+        },
+        "luxembourg_validation": {
+          "value": null,
+          "unit": "validation",
+          "source": null,
+          "status": "missing",
+          "scope": "Luxemburg, Freiland",
+          "note": "Lokale Beobachtungen, Hoehenlage, Boden und Sorte fehlen."
+        },
+        "reference_yield": {
+          "value": [
+            25,
+            65
+          ],
+          "unit": "lb/100ft_row",
+          "source": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/crop-and-field-planning-tools-for-vegetable-farmers",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": "Originaleinheit/Bezugsbasis; keine automatische Umrechnung in yield_per_plant."
+        },
+        "example_bed_width": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "example_rows_per_bed": {
+          "value": 8,
+          "unit": "rows",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "required_width_for_example_rows": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "minimum_width_for_one_row": {
+          "value": 0.15,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        }
+      }
+    },
+    {
+      "id": "radishes-autumn",
+      "species_id": "radishes",
+      "variety_id": null,
+      "establishment": "direct",
+      "yield_per_plant": {
+        "value": null,
+        "unit": "kg/plant",
+        "source": null,
+        "status": "missing"
+      },
+      "germination_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "establishment_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "plant_spacing": {
+        "value": 0.05,
+        "unit": "m",
+        "source": "https://www.lwg.bayern.de/mam/cms06/gartenakademie/dateien/2111-2016.pdf",
+        "status": "source_value"
+      },
+      "row_spacing": {
+        "value": 0.15,
+        "unit": "m",
+        "source": "https://www.lwg.bayern.de/mam/cms06/gartenakademie/dateien/2111-2016.pdf",
+        "status": "source_value"
+      },
+      "seeds_per_gram": {
+        "value": null,
+        "unit": "seeds/g",
+        "source": null,
+        "status": "missing"
+      },
+      "facts": {
+        "nursery_success_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "field_survival_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_sowing_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_transplant_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "nursery_duration": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "sowing_window": {
+          "value": "Juli bis August",
+          "unit": "calendar_window",
+          "source": "https://www.lwg.bayern.de/gartenakademie/gartendokumente/infoschriften/148345/",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "transplant_window": {
+          "value": null,
+          "unit": "calendar_window",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "harvest_window": {
+          "value": "September bis Oktober",
+          "unit": "calendar_window",
+          "source": "https://www.lwg.bayern.de/gartenakademie/gartendokumente/infoschriften/148345/",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "succession_interval": {
+          "value": 7,
+          "unit": "d",
+          "source": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers-in-minnesota",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": "Quellenintervall, kein automatisch eingeplanter Satz."
+        },
+        "time_based_yield_profile": {
+          "value": null,
+          "unit": "kg/plant/week",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "establishment_method": {
+          "value": "direct",
+          "unit": "method",
+          "source": "https://www.lwg.bayern.de/gartenakademie/gartendokumente/infoschriften/148345/",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "yield_model": {
+          "value": "single_harvest",
+          "unit": "model",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Modellklassifikation; keine Ertragsmenge",
+          "note": ""
+        },
+        "luxembourg_validation": {
+          "value": null,
+          "unit": "validation",
+          "source": null,
+          "status": "missing",
+          "scope": "Luxemburg, Freiland",
+          "note": "Lokale Beobachtungen, Hoehenlage, Boden und Sorte fehlen."
+        },
+        "example_bed_width": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "example_rows_per_bed": {
+          "value": 8,
+          "unit": "rows",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "required_width_for_example_rows": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "minimum_width_for_one_row": {
+          "value": 0.15,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        }
+      }
+    },
+    {
+      "id": "kohlrabi-standard-transplant",
+      "species_id": "kohlrabi",
+      "variety_id": null,
+      "establishment": "transplant",
+      "yield_per_plant": {
+        "value": null,
+        "unit": "kg/plant",
+        "source": null,
+        "status": "missing"
+      },
+      "germination_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "establishment_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "plant_spacing": {
+        "value": 0.3,
+        "unit": "m",
+        "source": "https://www.hortipendium.de/Kohlrabi_im_Hausgarten",
+        "status": "source_value"
+      },
+      "row_spacing": {
+        "value": 0.3,
+        "unit": "m",
+        "source": "https://www.hortipendium.de/Kohlrabi_im_Hausgarten",
+        "status": "source_value"
+      },
+      "seeds_per_gram": {
+        "value": null,
+        "unit": "seeds/g",
+        "source": null,
+        "status": "missing"
+      },
+      "facts": {
+        "nursery_success_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "field_survival_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_sowing_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_transplant_to_first_harvest": {
+          "value": [
+            42,
+            58
+          ],
+          "unit": "d",
+          "source": "https://www.hortipendium.de/Kohlrabi_Erwerbsanbau",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Bereich ausgewaehlter Saetze ab Pflanzung 1. Mai; regionale Mittelwerte."
+        },
+        "nursery_duration": {
+          "value": [
+            32,
+            38
+          ],
+          "unit": "d",
+          "source": "https://www.hortipendium.de/Kohlrabi_Erwerbsanbau",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Bereich ausgewaehlter Saetze ab Pflanzung 1. Mai; keine ganzjaehrige Pauschale."
+        },
+        "sowing_window": {
+          "value": "26. Maerz bis 20. Juli, ausgewaehlte Saetze",
+          "unit": "calendar_window",
+          "source": "https://www.hortipendium.de/Kohlrabi_Erwerbsanbau",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "transplant_window": {
+          "value": "1. Mai bis 28. August, ausgewaehlte Saetze",
+          "unit": "calendar_window",
+          "source": "https://www.hortipendium.de/Kohlrabi_Erwerbsanbau",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "harvest_window": {
+          "value": null,
+          "unit": "calendar_window",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "succession_interval": {
+          "value": 7,
+          "unit": "d",
+          "source": "https://www.hortipendium.de/Kohlrabi_Erwerbsanbau",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "time_based_yield_profile": {
+          "value": null,
+          "unit": "kg/plant/week",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "establishment_method": {
+          "value": "transplant",
+          "unit": "method",
+          "source": "https://www.hortipendium.de/Kohlrabi_im_Hausgarten",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "yield_model": {
+          "value": "single_harvest",
+          "unit": "model",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Modellklassifikation; keine Ertragsmenge",
+          "note": ""
+        },
+        "luxembourg_validation": {
+          "value": null,
+          "unit": "validation",
+          "source": null,
+          "status": "missing",
+          "scope": "Luxemburg, Freiland",
+          "note": "Lokale Beobachtungen, Hoehenlage, Boden und Sorte fehlen."
+        },
+        "germination_reference": {
+          "value": "Normalsaatgut >75%; Praezisionssaatgut >90%",
+          "unit": "percent_bounds",
+          "source": "https://www.hortipendium.de/Kohlrabi_Erwerbsanbau",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Kategorien/Untergrenzen, keine gemessene Keimrate einer Partie."
+        },
+        "seeds_per_gram_range": {
+          "value": [
+            160,
+            330
+          ],
+          "unit": "seeds/g",
+          "source": "https://www.hortipendium.de/Kohlrabi_Erwerbsanbau",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Kein Mittelwert fuer den Kern angenommen."
+        },
+        "example_bed_width": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "example_rows_per_bed": {
+          "value": 4,
+          "unit": "rows",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "required_width_for_example_rows": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "minimum_width_for_one_row": {
+          "value": 0.3,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        }
+      }
+    },
+    {
+      "id": "kohlrabi-superschmelz-transplant",
+      "species_id": "kohlrabi",
+      "variety_id": "kohlrabi-superschmelz",
+      "establishment": "transplant",
+      "yield_per_plant": {
+        "value": null,
+        "unit": "kg/plant",
+        "source": null,
+        "status": "missing"
+      },
+      "germination_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "establishment_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "plant_spacing": {
+        "value": 0.4,
+        "unit": "m",
+        "source": "https://www.hortipendium.de/Kohlrabi_im_Hausgarten",
+        "status": "source_value"
+      },
+      "row_spacing": {
+        "value": 0.4,
+        "unit": "m",
+        "source": "https://www.hortipendium.de/Kohlrabi_im_Hausgarten",
+        "status": "source_value"
+      },
+      "seeds_per_gram": {
+        "value": null,
+        "unit": "seeds/g",
+        "source": null,
+        "status": "missing"
+      },
+      "facts": {
+        "nursery_success_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "field_survival_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_sowing_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_transplant_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "nursery_duration": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "sowing_window": {
+          "value": null,
+          "unit": "calendar_window",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "transplant_window": {
+          "value": null,
+          "unit": "calendar_window",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "harvest_window": {
+          "value": null,
+          "unit": "calendar_window",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "succession_interval": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "time_based_yield_profile": {
+          "value": null,
+          "unit": "kg/plant/week",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "establishment_method": {
+          "value": "transplant",
+          "unit": "method",
+          "source": "https://www.hortipendium.de/Kohlrabi_im_Hausgarten",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "yield_model": {
+          "value": "single_harvest",
+          "unit": "model",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Modellklassifikation; keine Ertragsmenge",
+          "note": ""
+        },
+        "luxembourg_validation": {
+          "value": null,
+          "unit": "validation",
+          "source": null,
+          "status": "missing",
+          "scope": "Luxemburg, Freiland",
+          "note": "Lokale Beobachtungen, Hoehenlage, Boden und Sorte fehlen."
+        },
+        "profile_limitation": {
+          "value": "Nur Sortenabstand belegt; Zeiten normaler Sorten nicht uebernommen.",
+          "unit": "text",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Datenmodell",
+          "note": ""
+        },
+        "example_bed_width": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "example_rows_per_bed": {
+          "value": 3,
+          "unit": "rows",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "required_width_for_example_rows": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "minimum_width_for_one_row": {
+          "value": 0.4,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        }
+      }
+    },
+    {
+      "id": "beetroot-root-direct",
+      "species_id": "beetroot",
+      "variety_id": null,
+      "establishment": "direct",
+      "yield_per_plant": {
+        "value": null,
+        "unit": "kg/plant",
+        "source": null,
+        "status": "missing"
+      },
+      "germination_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "establishment_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "plant_spacing": {
+        "value": 0.1,
+        "unit": "m",
+        "source": "https://www.landwirtschaft.de/garten/selbst-anbauen/gemuesesteckbriefe/rote-bete-selbst-im-garten-anbauen",
+        "status": "source_value"
+      },
+      "row_spacing": {
+        "value": 0.3,
+        "unit": "m",
+        "source": "https://www.landwirtschaft.de/garten/selbst-anbauen/gemuesesteckbriefe/rote-bete-selbst-im-garten-anbauen",
+        "status": "source_value"
+      },
+      "seeds_per_gram": {
+        "value": null,
+        "unit": "seeds/g",
+        "source": null,
+        "status": "missing"
+      },
+      "facts": {
+        "nursery_success_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "field_survival_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_sowing_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_transplant_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "nursery_duration": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "sowing_window": {
+          "value": "Mitte Maerz bis Anfang Juli",
+          "unit": "calendar_window",
+          "source": "https://www.landwirtschaft.de/garten/selbst-anbauen/gemuesesteckbriefe/rote-bete-selbst-im-garten-anbauen",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "transplant_window": {
+          "value": null,
+          "unit": "calendar_window",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "harvest_window": {
+          "value": "Mitte Juni bis Ende November",
+          "unit": "calendar_window",
+          "source": "https://www.landwirtschaft.de/garten/selbst-anbauen/gemuesesteckbriefe/rote-bete-selbst-im-garten-anbauen",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "succession_interval": {
+          "value": 14,
+          "unit": "d",
+          "source": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers-in-minnesota",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": "Quellenintervall, kein automatisch eingeplanter Satz."
+        },
+        "time_based_yield_profile": {
+          "value": null,
+          "unit": "kg/plant/week",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "establishment_method": {
+          "value": "direct",
+          "unit": "method",
+          "source": "https://www.landwirtschaft.de/garten/selbst-anbauen/gemuesesteckbriefe/rote-bete-selbst-im-garten-anbauen",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "yield_model": {
+          "value": "single_harvest",
+          "unit": "model",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Modellklassifikation; keine Ertragsmenge",
+          "note": ""
+        },
+        "luxembourg_validation": {
+          "value": null,
+          "unit": "validation",
+          "source": null,
+          "status": "missing",
+          "scope": "Luxemburg, Freiland",
+          "note": "Lokale Beobachtungen, Hoehenlage, Boden und Sorte fehlen."
+        },
+        "sowing_to_root_harvest": {
+          "value": [
+            4,
+            5
+          ],
+          "unit": "month",
+          "source": "https://www.landwirtschaft.de/garten/selbst-anbauen/gemuesesteckbriefe/rote-bete-selbst-im-garten-anbauen",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Ausgewachsene Rueben; Babybeets gesondert zu modellieren."
+        },
+        "seed_unit_warning": {
+          "value": "Meist mehrere Samen je Knauel; monogermes Saatgut erhaeltlich.",
+          "unit": "text",
+          "source": "https://www.landwirtschaft.de/garten/selbst-anbauen/gemuesesteckbriefe/rote-bete-selbst-im-garten-anbauen",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Kern rechnet einzelne Samen, nicht mehrsamige Knauel."
+        },
+        "reference_yield": {
+          "value": [
+            30,
+            60
+          ],
+          "unit": "lb/100ft_row",
+          "source": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/crop-and-field-planning-tools-for-vegetable-farmers",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": "Originaleinheit/Bezugsbasis; keine automatische Umrechnung in yield_per_plant."
+        },
+        "example_bed_width": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "example_rows_per_bed": {
+          "value": 4,
+          "unit": "rows",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "required_width_for_example_rows": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "minimum_width_for_one_row": {
+          "value": 0.3,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        }
+      }
+    },
+    {
+      "id": "spinach-spring-direct",
+      "species_id": "spinach",
+      "variety_id": null,
+      "establishment": "direct",
+      "yield_per_plant": {
+        "value": null,
+        "unit": "kg/plant",
+        "source": null,
+        "status": "missing"
+      },
+      "germination_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "establishment_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "plant_spacing": {
+        "value": 0.1,
+        "unit": "m",
+        "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+        "status": "source_value"
+      },
+      "row_spacing": {
+        "value": 0.2,
+        "unit": "m",
+        "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+        "status": "source_value"
+      },
+      "seeds_per_gram": {
+        "value": null,
+        "unit": "seeds/g",
+        "source": null,
+        "status": "missing"
+      },
+      "facts": {
+        "nursery_success_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "field_survival_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_sowing_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_transplant_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "nursery_duration": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "sowing_window": {
+          "value": "Maerz",
+          "unit": "calendar_window",
+          "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "transplant_window": {
+          "value": null,
+          "unit": "calendar_window",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "harvest_window": {
+          "value": "Anfang Mai",
+          "unit": "calendar_window",
+          "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "succession_interval": {
+          "value": 7,
+          "unit": "d",
+          "source": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers-in-minnesota",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": "Quellenintervall, kein automatisch eingeplanter Satz."
+        },
+        "time_based_yield_profile": {
+          "value": null,
+          "unit": "kg/plant/week",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "establishment_method": {
+          "value": "direct",
+          "unit": "method",
+          "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "yield_model": {
+          "value": "repeated_harvest",
+          "unit": "model",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Modellklassifikation; keine Ertragsmenge",
+          "note": ""
+        },
+        "luxembourg_validation": {
+          "value": null,
+          "unit": "validation",
+          "source": null,
+          "status": "missing",
+          "scope": "Luxemburg, Freiland",
+          "note": "Lokale Beobachtungen, Hoehenlage, Boden und Sorte fehlen."
+        },
+        "reference_yield": {
+          "value": 40,
+          "unit": "lb/100ft_row_multiple_cuts",
+          "source": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/crop-and-field-planning-tools-for-vegetable-farmers",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": "Originaleinheit/Bezugsbasis; keine automatische Umrechnung in yield_per_plant."
+        },
+        "example_bed_width": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "example_rows_per_bed": {
+          "value": 6,
+          "unit": "rows",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "required_width_for_example_rows": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "minimum_width_for_one_row": {
+          "value": 0.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        }
+      }
+    },
+    {
+      "id": "spinach-autumn-direct",
+      "species_id": "spinach",
+      "variety_id": null,
+      "establishment": "direct",
+      "yield_per_plant": {
+        "value": null,
+        "unit": "kg/plant",
+        "source": null,
+        "status": "missing"
+      },
+      "germination_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "establishment_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "plant_spacing": {
+        "value": 0.1,
+        "unit": "m",
+        "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+        "status": "source_value"
+      },
+      "row_spacing": {
+        "value": 0.2,
+        "unit": "m",
+        "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+        "status": "source_value"
+      },
+      "seeds_per_gram": {
+        "value": null,
+        "unit": "seeds/g",
+        "source": null,
+        "status": "missing"
+      },
+      "facts": {
+        "nursery_success_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "field_survival_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_sowing_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_transplant_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "nursery_duration": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "sowing_window": {
+          "value": "Anfang August bis Mitte September",
+          "unit": "calendar_window",
+          "source": "https://www.lwg.bayern.de/gartenakademie/gartendokumente/infoschriften/148345/",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "transplant_window": {
+          "value": null,
+          "unit": "calendar_window",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "harvest_window": {
+          "value": "September bis November",
+          "unit": "calendar_window",
+          "source": "https://www.lwg.bayern.de/gartenakademie/gartendokumente/infoschriften/148345/",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "succession_interval": {
+          "value": 7,
+          "unit": "d",
+          "source": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers-in-minnesota",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": "Quellenintervall, kein automatisch eingeplanter Satz."
+        },
+        "time_based_yield_profile": {
+          "value": null,
+          "unit": "kg/plant/week",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "establishment_method": {
+          "value": "direct",
+          "unit": "method",
+          "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "yield_model": {
+          "value": "repeated_harvest",
+          "unit": "model",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Modellklassifikation; keine Ertragsmenge",
+          "note": ""
+        },
+        "luxembourg_validation": {
+          "value": null,
+          "unit": "validation",
+          "source": null,
+          "status": "missing",
+          "scope": "Luxemburg, Freiland",
+          "note": "Lokale Beobachtungen, Hoehenlage, Boden und Sorte fehlen."
+        },
+        "example_bed_width": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "example_rows_per_bed": {
+          "value": 6,
+          "unit": "rows",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "required_width_for_example_rows": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "minimum_width_for_one_row": {
+          "value": 0.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        }
+      }
+    },
+    {
+      "id": "bush-beans-direct",
+      "species_id": "bush-beans",
+      "variety_id": null,
+      "establishment": "direct",
+      "yield_per_plant": {
+        "value": null,
+        "unit": "kg/plant",
+        "source": null,
+        "status": "missing"
+      },
+      "germination_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "establishment_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "plant_spacing": {
+        "value": 0.06,
+        "unit": "m",
+        "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+        "status": "source_value"
+      },
+      "row_spacing": {
+        "value": 0.4,
+        "unit": "m",
+        "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+        "status": "source_value"
+      },
+      "seeds_per_gram": {
+        "value": null,
+        "unit": "seeds/g",
+        "source": null,
+        "status": "missing"
+      },
+      "facts": {
+        "nursery_success_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "field_survival_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_sowing_to_first_harvest": {
+          "value": [
+            50,
+            55
+          ],
+          "unit": "d",
+          "source": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/crop-and-field-planning-tools-for-vegetable-farmers",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": ""
+        },
+        "days_transplant_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "nursery_duration": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "sowing_window": {
+          "value": "Ab Mitte Mai; Nachkultur bis 10. Juli",
+          "unit": "calendar_window",
+          "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf; https://www.lwg.bayern.de/gartenakademie/gartendokumente/infoschriften/148345/",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "transplant_window": {
+          "value": null,
+          "unit": "calendar_window",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "harvest_window": {
+          "value": "Juli/August; Nachkultur im September",
+          "unit": "calendar_window",
+          "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf; https://www.lwg.bayern.de/gartenakademie/gartendokumente/infoschriften/148345/",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "succession_interval": {
+          "value": 10,
+          "unit": "d",
+          "source": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers-in-minnesota",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": "Quellenintervall, kein automatisch eingeplanter Satz."
+        },
+        "time_based_yield_profile": {
+          "value": null,
+          "unit": "kg/plant/week",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "establishment_method": {
+          "value": "direct",
+          "unit": "method",
+          "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "yield_model": {
+          "value": "repeated_harvest",
+          "unit": "model",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Modellklassifikation; keine Ertragsmenge",
+          "note": ""
+        },
+        "luxembourg_validation": {
+          "value": null,
+          "unit": "validation",
+          "source": null,
+          "status": "missing",
+          "scope": "Luxemburg, Freiland",
+          "note": "Lokale Beobachtungen, Hoehenlage, Boden und Sorte fehlen."
+        },
+        "reference_yield": {
+          "value": 80,
+          "unit": "lb/100ft_row",
+          "source": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/crop-and-field-planning-tools-for-vegetable-farmers",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": "Originaleinheit/Bezugsbasis; keine automatische Umrechnung in yield_per_plant."
+        },
+        "example_bed_width": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "example_rows_per_bed": {
+          "value": 3,
+          "unit": "rows",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "required_width_for_example_rows": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "minimum_width_for_one_row": {
+          "value": 0.4,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        }
+      }
+    },
+    {
+      "id": "zucchini-transplant-lwg",
+      "species_id": "zucchini",
+      "variety_id": null,
+      "establishment": "transplant",
+      "yield_per_plant": {
+        "value": null,
+        "unit": "kg/plant",
+        "source": null,
+        "status": "missing"
+      },
+      "germination_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "establishment_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "plant_spacing": {
+        "value": 0.6,
+        "unit": "m",
+        "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+        "status": "source_value"
+      },
+      "row_spacing": {
+        "value": 0.6,
+        "unit": "m",
+        "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+        "status": "source_value"
+      },
+      "seeds_per_gram": {
+        "value": null,
+        "unit": "seeds/g",
+        "source": null,
+        "status": "missing"
+      },
+      "facts": {
+        "nursery_success_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "field_survival_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_sowing_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_transplant_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "nursery_duration": {
+          "value": 4,
+          "unit": "week",
+          "source": "https://www.lwg.bayern.de/gartenakademie/gartendokumente/gartencast/370792/index.php",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "sowing_window": {
+          "value": null,
+          "unit": "calendar_window",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "transplant_window": {
+          "value": "Ab Mitte Mai, frostabhaengig",
+          "unit": "calendar_window",
+          "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "harvest_window": {
+          "value": "Ab Juli bis September",
+          "unit": "calendar_window",
+          "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "succession_interval": {
+          "value": 30,
+          "unit": "d",
+          "source": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers-in-minnesota",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": "Quellenintervall, kein automatisch eingeplanter Satz."
+        },
+        "time_based_yield_profile": {
+          "value": null,
+          "unit": "kg/plant/week",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "establishment_method": {
+          "value": "transplant",
+          "unit": "method",
+          "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "yield_model": {
+          "value": "repeated_harvest",
+          "unit": "model",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Modellklassifikation; keine Ertragsmenge",
+          "note": ""
+        },
+        "luxembourg_validation": {
+          "value": null,
+          "unit": "validation",
+          "source": null,
+          "status": "missing",
+          "scope": "Luxemburg, Freiland",
+          "note": "Lokale Beobachtungen, Hoehenlage, Boden und Sorte fehlen."
+        },
+        "reference_yield": {
+          "value": [
+            3,
+            3.5
+          ],
+          "unit": "lb/plant",
+          "source": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/crop-and-field-planning-tools-for-vegetable-farmers",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": "Originaleinheit/Bezugsbasis; keine automatische Umrechnung in yield_per_plant."
+        },
+        "example_bed_width": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "example_rows_per_bed": {
+          "value": 2,
+          "unit": "rows",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "required_width_for_example_rows": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "minimum_width_for_one_row": {
+          "value": 0.6,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        }
+      }
+    },
+    {
+      "id": "tomatoes-field-transplant",
+      "species_id": "tomatoes",
+      "variety_id": null,
+      "establishment": "transplant",
+      "yield_per_plant": {
+        "value": null,
+        "unit": "kg/plant",
+        "source": null,
+        "status": "missing"
+      },
+      "germination_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "establishment_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "plant_spacing": {
+        "value": 0.5,
+        "unit": "m",
+        "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+        "status": "source_value"
+      },
+      "row_spacing": {
+        "value": 0.6,
+        "unit": "m",
+        "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+        "status": "source_value"
+      },
+      "seeds_per_gram": {
+        "value": null,
+        "unit": "seeds/g",
+        "source": null,
+        "status": "missing"
+      },
+      "facts": {
+        "nursery_success_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "field_survival_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_sowing_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_transplant_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "nursery_duration": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "sowing_window": {
+          "value": "Mitte bis Ende Maerz, geschuetzte Anzucht",
+          "unit": "calendar_window",
+          "source": "https://www.lwg.bayern.de/gartenakademie/gartendokumente/gartencast/370792/index.php",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "transplant_window": {
+          "value": "Ab Mitte Mai, frostabhaengig",
+          "unit": "calendar_window",
+          "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "harvest_window": {
+          "value": "Ab Juli bis Oktober",
+          "unit": "calendar_window",
+          "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "succession_interval": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "time_based_yield_profile": {
+          "value": null,
+          "unit": "kg/plant/week",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "establishment_method": {
+          "value": "transplant",
+          "unit": "method",
+          "source": "https://www.lwg.bayern.de/mam/cms06/landespflege/dateien/merkblatt_gemuese_in.pdf",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "yield_model": {
+          "value": "time_profile_required",
+          "unit": "model",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Anforderung Abnahmefall 3; noch nicht implementiert",
+          "note": ""
+        },
+        "luxembourg_validation": {
+          "value": null,
+          "unit": "validation",
+          "source": null,
+          "status": "missing",
+          "scope": "Luxemburg, Freiland",
+          "note": "Lokale Beobachtungen, Hoehenlage, Boden und Sorte fehlen."
+        },
+        "reference_yield_cherry_field": {
+          "value": [
+            2,
+            6
+          ],
+          "unit": "lb/plant",
+          "source": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/crop-and-field-planning-tools-for-vegetable-farmers",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": "Separate Typengruppe cherry; kein Wochenprofil, kein automatischer Rechenwert."
+        },
+        "reference_yield_slicer_roma_field": {
+          "value": [
+            2,
+            6
+          ],
+          "unit": "lb/plant",
+          "source": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/crop-and-field-planning-tools-for-vegetable-farmers",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": "Separate Typengruppe slicer_roma; kein Wochenprofil, kein automatischer Rechenwert."
+        },
+        "example_bed_width": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "example_rows_per_bed": {
+          "value": 2,
+          "unit": "rows",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "required_width_for_example_rows": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "minimum_width_for_one_row": {
+          "value": 0.6,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        }
+      }
+    },
+    {
+      "id": "onions-seed-direct",
+      "species_id": "onions",
+      "variety_id": null,
+      "establishment": "direct",
+      "yield_per_plant": {
+        "value": null,
+        "unit": "kg/plant",
+        "source": null,
+        "status": "missing"
+      },
+      "germination_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "establishment_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "plant_spacing": {
+        "value": 0.0762,
+        "unit": "m",
+        "source": "https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-onions; untere Bereichsgrenze; 1 inch = 0.0254 m; docs/agronomy-sources.md#planungsannahmen",
+        "status": "planning_assumption"
+      },
+      "row_spacing": {
+        "value": 0.3048,
+        "unit": "m",
+        "source": "https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-onions; untere Bereichsgrenze; 1 inch = 0.0254 m; docs/agronomy-sources.md#planungsannahmen",
+        "status": "planning_assumption"
+      },
+      "seeds_per_gram": {
+        "value": null,
+        "unit": "seeds/g",
+        "source": null,
+        "status": "missing"
+      },
+      "facts": {
+        "nursery_success_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "field_survival_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_sowing_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_transplant_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "nursery_duration": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "sowing_window": {
+          "value": "Fruehjahr, sobald Boden bearbeitbar",
+          "unit": "calendar_window",
+          "source": "https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-onions",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": ""
+        },
+        "transplant_window": {
+          "value": null,
+          "unit": "calendar_window",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "harvest_window": {
+          "value": null,
+          "unit": "calendar_window",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "succession_interval": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "time_based_yield_profile": {
+          "value": null,
+          "unit": "kg/plant/week",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "establishment_method": {
+          "value": "direct",
+          "unit": "method",
+          "source": "https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-onions",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "yield_model": {
+          "value": "single_harvest",
+          "unit": "model",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Modellklassifikation; keine Ertragsmenge",
+          "note": ""
+        },
+        "luxembourg_validation": {
+          "value": null,
+          "unit": "validation",
+          "source": null,
+          "status": "missing",
+          "scope": "Luxemburg, Freiland",
+          "note": "Lokale Beobachtungen, Hoehenlage, Boden und Sorte fehlen."
+        },
+        "plant_spacing_range": {
+          "value": [
+            3,
+            4
+          ],
+          "unit": "inch",
+          "source": "https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-onions",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": ""
+        },
+        "row_spacing_range": {
+          "value": [
+            12,
+            18
+          ],
+          "unit": "inch",
+          "source": "https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-onions",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": ""
+        },
+        "alternative_method": {
+          "value": "Steckzwiebeln benoetigen ein eigenes Profil; keine Saatgutumrechnung.",
+          "unit": "text",
+          "source": "https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-onions",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": ""
+        },
+        "reference_yield": {
+          "value": [
+            130,
+            175
+          ],
+          "unit": "lb/100ft_row",
+          "source": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/crop-and-field-planning-tools-for-vegetable-farmers",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": "Originaleinheit/Bezugsbasis; keine automatische Umrechnung in yield_per_plant."
+        },
+        "example_bed_width": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "example_rows_per_bed": {
+          "value": 3,
+          "unit": "rows",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "required_width_for_example_rows": {
+          "value": 0.9144,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "minimum_width_for_one_row": {
+          "value": 0.3048,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        }
+      }
+    },
+    {
+      "id": "onions-seed-transplant",
+      "species_id": "onions",
+      "variety_id": null,
+      "establishment": "transplant",
+      "yield_per_plant": {
+        "value": null,
+        "unit": "kg/plant",
+        "source": null,
+        "status": "missing"
+      },
+      "germination_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "establishment_rate": {
+        "value": null,
+        "unit": "fraction",
+        "source": null,
+        "status": "missing"
+      },
+      "plant_spacing": {
+        "value": 0.0762,
+        "unit": "m",
+        "source": "https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-onions; untere Bereichsgrenze; 1 inch = 0.0254 m; docs/agronomy-sources.md#planungsannahmen",
+        "status": "planning_assumption"
+      },
+      "row_spacing": {
+        "value": 0.3048,
+        "unit": "m",
+        "source": "https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-onions; untere Bereichsgrenze; 1 inch = 0.0254 m; docs/agronomy-sources.md#planungsannahmen",
+        "status": "planning_assumption"
+      },
+      "seeds_per_gram": {
+        "value": null,
+        "unit": "seeds/g",
+        "source": null,
+        "status": "missing"
+      },
+      "facts": {
+        "nursery_success_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "field_survival_rate": {
+          "value": null,
+          "unit": "fraction",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_sowing_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "days_transplant_to_first_harvest": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "nursery_duration": {
+          "value": [
+            10,
+            12
+          ],
+          "unit": "week",
+          "source": "https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-onions",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": ""
+        },
+        "sowing_window": {
+          "value": "Februar, geschuetzte Anzucht",
+          "unit": "calendar_window",
+          "source": "https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-onions",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": ""
+        },
+        "transplant_window": {
+          "value": "Mai",
+          "unit": "calendar_window",
+          "source": "https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-onions",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": ""
+        },
+        "harvest_window": {
+          "value": null,
+          "unit": "calendar_window",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "succession_interval": {
+          "value": null,
+          "unit": "d",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "time_based_yield_profile": {
+          "value": null,
+          "unit": "kg/plant/week",
+          "source": null,
+          "status": "missing",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": "Keine passende belastbare Angabe fuer dieses Profil hinterlegt."
+        },
+        "establishment_method": {
+          "value": "transplant",
+          "unit": "method",
+          "source": "https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-onions",
+          "status": "source_value",
+          "scope": "Deutschland; Freiland/Garten; nicht fuer Luxemburg standortvalidiert",
+          "note": ""
+        },
+        "yield_model": {
+          "value": "single_harvest",
+          "unit": "model",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Modellklassifikation; keine Ertragsmenge",
+          "note": ""
+        },
+        "luxembourg_validation": {
+          "value": null,
+          "unit": "validation",
+          "source": null,
+          "status": "missing",
+          "scope": "Luxemburg, Freiland",
+          "note": "Lokale Beobachtungen, Hoehenlage, Boden und Sorte fehlen."
+        },
+        "plant_spacing_range": {
+          "value": [
+            3,
+            4
+          ],
+          "unit": "inch",
+          "source": "https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-onions",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": ""
+        },
+        "row_spacing_range": {
+          "value": [
+            12,
+            16
+          ],
+          "unit": "inch",
+          "source": "https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-onions",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": ""
+        },
+        "alternative_method": {
+          "value": "Steckzwiebeln benoetigen ein eigenes Profil; keine Saatgutumrechnung.",
+          "unit": "text",
+          "source": "https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-onions",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": ""
+        },
+        "reference_yield": {
+          "value": [
+            130,
+            175
+          ],
+          "unit": "lb/100ft_row",
+          "source": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/crop-and-field-planning-tools-for-vegetable-farmers",
+          "status": "source_value",
+          "scope": "Minnesota, USA; separate Freilandreferenz; keine Luxembourg-Prognose oder Kalibrierung mit deutschen Abstaenden",
+          "note": "Originaleinheit/Bezugsbasis; keine automatische Umrechnung in yield_per_plant."
+        },
+        "example_bed_width": {
+          "value": 1.2,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "example_rows_per_bed": {
+          "value": 3,
+          "unit": "rows",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "required_width_for_example_rows": {
+          "value": 0.9144,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        },
+        "minimum_width_for_one_row": {
+          "value": 0.3048,
+          "unit": "m",
+          "source": "docs/agronomy-sources.md#planungsannahmen",
+          "status": "planning_assumption",
+          "scope": "Geometrisches Layoutbeispiel; keine Anbauempfehlung",
+          "note": "floor(Breite / Reihenabstand), Breite fuer n Reihen = n * Reihenabstand; halber Reihenabstand je Seitenrand; ohne Wege/Pflanzenueberhang."
+        }
+      }
+    }
+  ]
+}
