@@ -1,13 +1,17 @@
 """Server-owned revisions and lock policy around the central spatial model."""
 from dataclasses import replace
-from ..spatial import GeometryState, Point, new_id, require_valid, resize_bed_width
+import json
+from ..spatial import GeometryState, Point, dumps, loads, new_id, require_valid, resize_bed_width
 from .errors import ProjectError
 
 
-def reconcile(previous: GeometryState, candidate: GeometryState) -> GeometryState:
+def reconcile(previous: GeometryState, candidate: GeometryState, *, allow_add=False) -> GeometryState:
     require_valid(candidate)
-    if previous.parcel.object_id != candidate.parcel.object_id or {b.object_id for b in previous.beds} != {b.object_id for b in candidate.beds}:
-        raise ProjectError("identity_change", "Existing parcel/bed IDs must be retained; add/remove is not supported in this phase")
+    old_ids = {b.object_id for b in previous.beds}
+    new_ids = {b.object_id for b in candidate.beds}
+    identities_valid = (old_ids < new_ids and len(new_ids - old_ids) == 1) if allow_add else old_ids == new_ids
+    if previous.parcel.object_id != candidate.parcel.object_id or not identities_valid:
+        raise ProjectError("identity_change", "Existing parcel/bed IDs must be retained; use the dedicated bed creation endpoint to add a bed")
     parcel = replace(candidate.parcel, revision_id=previous.parcel.revision_id)
     if previous.parcel.geometry_locked and (parcel.outer, parcel.holes) != (previous.parcel.outer, previous.parcel.holes):
         raise ProjectError("geometry_locked", "Parcel is locked", object_ids=[parcel.object_id])
@@ -16,6 +20,9 @@ def reconcile(previous: GeometryState, candidate: GeometryState) -> GeometryStat
     old = {b.object_id: b for b in previous.beds}
     beds = []
     for incoming in candidate.beds:
+        if incoming.object_id not in old:
+            beds.append(replace(incoming, revision_id=new_id()))
+            continue
         before = old[incoming.object_id]
         bed = replace(incoming, revision_id=before.revision_id)
         geometry_changed = (bed.center, bed.width_m, bed.length_m, bed.rotation_deg) != (before.center, before.width_m, before.length_m, before.rotation_deg)
@@ -24,6 +31,13 @@ def reconcile(previous: GeometryState, candidate: GeometryState) -> GeometryStat
         beds.append(before if bed == before else replace(bed, revision_id=new_id()))
     result = GeometryState(parcel, tuple(beds), candidate.frame, previous.revision_id)
     return previous if result == previous else replace(result, revision_id=new_id())
+
+
+def append_bed(state: GeometryState, bed: dict) -> GeometryState:
+    """Use the strict existing JSON reader and Shapely validation, without repair."""
+    raw = json.loads(dumps(state))
+    raw["beds"].append(bed)
+    return loads(json.dumps(raw, allow_nan=False))
 
 
 def patch_bed(state: GeometryState, bed_id: str, changes: dict) -> GeometryState:

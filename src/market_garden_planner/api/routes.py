@@ -31,10 +31,17 @@ class ProjectAPI:
             fields(body, ("geometry",))
             state = spatial_input(body)
             return 200, {"valid": True, "issues": [], "geometry_token": geometry_token(state)}
-        match = re.fullmatch(r"/api/v1/projects/([^/]+)(?:/(validation|beds/([^/]+)))?", path)
+        match = re.fullmatch(r"/api/v1/projects/([^/]+)(?:/(validation|beds|beds/([^/]+)))?", path)
         if not match:
             raise ProjectError("not_found", "Unknown API endpoint", 404)
         project_id, suffix, bed_id = match.groups()
+        if method == "POST" and suffix == "beds":
+            if isinstance(body, dict) and "expected_revision" not in body:
+                raise ProjectError("revision_required", "expected_revision is required", 428)
+            fields(body, ("expected_revision", "bed"), ("command_id",))
+            project = self.repository.add_bed(project_id, body["expected_revision"], body["bed"],
+                                              command_id=body.get("command_id"))
+            return 201, {"project": project.to_dict()}
         if method == "GET" and suffix in (None, "validation"):
             project = self.repository.get(project_id)
             if suffix:

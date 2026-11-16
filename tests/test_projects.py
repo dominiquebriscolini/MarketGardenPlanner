@@ -1,7 +1,7 @@
 """Real SQLite and HTTP integration tests. All geometry/crop fixtures synthetic."""
 from contextlib import closing
 from concurrent.futures import ThreadPoolExecutor
-from dataclasses import replace
+from dataclasses import asdict, replace
 import http.client
 import json
 from pathlib import Path
@@ -232,6 +232,90 @@ class APITests(unittest.TestCase):
         self.assertEqual(status, 200, data)
         self.assertEqual(data["project"]["name"], "Renamed")
         self.assertEqual(self.request("GET", url + "/validation")[1]["valid"], True)
+
+    def test_api_add_bed_preserves_neighbors_and_survives_reload(self):
+        project = self.create()
+        url = "/api/v1/projects/" + project["project_id"]
+        drawn = bed(self.state.parcel, x=18, y=12, width_m=.83, length_m=5.17, rotation_deg=23.71)
+        status, data = self.request("POST", url + "/beds", {
+            "expected_revision": project["revision_id"], "command_id": new_id(), "bed": asdict(drawn)})
+        self.assertEqual(status, 201, data)
+        saved = data["project"]
+        self.assertEqual(saved["geometry"]["beds"][:-1], project["geometry"]["beds"])
+        self.assertEqual(saved["geometry"]["parcel"], project["geometry"]["parcel"])
+        added = saved["geometry"]["beds"][-1]
+        self.assertEqual(added, {**asdict(drawn), "revision_id": added["revision_id"]})
+        self.assertNotEqual(added["revision_id"], drawn.revision_id)
+        self.assertNotEqual(saved["revision_id"], project["revision_id"])
+        self.assertNotEqual(saved["geometry_token"], project["geometry_token"])
+        self.assertEqual(self.request("GET", url)[1]["project"], saved)
+        reopened = ProjectRepository(Path(self.temp.name) / "api.sqlite3").get(project["project_id"])
+        self.assertEqual(reopened.to_dict(), saved)
+
+    def test_api_add_invalid_collision_boundary_hole_and_duplicate_never_writes(self):
+        project = self.create()
+        url = "/api/v1/projects/" + project["project_id"]
+        candidates = [bed(self.state.parcel), bed(self.state.parcel, x=-1),
+                      bed(self.state.parcel, x=24.5, y=4.5, length_m=1), self.state.beds[0]]
+        for candidate in candidates:
+            with self.subTest(center=candidate.center):
+                status, data = self.request("POST", url + "/beds", {
+                    "expected_revision": project["revision_id"], "bed": asdict(candidate)})
+                self.assertEqual(status, 422, data)
+                self.assertEqual(self.request("GET", url)[1]["project"], project)
+
+    def test_api_add_revision_idempotency_and_rollback(self):
+        project = self.create()
+        url = "/api/v1/projects/" + project["project_id"]
+        body = {"expected_revision": project["revision_id"], "command_id": new_id(),
+                "bed": asdict(bed(self.state.parcel, x=18, y=12, length_m=4))}
+        status, first = self.request("POST", url + "/beds", body)
+        self.assertEqual(status, 201, first)
+        self.assertEqual(self.request("POST", url + "/beds", body), (201, first))
+        different = {**body, "command_id": new_id()}
+        self.assertEqual(self.request("POST", url + "/beds", different)[0], 409)
+        self.assertEqual(self.request("POST", url + "/beds", {"bed": body["bed"]})[0], 428)
+        self.assertEqual(self.request("GET", url)[1]["project"], first["project"])
+        current = first["project"]
+        with closing(sqlite3.connect(Path(self.temp.name) / "api.sqlite3", isolation_level=None)) as db:
+            db.execute("CREATE TRIGGER fail_add BEFORE INSERT ON commands BEGIN SELECT RAISE(ABORT,'disk failure'); END")
+        status, _ = self.request("POST", url + "/beds", {
+            "expected_revision": current["revision_id"], "command_id": new_id(),
+            "bed": asdict(bed(self.state.parcel, x=21, y=12, length_m=4))})
+        self.assertEqual(status, 500)
+        self.assertEqual(self.request("GET", url)[1]["project"], current)
+
+    def test_api_move_rotated_bed_preserves_dimensions_neighbors_and_reloads(self):
+        project = self.create()
+        url = "/api/v1/projects/" + project["project_id"]
+        status, data = self.request("PATCH", url + "/beds/" + self.state.beds[0].object_id, {
+            "expected_revision": project["revision_id"], "changes": {"center": {"x": 7.12345, "y": 10.6789}}})
+        self.assertEqual(status, 200, data)
+        saved = data["project"]
+        self.assertEqual(saved["geometry"]["beds"][1:], project["geometry"]["beds"][1:])
+        before = project["geometry"]["beds"][0]
+        moved = saved["geometry"]["beds"][0]
+        self.assertEqual(moved, {**before, "center": {"x": 7.12345, "y": 10.6789}, "revision_id": moved["revision_id"]})
+        self.assertEqual(moved["rotation_deg"], 17)
+        self.assertEqual(self.request("GET", url)[1]["project"], saved)
+
+    def test_api_move_invalid_positions_do_not_persist(self):
+        project = self.create()
+        url = "/api/v1/projects/" + project["project_id"]
+        for x, y in ((13, 9), (-1, 9), (24.5, 4.5)):
+            with self.subTest(x=x, y=y):
+                status, data = self.request("PATCH", url + "/beds/" + self.state.beds[0].object_id, {
+                    "expected_revision": project["revision_id"], "changes": {"center": {"x": x, "y": y}}})
+                self.assertEqual(status, 422, data)
+                self.assertEqual(self.request("GET", url)[1]["project"], project)
+
+    def test_full_save_still_rejects_added_beds(self):
+        project = self.create()
+        project["geometry"]["beds"].append(asdict(bed(self.state.parcel, x=18, y=12, length_m=4)))
+        status, data = self.request("PUT", "/api/v1/projects/" + project["project_id"], {
+            "expected_revision": project["revision_id"], "name": project["name"], "geometry": project["geometry"]})
+        self.assertEqual(status, 422, data)
+        self.assertEqual(data["error"]["code"], "identity_change")
 
     def test_api_conflict_and_required_revision(self):
         project = self.create()

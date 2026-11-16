@@ -155,6 +155,22 @@ th:first-child,td:first-child {padding-left:0;white-space:nowrap;}.current-week 
 .project-season p {font-size:13px;margin:8px 0;}
 .project-season small {font-size:10px;line-height:1.6;}
 .sr-only {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+.editor-controls {width:300px;max-width:100%;padding:12px 14px;pointer-events:auto;max-height:38dvh;overflow:auto;}
+.editor-tools {display:flex;gap:5px;}
+.editor-tools button {font-size:11px;padding:7px 9px;}
+.editor-tools button[aria-pressed=true] {background:#e4eadc;border-color:#9aaa8a;color:#314b2c;}
+.editor-controls p {font-size:10px;line-height:1.6;margin:9px 0 0;color:#73836a;}
+.bed-width {display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:10px;color:#66795e;margin-top:10px;}
+.bed-width input {width:85px;padding:5px;border:1px solid #cbd4c1;border-radius:3px;background:#fcfcf7;color:#40563a;}
+.editor-controls .draft-dimensions {font-variant-numeric:tabular-nums;color:#556d49;}
+.editor-controls .edit-status.invalid,.editor-controls .edit-status.error {color:#944c3d;}
+.editor-controls .cancel-draft {font-size:10px;margin-top:9px;padding:5px 8px;}
+.drawing-mode,.drawing-mode .bed {cursor:crosshair;}
+.bed.move-origin {opacity:.35;}
+.bed-draft rect {fill:#879b652b;stroke:#6e8155;stroke-width:1.5px;stroke-dasharray:6 4;vector-effect:non-scaling-stroke;}
+.bed-draft.checking rect {fill:#b19b5725;stroke:#a08b51;}
+.bed-draft.invalid rect,.bed-draft.error rect {fill:#ba62413b;stroke:#a34e3c;}
+.bed-draft.saving rect {stroke-dasharray:3 3;}
 @media(max-width:1000px) {
   .season {width:calc(100% - 190px);left:auto;right:20px;transform:none;}
   .occupancy {display:none;}.details {width:300px;}
@@ -196,4 +212,6 @@ th:first-child,td:first-child {padding-left:0;white-space:nowrap;}.current-week 
   .details {top:282px;}
   .map-north {bottom:145px;right:16px;font-size:11px;}
   .map-message {top:52%;}
+  .editor-controls {position:fixed;bottom:130px;left:12px;right:12px;width:auto;max-width:none;max-height:180px;padding:10px 12px;}
+  .project-mode .details {bottom:330px;}
 }

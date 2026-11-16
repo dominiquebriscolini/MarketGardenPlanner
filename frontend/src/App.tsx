@@ -1,4 +1,4 @@
-import {useEffect,useMemo,useState} from 'react';
+import {useCallback,useEffect,useMemo,useState} from 'react';
 import {Demo,fmt,stages} from './types';
 import {Plot} from './Plot';
 import {Details} from './Details';
@@ -7,6 +7,8 @@ import {ForecastWindow} from './ForecastWindow';
 import {Point,seasonStep} from './interactions';
 import {ProjectSummary,SavedProject,demoToMap,projectToMap} from './projectView';
 import {getJSON,listProjects,loadProject} from './projectClient';
+import {useBedEditor} from './useBedEditor';
+import {EditorControls} from './EditorControls';
 
 export function App() {
   const [data,setData]=useState<Demo|null>(null),[demoError,setDemoError]=useState('');
@@ -46,6 +48,12 @@ export function App() {
   },[]);
   const demoMode=mode==='demo';
   const activeProject=project?.project_id===mode?project:null;
+  const onSaved=useCallback((saved:SavedProject,bedId:string)=>{
+    setProject(saved);setSelected(bedId);
+    const {geometry:_,...summary}=saved;
+    setCatalog(items=>items.map(p=>p.project_id===saved.project_id?summary:p));
+  },[]);
+  const editor=useBedEditor(activeProject,onSaved);
   const geometry=useMemo(()=>demoMode?(data?demoToMap(data):null):(activeProject?projectToMap(activeProject):null),[demoMode,data,activeProject]);
   const day=data?.days[index];
   const occupied=day?Object.values(day.beds).filter(b=>b.stage!=='free').length:0;
@@ -56,7 +64,7 @@ export function App() {
   const synthetic=activeProject&&/syntheti/i.test([activeProject.name,activeProject.geometry.parcel.source_reference,...activeProject.geometry.beds.map(b=>b.source_reference)].join(' '));
   const mapError=demoMode?demoError:projectError;
   return <main className={`map-app ${forecastOpen&&demoMode?'forecast-open':''} ${demoMode?'demo-mode':'project-mode'}`}>
-    {geometry&&<Plot key={mode} geometry={geometry} data={demoMode?data??undefined:undefined} index={index} selected={selected} onSelect={setSelected}/>}
+    {geometry&&<Plot key={mode} geometry={geometry} data={demoMode?data??undefined:undefined} index={index} selected={selected} onSelect={setSelected} editor={activeProject?editor:undefined}/>}
     {!geometry&&<div className="map-message floating" role={mapError?'alert':'status'}>
       <h2>{mapError?'Ansicht konnte nicht geladen werden':projectLoading?'Projekt wird geladen …':'Daten werden geladen …'}</h2>
       <p>{mapError||'Die Karte erscheint nach dem Laden.'}</p>{mapError&&<button onClick={reload}>Erneut versuchen</button>}
@@ -64,14 +72,14 @@ export function App() {
     <div className="top-left-stack">
       <header className="project-title floating"><span className="eyebrow">MARKET GARDEN / {demoMode?'SAISONATLAS':'PROJEKTANSICHT'}</span>
         <h1 title={title}>{title}{demoMode&&<span>2026</span>}</h1>
-        <p className={demoMode||synthetic?'demo-notice':'project-notice'}>{demoMode?'Demo-Modus · synthetische Daten':synthetic?'Synthetisches Testprojekt · nur Anzeige':'Gespeichertes Projekt · nur Anzeige'}</p>
+        <p className={demoMode||synthetic?'demo-notice':'project-notice'}>{demoMode?'Demo-Modus · synthetische Daten · schreibgeschützt':synthetic?'Synthetisches Testprojekt':'Gespeichertes Projekt'}</p>
         {activeProject&&<p className="project-parcel" title={activeProject.project_id}>{activeProject.geometry.parcel.name||'Grundstück'} · {activeProject.geometry.beds.length} Beete</p>}
         <div className="project-picker"><label className="sr-only" htmlFor="project-choice">Ansicht / Projekt</label>
-          <select id="project-choice" value={mode} onChange={e=>changeMode(e.target.value)}>
+          <select id="project-choice" value={mode} disabled={editor.busy} onChange={e=>changeMode(e.target.value)}>
             <option value="demo">Demo · Saison 2026 (synthetisch)</option>
             {mode!=='demo'&&!catalog.some(p=>p.project_id===mode)&&<option value={mode}>Ausgewähltes Projekt</option>}
             {catalog.map(p=><option key={p.project_id} value={p.project_id}>{p.name} · {p.project_id.slice(0,8)}</option>)}
-          </select><button aria-label="Projektliste neu laden" onClick={reload}>↻</button>
+          </select><button aria-label="Projektliste neu laden" disabled={editor.busy} onClick={reload}>↻</button>
         </div>
         {listLoading&&<p className="catalog-message" role="status">Projektliste wird geladen …</p>}
         {!listLoading&&listError&&<p className="catalog-message error" role="alert">{listError}</p>}
@@ -82,6 +90,7 @@ export function App() {
         {legendOpen&&<div id="legend-items">{demoMode?Object.entries(stages).map(([key,label])=><span key={key}><i className={key}/>{label}</span>):<><span><i className="unplanned"/>Beetgeometrie</span><span><i className="hole"/>Grundstücksaussparung</span></>}
           <small>{demoMode?'Schematische Planphasen':'Keine Kulturbelegung hinterlegt'}</small></div>}
       </div><button className="floating forecast-toggle" aria-expanded={demoMode&&forecastOpen} disabled={!demoMode||!data} title={demoMode?'':'Keine Scheduler-Ergebnisse für dieses Projekt'} onClick={()=>setForecastOpen(v=>!v)}>Ernteprognose ↗</button></div>
+      {activeProject&&<EditorControls editor={editor}/>}
     </div>
     {demoMode&&data&&selected&&<Details data={data} index={index} selected={selected} onClose={()=>setSelected(null)}/>}
     {!demoMode&&activeProject&&selected&&<ProjectDetails project={activeProject} selected={selected} onClose={()=>setSelected(null)}/>}

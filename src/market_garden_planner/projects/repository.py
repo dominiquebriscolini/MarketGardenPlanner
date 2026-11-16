@@ -10,7 +10,7 @@ import sqlite3
 from ..spatial import GeometryState, dumps, loads, geometry_token, new_id
 from ..spatial.models import require_uuid
 from .errors import ProjectError
-from .geometry_updates import reconcile, patch_bed
+from .geometry_updates import append_bed, reconcile, patch_bed
 
 APPLICATION_ID = 0x4D475031  # MGP1
 SCHEMA_VERSION = 1
@@ -140,7 +140,7 @@ class ProjectRepository:
                        (project.project_id, name, project.revision_id, serialized, geometry_token(geometry), now, now))
         return project
 
-    def _change(self, project_id, expected_revision, transform, request, command_id):
+    def _change(self, project_id, expected_revision, transform, request, command_id, *, allow_add=False):
         require_uuid(expected_revision)
         if command_id is not None:
             require_uuid(command_id)
@@ -162,7 +162,7 @@ class ProjectRepository:
                                    expected_revision=expected_revision, current_revision=before.revision_id)
             name, candidate = transform(before)
             project_name(name)
-            geometry = reconcile(before.geometry, candidate)
+            geometry = reconcile(before.geometry, candidate, allow_add=allow_add)
             if geometry == before.geometry and name == before.name:
                 result = before
             else:
@@ -186,3 +186,9 @@ class ProjectRepository:
         request = {"operation": "update_bed", "expected_revision": expected_revision, "bed_id": bed_id, "changes": changes}
         return self._change(project_id, expected_revision,
                             lambda before: (before.name, patch_bed(before.geometry, bed_id, changes)), request, command_id)
+
+    def add_bed(self, project_id, expected_revision, bed, *, command_id=None):
+        request = {"operation": "add_bed", "expected_revision": expected_revision, "bed": bed}
+        return self._change(project_id, expected_revision,
+                            lambda before: (before.name, append_bed(before.geometry, bed)),
+                            request, command_id, allow_add=True)

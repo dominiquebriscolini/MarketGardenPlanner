@@ -84,6 +84,14 @@ Polygonlöchern und frei gedrehten Beeten. Separate Demo mit Saisonplanung;
 gespeicherte Projekte ohne erfundene Scheduler-Ergebnisse. [Abnahme](phase3b3a.md).
 Der folgende Editorumfang bleibt offen und ist durch 3B.3a nicht implementiert.
 
+**3B.3b implementiert:** Rechteckbeete über zwei Längsachsenpunkte und
+eingegebene Breite frei zeichnen, auswählen und metrisch verschieben.
+Shapely-Vorschau, revisionssicherer Anlegebefehl und bestehender PATCH,
+Sperr-/Konfliktbehandlung; bestätigter Stand getrennt vom Entwurf.
+[Abnahme und Grenzen](phase3b3b.md). Die folgenden Kriterien für den
+vollständigen Editor (u. a. Grundstücksgrenze, Skalieren/Rotation, Undo/Redo,
+Wege, Sperrflächen) bleiben weiterhin zukünftiger Umfang.
+
 Abhängigkeit: 3B.2. Grenzen und Beete manuell erfassen oder aus explizitem
 Projektformat übernehmen. Fremdformate/GIS-Importe später einzeln spezifizieren.
 Länge, Breite, Position und Rotation numerisch editieren; Pointerwerkzeuge

@@ -373,6 +373,17 @@ rein lesende 3B.1-Domänenpaket ist der Serverwechsel noch nicht nötig.
 
 ## 10. Zwei Ansichten derselben Objekte
 
+**Umsetzung 3B.3b:** Der React/SVG-Editor unterstützt jetzt manuelles Anlegen
+und Verschieben rechteckiger Beete. Zwei Längsachsenpunkte plus explizite
+Breite erlauben freie Winkel ohne Raster. Entwurf und bestätigter Projektstand
+bleiben getrennt; die inverse Kameraabbildung liefert metrische Weltpunkte.
+Für Anlegen ergänzt `POST /api/v1/projects/{id}/beds` den bisherigen Vertrag.
+Verschieben verwendet PATCH mit ausschließlich `center`. Beide nutzen dieselbe
+SQLite-Transaktion und zentrale Python-Validierung. Der bisherige PUT-Vertrag
+mit unveränderter ID-Menge bleibt erhalten. Kein Schemawechsel; projektbezogene
+Vorschau, Undo/Redo und weitere Editorfunktionen sind noch offen.
+[Bedienung, API und Abnahme](phase3b3b.md).
+
 Technisch 2D: Weltpunkt → Kamera → SVG; Bearbeitung verwendet die inverse
 Transformation. Das Grundstücksraster darf verschwinden, ohne die Daten zu
 ändern. Rotation und Maßangaben gehören zum Objekt, nicht zur Kamera.
