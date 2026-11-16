@@ -54,10 +54,12 @@ festlegen und isoliert vom agronomischen Kern halten.
 
 ### 3B.2 — Projektpersistenz und versionierter Anwendungsvertrag
 
-Abhängigkeit: 3B.1. Zuerst versionierte JSON-Projektdatei mit atomarem Austausch
-und Repository-Schnittstelle. SQLite folgt bei der Variantenverwaltung hinter
-derselben Schnittstelle; kein paralleles manuelles Pflegen zweier Wahrheiten.
-FastAPI/Pydantic als äußerer Adapter für Vorschau, validierte Befehle und Laden.
+Abhängigkeit: 3B.1. Implementiert gemäß Auftrag direkt mit SQLite-Repository;
+das räumliche JSON bleibt der einzige Geometrievertrag. Kein separates zweites
+Projektdateimodell. [Datenbankschema, API und Tests](phase3b2.md).
+Transport zunächst über den vorhandenen lokalen HTTP-Handler statt FastAPI;
+die Trennung erlaubt späteren Austausch. Generische Topologie-Vorschau vorhanden,
+projektbezogene Sperr-/Revisionsvorschau bleibt ein kleiner Anschlussauftrag für 3B.3.
 
 Abnahme:
 
@@ -68,6 +70,11 @@ Abnahme:
 - Wiederholte Command-ID ist idempotent; Schreibfehler lassen alten Stand lesbar.
 - Bestehender Prototyp bleibt durch einen Kompatibilitätsadapter ausführbar.
 - Keine automatische Generierung oder Saisonberechnung durch Öffnen/Speichern.
+
+Stand: 81 Python- und 12 Frontend-Tests erfolgreich. Idempotente Änderungsbelege
+für PUT/PATCH umgesetzt; Projekterstellung bleibt ein normales nicht idempotentes
+POST. Objekt-Hinzufügen/-Löschen und projektbezogene Preview-Befehle vor dem
+vollständigen Editor ergänzen. Keine Bake-Variantenverwaltung in 3B.2.
 
 ### 3B.3 — Präziser manueller 2D-Editor und Bestandsübernahme
 

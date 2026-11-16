@@ -1,5 +1,13 @@
 # Market Gardening Planner ? Phase 1 und 2
 
+## Projektpersistenz und API Phase 3B.2
+
+SQLite-Projekte mit zentral validierter Geometrie und Revisionskonflikten:
+`.\.venv\Scripts\python.exe -B -m market_garden_planner.api.server`.
+Standard: http://127.0.0.1:8766, lokale Datenbank `.local/projects.sqlite3`.
+[Installation, API-Anfragen, Schema und Testresultate](docs/phase3b2.md).
+Der bisherige Demo-Start auf Port 8765 bleibt unverändert.
+
 ## Geometriekern Phase 3B.1
 
 Separates optionales Paket `market_garden_planner.spatial` mit metrischen

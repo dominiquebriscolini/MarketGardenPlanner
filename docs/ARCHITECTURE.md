@@ -2,7 +2,8 @@
 
 Stand: 16.11.2026. **Architekturvorschlag zur Prüfung, keine Implementierung.**
 Umsetzungsstand: Der getrennte Geometriekern 3B.1 ist inzwischen implementiert;
-[Datenstrukturen, Tests und Konkretisierungen](phase3b1.md). Die übrigen
+[Datenstrukturen, Tests und Konkretisierungen](phase3b1.md). SQLite-Projekte und
+lokale API sind in [Phase 3B.2](phase3b2.md) umgesetzt. Die übrigen
 Abschnitte beschreiben weiterhin die Zielarchitektur späterer Phasen.
 Verwandte Dokumente: [Produkt](PRODUCT.md), [Roadmap](ROADMAP.md),
 [aktueller Prototyp](phase3a2.md), [Ernteprognose](phase3a2-harvest.md).
@@ -329,6 +330,10 @@ geändert, hinzugefügt und entfernt unterscheiden.
   Aussage „mehr Ertrag durch andere Geometrie“. Fehlende Prognose ≠ Nullertrag.
 
 Für lokale Speicherung SQLite hinter einem Repository vorsehen. Transaktionen
+werden seit 3B.2 für aktuelle Projekte und wiederholbare Änderungsbelege verwendet;
+das vorhandene räumliche JSON bleibt die einzige Geometriedarstellung. SQLite
+wurde auf ausdrücklichen Auftrag direkt eingeführt, ohne vorgeschaltete separate
+JSON-Projektdatei. Bake bleibt eine spätere Funktion. Weitere Transaktionen
 ermöglichen atomare Projekt-/Bake-Schreibvorgänge; siehe
 [SQLite-Transaktionen](https://www.sqlite.org/transactional.html). Zunächst
 versionierten JSON-Import/-Export zur Sicherung und Migration unterstützen.
@@ -357,6 +362,10 @@ verspätete Serverantworten dürfen keinen jüngeren Editorzustand überschreibe
 Undo/Redo zunächst über begrenzte Befehlshistorie, kein umfassendes Event-Sourcing.
 
 Für diese Schreibschnittstellen FastAPI/Pydantic als äußerer Adapter empfehlen:
+**Implementierungsentscheidung 3B.2:** Für die derzeit kleine, ausschließlich
+lokale API wird vorerst der bestehende Standardbibliothek-HTTP-Handler erweitert.
+Repository, Routing und Domäne sind getrennt; FastAPI/Pydantic bleibt eine Option
+bei größerem Umfang. Die folgende Empfehlung beschreibt dessen spätere Vorteile:
 Validierung und OpenAPI-Vertrag reduzieren parallele handgepflegte Modelle.
 Siehe [FastAPI](https://fastapi.tiangolo.com/features/). TypeScript-Typen später
 aus dem Vertrag generieren, Parserfehler trotzdem sichtbar behandeln. Für das
