@@ -78,6 +78,12 @@ vollständigen Editor ergänzen. Keine Bake-Variantenverwaltung in 3B.2.
 
 ### 3B.3 — Präziser manueller 2D-Editor und Bestandsübernahme
 
+Vorbereitender Teilschritt **3B.3a implementiert**: ausschließlich lesende
+Projektauswahl und maßhaltige SVG-Anzeige der vorhandenen Projekt-API, inklusive
+Polygonlöchern und frei gedrehten Beeten. Separate Demo mit Saisonplanung;
+gespeicherte Projekte ohne erfundene Scheduler-Ergebnisse. [Abnahme](phase3b3a.md).
+Der folgende Editorumfang bleibt offen und ist durch 3B.3a nicht implementiert.
+
 Abhängigkeit: 3B.2. Grenzen und Beete manuell erfassen oder aus explizitem
 Projektformat übernehmen. Fremdformate/GIS-Importe später einzeln spezifizieren.
 Länge, Breite, Position und Rotation numerisch editieren; Pointerwerkzeuge

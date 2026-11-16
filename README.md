@@ -1,5 +1,13 @@
 # Market Gardening Planner ? Phase 1 und 2
 
+## Projektanzeige Phase 3B.3a
+
+Gespeicherte Grundstücke mit Polygonlöchern und frei gedrehten Beeten jetzt
+in der bestehenden Karte öffnen: API-Server wie unten starten, im Browser
+**http://127.0.0.1:8766** öffnen und oben links **„Ansicht / Projekt“** wählen.
+Geometrieanzeige ohne Bearbeitung; die synthetische Demo bleibt separat verfügbar.
+[Startanleitung, Koordinatentransformation und Abnahme](docs/phase3b3a.md).
+
 ## Projektpersistenz und API Phase 3B.2
 
 SQLite-Projekte mit zentral validierter Geometrie und Revisionskonflikten:
