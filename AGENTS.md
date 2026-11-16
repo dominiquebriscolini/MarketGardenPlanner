@@ -11,6 +11,13 @@
 - Keine Änderungen an externen Projekten oder Rhino-Konfigurationen.
 - Keine Git-Commits ohne ausdrücklichen Auftrag.
 
+## Verbindliches Entscheidungsprotokoll
+
+- Bei jeder neuen Entwicklungsphase muss Codex `docs/DECISIONS.md` lesen und berücksichtigen.
+- Neue Produkt- oder Architekturentscheidungen müssen in `docs/DECISIONS.md` mit stabiler ID, Datum, Status, Begründung und Auswirkungen dokumentiert werden.
+- Bestehende Entscheidungen dürfen nicht stillschweigend überschrieben werden. Änderungen und Statuswechsel müssen ausdrücklich begründet und mit Datum, bisheriger Entscheidung und gegebenenfalls ersetzendem Beschluss nachvollziehbar dokumentiert werden.
+- Beschlossene Zukunftsziele sind keine pauschale Implementierungsfreigabe; vorgeschlagene und offene Details dürfen nicht als bereits beschlossen behandelt werden.
+
 ## Ergänzungen zur Grundstücksarchitektur (Phase 3B.0)
 
 - Architekturvorschläge und Abnahmefolgen stehen in `docs/ARCHITECTURE.md`
