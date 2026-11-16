@@ -65,7 +65,8 @@ class Handler(DemoHandler):
             parsed = urlsplit(self.path)
             if parsed.query:
                 raise ProjectError("invalid_request", "API query parameters are not supported", 400)
-            body = self._body() if self.command in ("POST", "PUT", "PATCH") else None
+            has_delete_body = self.command == "DELETE" and (self.headers.get("Content-Length") is not None or self.headers.get("Transfer-Encoding"))
+            body = self._body() if self.command in ("POST", "PUT", "PATCH") or has_delete_body else None
             status, data = self.api.dispatch(self.command, parsed.path, body)
             self._json(status, data)
         except GeometryValidationError as error:

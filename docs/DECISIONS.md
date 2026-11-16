@@ -5,6 +5,10 @@ Git-Stand `46db28f`. Dieses Protokoll wird vor jeder neuen Entwicklungsphase
 gelesen und berücksichtigt. Es hält Produkt- und Architekturentscheidungen
 fest; ein beschlossenes Zukunftsziel ist keine Implementierungsfreigabe.
 
+Fortschreibung 16.11.2026: Phase 3B.3c ergänzt DEC-027 und konkretisiert damit
+die bislang offenen präzisen Bearbeitungs- und Löschfunktionen aus DEC-010.
+Die oben genannte Datierung der Erstfassung bleibt als Historie erhalten.
+
 ## Geltung, Quellen und Fortschreibung
 
 - **beschlossen:** verbindlicher Grundsatz, ausdrücklich gewünschtes Produktziel
@@ -449,6 +453,52 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
   sind offen und wurden in diesem Auftrag nicht geprüft.
 - **Quelle:** Protokollauftrag.
 
+### DEC-027 — Präzise Beetänderungen und bestätigte Einzel-Löschung
+
+- **Datum:** 16.11.2026, ausdrücklicher Nutzerauftrag Phase 3B.3c.
+- **Status:** beschlossen.
+- **Entscheidung:** Numerische Mittelpunkt-, Maß- und Winkeleingaben sowie
+  ein Rotationsgriff ergänzen den Editor. Rotation und Größenänderung erfolgen
+  standardmäßig um den Mittelpunkt, ohne Raster. Ein expliziter Mittelpunkt-
+  Ankervertrag bereitet spätere feste Bezugskanten vor; diese werden hier noch
+  nicht als neue Bedienfunktion eingeführt. Einzelne ungesperrte Beete können
+  nach Bestätigung gelöscht werden, auch über Entf außerhalb von Eingabefeldern.
+- **Begründung:** Präzise Bearbeitung braucht unabhängige geometrische Operationen,
+  eine eindeutige Bezugslage und Schutz vor versehentlicher Löschung.
+- **Auswirkungen:** Der bisherige Vorschau-/Bestätigungsablauf bleibt erhalten.
+  Änderungen nutzen PATCH; ein eigener DELETE-Befehl prüft Sperre und erwartete
+  Projektrevision in derselben Transaktion. Die ID eines gelöschten Beets wird
+  im dauerhaften Änderungsbeleg vermerkt und darf im selben Projekt nicht neu
+  vergeben werden. Dafür bleiben bestehendes JSON- und SQLite-Schema erhalten.
+  Kein Undo/Redo und keine automatische Beetaufteilung in dieser Phase.
+- **Quelle:** Nutzerauftrag Phase 3B.3c; DEC-003/006/007/008/009/010;
+  [Umsetzung und Grenzen](phase3b3c.md).
+
+Fortschreibung zu DEC-010: Die dort für den Stand 3B.3b als offen bezeichneten
+numerischen Bearbeitungs- und Löschfunktionen werden durch diesen ausdrücklichen
+Auftrag konkretisiert. Die ursprüngliche Beschreibung bleibt als Verlauf erhalten;
+Zeichnen, Translation und bestätigte Übernahme gelten unverändert weiter.
+
+### DEC-028 — Kompakte Anzeige und ausdrückliches Shift-Snapping
+
+- **Datum:** 16.11.2026, Nutzerauftrag UI-Feinschliff zu Phase 3B.3c.
+- **Status:** beschlossen.
+- **Entscheidung:** Geometrische Zahlen im Ruhezustand mit höchstens zwei
+  Nachkommastellen anzeigen, vollständige Werte intern erhalten. Erst eine
+  tatsächliche Eingabe verändert den numerischen Entwurf; Fokus, Anzeige oder
+  Auswahl runden keine Fachwerte. Während einer ausdrücklich eingegebenen
+  präzisen Zahl darf der aktive Eingabetext vollständig sichtbar bleiben;
+  beim Verlassen des Felds wird wieder nur die Anzeige kompakt formatiert.
+  Griffrotation bleibt frei; ausschließlich mit gedrückter Shift-Taste gilt
+  ein 15°-Winkelraster. Shift loslassen stellt sofort den freien Winkel an
+  derselben Mausposition wieder her. Während des Drehens den Winkel anzeigen.
+- **Begründung:** Lesbarkeit soll die geometrische Genauigkeit bewahren;
+  bewusstes Fangverhalten unterstützt präzise Ausrichtungen ohne Rasterpflicht.
+- **Auswirkungen:** DEC-003 und DEC-027 bleiben für die Fachgeometrie und freie
+  Standardrotation erhalten. Das optionale Raster ist eine ausdrückliche
+  Bedienaktion. Vorschau, Python-Validierung und API-Bestätigung bleiben maßgeblich.
+- **Quelle:** Nutzerauftrag „Phase 3B.3c: UI-Feinschliff“; phase3b3c.md.
+
 ## Konsistenzprüfung und aktuelle Grenzen
 
 Die Grundsätze sind mit Produkt, Architektur und Phasenabnahmen vereinbar.
@@ -496,3 +546,5 @@ auftrag wurden keine Anwendungstests, Builds oder Funktionen geändert.
 | Datum | Änderung | Grundlage |
 |---|---|---|
 | 16.11.2026 | Erstfassung DEC-001 bis DEC-026; historische Einordnung und offene Details aufgenommen. | Bestehende Dokumentation und ausdrücklicher Auftrag zum dauerhaften Entscheidungsprotokoll. Keine neuen Funktionen, kein Git-Commit. |
+| 16.11.2026 | DEC-027 ergänzt; Bezug zu den bislang offenen Editorfunktionen in DEC-010 ausdrücklich fortgeschrieben. | Nutzerauftrag Phase 3B.3c; Mittelpunkt-Anker und revisionssichere Einzel-Löschung mit dauerhafter ID-Sperre. |
+| 16.11.2026 | DEC-028 ergänzt: kompakte Anzeige ohne Verlust interner Präzision und optionales Shift-Winkelraster. | Ausdrücklicher UI-Feinschliff-Auftrag; keine Änderung der Standardrotation oder Fachgeometrie. |

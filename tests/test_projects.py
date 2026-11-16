@@ -317,6 +317,126 @@ class APITests(unittest.TestCase):
         self.assertEqual(status, 422, data)
         self.assertEqual(data["error"]["code"], "identity_change")
 
+    def test_precise_numeric_edits_preserve_unedited_properties_and_reload(self):
+        current = self.create()
+        url = "/api/v1/projects/" + current["project_id"]
+        target = url + "/beds/" + self.state.beds[0].object_id
+        for changes in ({"rotation_deg": 17.12567}, {"width_m": .753421, "length_m": 7.123456},
+                        {"center": {"x": 7.1234567, "y": 10.7654321}}, {"rotation_deg": 359.875}):
+            with self.subTest(changes=changes):
+                status, data = self.request("PATCH", target, {"expected_revision": current["revision_id"], "changes": changes})
+                self.assertEqual(status, 200, data)
+                saved = data["project"]
+                old, edited = current["geometry"]["beds"][0], saved["geometry"]["beds"][0]
+                self.assertEqual(edited, {**old, **changes, "revision_id": edited["revision_id"]})
+                self.assertEqual(saved["geometry"]["beds"][1:], current["geometry"]["beds"][1:])
+                self.assertEqual(saved["geometry"]["parcel"], current["geometry"]["parcel"])
+                self.assertNotEqual(edited["revision_id"], old["revision_id"])
+                self.assertEqual(self.request("GET", url)[1]["project"], saved)
+                current = saved
+        self.assertEqual(ProjectRepository(Path(self.temp.name) / "api.sqlite3").get(current["project_id"]).to_dict(), current)
+
+    def test_precise_invalid_dimensions_angles_boundary_hole_and_collision_are_rejected(self):
+        self.state = replace(self.state, beds=(replace(self.state.beds[0], center=Point(1, 9), rotation_deg=0), self.state.beds[1]))
+        project = self.create()
+        url = "/api/v1/projects/" + project["project_id"]
+        target = url + "/beds/" + self.state.beds[0].object_id
+        for changes in ({"width_m": 0}, {"length_m": -1}, {"rotation_deg": 360}, {"rotation_deg": -1},
+                        {"rotation_deg": 90}, {"width_m": 25}, {"center": {"x": 13, "y": 9}},
+                        {"center": {"x": 24.5, "y": 4.5}}, {"center": {"x": -2, "y": 9}}):
+            with self.subTest(changes=changes):
+                status, data = self.request("PATCH", target, {"expected_revision": project["revision_id"], "changes": changes})
+                self.assertEqual(status, 422, data)
+                self.assertEqual(self.request("GET", url)[1]["project"], project)
+
+    def test_locked_bed_blocks_rotation_resize_position_and_delete(self):
+        self.state = replace(self.state, beds=(replace(self.state.beds[0], geometry_locked=True), self.state.beds[1]))
+        project = self.create()
+        url = "/api/v1/projects/" + project["project_id"]
+        target = url + "/beds/" + self.state.beds[0].object_id
+        for changes in ({"rotation_deg": 25.5}, {"width_m": .75, "length_m": 7}, {"center": {"x": 7, "y": 10}}):
+            status, data = self.request("PATCH", target, {"expected_revision": project["revision_id"], "changes": changes})
+            self.assertEqual(status, 422, data)
+        status, data = self.request("DELETE", target, {"expected_revision": project["revision_id"]})
+        self.assertEqual(status, 422, data)
+        self.assertEqual(data["error"]["code"], "geometry_locked")
+        self.assertEqual(self.request("GET", url)[1]["project"], project)
+
+    def test_delete_bed_preserves_neighbors_revision_and_persistence(self):
+        project = self.create()
+        url = "/api/v1/projects/" + project["project_id"]
+        status, data = self.request("DELETE", url + "/beds/" + self.state.beds[0].object_id,
+                                    {"expected_revision": project["revision_id"], "command_id": new_id()})
+        self.assertEqual(status, 200, data)
+        saved = data["project"]
+        self.assertEqual(saved["geometry"]["beds"], project["geometry"]["beds"][1:])
+        self.assertEqual(saved["geometry"]["parcel"], project["geometry"]["parcel"])
+        self.assertNotEqual(saved["geometry_token"], project["geometry_token"])
+        self.assertNotEqual(saved["geometry"]["revision_id"], project["geometry"]["revision_id"])
+        self.assertNotEqual(saved["revision_id"], project["revision_id"])
+        self.assertEqual(self.request("GET", url)[1]["project"], saved)
+        self.assertEqual(ProjectRepository(Path(self.temp.name) / "api.sqlite3").get(project["project_id"]).to_dict(), saved)
+        # Full PUT still cannot add/remove identities.
+        removed = {**saved["geometry"], "beds": []}
+        self.assertEqual(self.request("PUT", url, {"expected_revision": saved["revision_id"], "name": saved["name"], "geometry": removed})[0], 422)
+
+    def test_delete_revision_required_conflict_idempotency_and_bad_requests(self):
+        project = self.create()
+        url = "/api/v1/projects/" + project["project_id"]
+        target = url + "/beds/" + self.state.beds[0].object_id
+        self.assertEqual(self.request("DELETE", target)[0], 428)
+        self.assertEqual(self.request("DELETE", target, {})[0], 428)
+        self.assertEqual(self.request("DELETE", target, {"expected_revision": project["revision_id"], "command_id": ""})[0], 422)
+        self.assertEqual(self.request("DELETE", target, {"expected_revision": project["revision_id"], "extra": True})[0], 422)
+        body = {"expected_revision": project["revision_id"], "command_id": new_id()}
+        status, first = self.request("DELETE", target, body)
+        self.assertEqual(status, 200, first)
+        self.assertEqual(self.request("DELETE", target, body), (200, first))
+        self.assertEqual(self.request("DELETE", url + "/beds/" + self.state.beds[1].object_id,
+                                      {"expected_revision": project["revision_id"]})[0], 409)
+        self.assertEqual(self.request("DELETE", target, {"expected_revision": first["project"]["revision_id"]})[0], 404)
+        self.assertEqual(self.request("GET", url)[1]["project"], first["project"])
+
+    def test_delete_receipt_failure_rolls_back_and_does_not_retire_id(self):
+        project = self.create()
+        url = "/api/v1/projects/" + project["project_id"]
+        with closing(sqlite3.connect(Path(self.temp.name) / "api.sqlite3", isolation_level=None)) as db:
+            db.execute("CREATE TRIGGER fail_delete BEFORE INSERT ON commands BEGIN SELECT RAISE(ABORT,'disk failure'); END")
+        status, data = self.request("DELETE", url + "/beds/" + self.state.beds[0].object_id,
+                                    {"expected_revision": project["revision_id"]})
+        self.assertEqual(status, 500, data)
+        self.assertEqual(self.request("GET", url)[1]["project"], project)
+        with closing(sqlite3.connect(Path(self.temp.name) / "api.sqlite3")) as db:
+            self.assertEqual(db.execute("SELECT count(*) FROM commands").fetchone()[0], 0)
+
+    def test_deleted_id_is_retired_without_client_command_and_project_scoped(self):
+        project = self.create()
+        url = "/api/v1/projects/" + project["project_id"]
+        status, data = self.request("DELETE", url + "/beds/" + self.state.beds[0].object_id,
+                                    {"expected_revision": project["revision_id"]})
+        self.assertEqual(status, 200, data)
+        current = data["project"]
+        repo = ProjectRepository(Path(self.temp.name) / "api.sqlite3")
+        with self.assertRaisesRegex(ProjectError, "reused"):
+            repo.add_bed(project["project_id"], current["revision_id"], asdict(self.state.beds[0]))
+        status, data = self.request("POST", url + "/beds", {
+            "expected_revision": current["revision_id"], "bed": asdict(self.state.beds[0])})
+        self.assertEqual(status, 422, data)
+        self.assertEqual(data["error"]["code"], "retired_id")
+        self.assertEqual(self.request("GET", url)[1]["project"], current)
+        independent = self.create()
+        self.assertEqual(independent["geometry"]["beds"][0]["object_id"], self.state.beds[0].object_id)
+
+    def test_delete_last_bed_leaves_valid_empty_project(self):
+        self.state = replace(self.state, beds=(self.state.beds[0],))
+        project = self.create()
+        url = "/api/v1/projects/" + project["project_id"]
+        status, data = self.request("DELETE", url + "/beds/" + self.state.beds[0].object_id,
+                                    {"expected_revision": project["revision_id"]})
+        self.assertEqual(status, 200, data)
+        self.assertEqual(data["project"]["geometry"]["beds"], [])
+        self.assertTrue(self.request("GET", url + "/validation")[1]["valid"])
+
     def test_api_conflict_and_required_revision(self):
         project = self.create()
         url = "/api/v1/projects/" + project["project_id"]

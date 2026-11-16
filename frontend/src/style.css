@@ -171,6 +171,31 @@ th:first-child,td:first-child {padding-left:0;white-space:nowrap;}.current-week 
 .bed-draft.checking rect {fill:#b19b5725;stroke:#a08b51;}
 .bed-draft.invalid rect,.bed-draft.error rect {fill:#ba62413b;stroke:#a34e3c;}
 .bed-draft.saving rect {stroke-dasharray:3 3;}
+.rotation-handle {cursor:grab;outline:none;}
+.rotation-handle:active {cursor:grabbing;}
+.rotation-handle line {stroke:#75856a;stroke-width:1px;vector-effect:non-scaling-stroke;}
+.rotation-knob {fill:#fcfcf6;stroke:#596f4b;stroke-width:1.5px;vector-effect:non-scaling-stroke;}
+.rotation-handle:focus .rotation-knob {stroke:#293f23;stroke-width:2.5px;}
+.rotation-readout {position:fixed;z-index:21;pointer-events:none;width:156px;height:58px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;gap:3px;padding:8px 12px;background:#fcfcf6;border:1px solid #b8c6ac;border-radius:4px;color:#354d2b;font-variant-numeric:tabular-nums;}
+.rotation-readout strong {font-size:14px;font-weight:600;}
+.rotation-readout small {font-size:10px;color:#75846a;}
+.geometry-form {margin:12px 0 22px;}
+.geometry-form fieldset {border:0;padding:0;margin:0;min-width:0;}
+.geometry-form legend {font-size:11px;color:#5d7451;margin-bottom:9px;}
+.geometry-form label {display:flex;align-items:center;justify-content:space-between;gap:10px;margin:7px 0;font-size:10px;color:#64775b;}
+.geometry-form input {width:128px;max-width:48%;padding:6px 7px;border:1px solid #c7d0be;border-radius:3px;background:#fcfcf7;color:#40553a;font:11px 'Segoe UI',sans-serif;}
+.geometry-form input:disabled {background:#f1f3eb;color:#84917a;}
+.geometry-hint,.geometry-form .edit-status {font-size:9px;line-height:1.6;color:#7b8a70;}
+.geometry-actions {display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.geometry-actions button,.geometry-form button {font-size:10px;padding:6px 9px;}
+.delete-bed {color:#8d4d3c;border-color:#d8bbae;}
+.geometry-form>.delete-bed {margin-top:14px;}
+.form-error,.geometry-form .edit-status.invalid,.geometry-form .edit-status.error {color:#944c3d;font-size:10px;line-height:1.6;}
+.delete-dialog {width:380px;max-width:calc(100vw - 36px);max-height:calc(100dvh - 36px);overflow:auto;background:#fcfcf6;color:#40553a;border:1px solid #c6cfbb;border-radius:7px;padding:24px;}
+.delete-dialog::backdrop {background:#26352250;}
+.delete-dialog h2 {font:25px Georgia,serif;margin:10px 0 14px;}
+.delete-dialog p {font-size:12px;line-height:1.7;}
+.delete-dialog .dialog-id {font:10px Consolas,monospace;overflow-wrap:anywhere;color:#809074;}
 @media(max-width:1000px) {
   .season {width:calc(100% - 190px);left:auto;right:20px;transform:none;}
   .occupancy {display:none;}.details {width:300px;}

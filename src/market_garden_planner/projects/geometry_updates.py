@@ -5,13 +5,18 @@ from ..spatial import GeometryState, Point, dumps, loads, new_id, require_valid,
 from .errors import ProjectError
 
 
-def reconcile(previous: GeometryState, candidate: GeometryState, *, allow_add=False) -> GeometryState:
+def reconcile(previous: GeometryState, candidate: GeometryState, *, allow_add=False, allow_remove=False) -> GeometryState:
     require_valid(candidate)
     old_ids = {b.object_id for b in previous.beds}
     new_ids = {b.object_id for b in candidate.beds}
     identities_valid = (old_ids < new_ids and len(new_ids - old_ids) == 1) if allow_add else old_ids == new_ids
+    if allow_remove:
+        identities_valid = new_ids < old_ids and len(old_ids - new_ids) == 1
     if previous.parcel.object_id != candidate.parcel.object_id or not identities_valid:
         raise ProjectError("identity_change", "Existing parcel/bed IDs must be retained; use the dedicated bed creation endpoint to add a bed")
+    removed_locked = [b.object_id for b in previous.beds if b.object_id not in new_ids and b.geometry_locked]
+    if removed_locked:
+        raise ProjectError("geometry_locked", "Locked beds cannot be deleted", object_ids=removed_locked)
     parcel = replace(candidate.parcel, revision_id=previous.parcel.revision_id)
     if previous.parcel.geometry_locked and (parcel.outer, parcel.holes) != (previous.parcel.outer, previous.parcel.holes):
         raise ProjectError("geometry_locked", "Parcel is locked", object_ids=[parcel.object_id])
@@ -38,6 +43,12 @@ def append_bed(state: GeometryState, bed: dict) -> GeometryState:
     raw = json.loads(dumps(state))
     raw["beds"].append(bed)
     return loads(json.dumps(raw, allow_nan=False))
+
+
+def remove_bed(state: GeometryState, bed_id: str) -> GeometryState:
+    if not any(b.object_id == bed_id for b in state.beds):
+        raise ProjectError("bed_not_found", "Bed not found in project", 404)
+    return replace(state, beds=tuple(b for b in state.beds if b.object_id != bed_id))
 
 
 def patch_bed(state: GeometryState, bed_id: str, changes: dict) -> GeometryState:

@@ -1,12 +1,17 @@
 import type {SavedProject} from './projectView';
-export function ProjectDetails({project,selected,onClose}:{project:SavedProject;selected:string;onClose:()=>void}) {
+import type {BedEditor} from './useBedEditor';
+import {BedGeometryForm} from './BedGeometryForm';
+import {formatGeometry} from './geometryDisplay';
+export function ProjectDetails({project,selected,onClose,editor}:{project:SavedProject;selected:string;onClose:()=>void;editor?:BedEditor}) {
   const bed=project.geometry.beds.find(b=>b.object_id===selected);
   if(!bed)return null;
-  const format=(v:number)=>v.toLocaleString('de-DE',{maximumFractionDigits:8});
+  const format=formatGeometry;
   return <aside className="details floating geometry-details" aria-label={`Geometrie ${bed.name||bed.object_id}`}>
     <div className="detail-header"><div><span className="eyebrow">BEET / GEOMETRIE</span><h2>{bed.name||'Beet'}</h2></div>
       <button className="close-button" aria-label="Beetdetails schließen" onClick={onClose}>×</button></div>
-    <div className="detail-body"><span className="badge">Nur Anzeige</span>
+    <div className="detail-body"><span className="badge">{editor?'Geometrie bearbeiten':'Nur Anzeige'}</span>
+      {editor&&<BedGeometryForm key={`${bed.object_id}:${bed.revision_id}:${editor.cancelVersion}:${editor.inputVersion}`} bed={bed} editor={editor}/>}
+      {editor&&<h3>Gespeicherte Geometrie</h3>}
       <dl><dt>Breite</dt><dd>{format(bed.width_m)} m</dd><dt>Länge</dt><dd>{format(bed.length_m)} m</dd>
         <dt>Fläche</dt><dd>{format(bed.width_m*bed.length_m)} m²</dd><dt>Rotation (Welt, CCW)</dt><dd>{format(bed.rotation_deg)}°</dd>
         <dt>Mittelpunkt X / Ost</dt><dd>{format(bed.center.x)} m</dd><dt>Mittelpunkt Y / Nord</dt><dd>{format(bed.center.y)} m</dd>

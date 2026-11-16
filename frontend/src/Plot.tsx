@@ -5,7 +5,9 @@ import { cameraView, fittedView, Point } from './interactions';
 import { BedTooltip, Hover } from './BedTooltip';
 import { ProjectTooltip } from './ProjectTooltip';
 import { MapGeometry, SpatialBed, parcelPath } from './projectView';
-import {drawnBed,screenToWorld,translatedBed} from './editingGeometry';
+import {drawnBed,rotatedBed,screenToWorld,translatedBed} from './editingGeometry';
+import {RotationHandle} from './RotationHandle';
+import {RotationReadout,RotationFeedback} from './RotationReadout';
 import type {BedDraft,ScreenBounds} from './editingGeometry';
 import type {View} from './interactions';
 import type {BedEditor} from './useBedEditor';
@@ -32,13 +34,33 @@ export function Plot({geometry,data,index,selected,onSelect,editor:editorProp}: 
   const [viewport,setViewport]=useState({width:window.innerWidth,height:window.innerHeight});
   const [zoom,setZoom]=useState(1), [pan,setPan]=useState<Point>({x:0,y:0});
   const [hover,setHover]=useState<Hover|null>(null), [dragging,setDragging]=useState(false);
+  const [rotationFeedback,setRotationFeedback]=useState<RotationFeedback|null>(null);
   const drag=useRef<{pointerId:number;start:Point;pan:Point;moved:boolean}|null>(null);
   const suppressClick=useRef(false);
-  const editDrag=useRef<{pointerId:number;kind:'create'|'move';start:Point;screen:Point;bed:SpatialBed;width:number;view:View;bounds:ScreenBounds;draft:BedDraft|null;moved:boolean}|null>(null);
+  const editDrag=useRef<{pointerId:number;kind:'create'|'move'|'rotate';start:Point;end:Point;screen:Point;lastScreen:Point;bed:SpatialBed;width:number;view:View;bounds:ScreenBounds;draft:BedDraft|null;moved:boolean}|null>(null);
+  const shiftPressed=useRef(false);
+  const editorRef=useRef(editor);editorRef.current=editor;
+  useEffect(()=>{
+    // Recompute from the original gesture at the last pointer position, without rebasing on a snapped angle.
+    const update=(shift:boolean)=>{
+      shiftPressed.current=shift;
+      const edit=editDrag.current;
+      if(edit?.kind!=='rotate'||!edit.moved)return;
+      const bed=rotatedBed(edit.bed,edit.start,edit.end,shift);
+      if(bed){edit.draft={kind:'rotate',bed};editorRef.current?.preview(edit.draft);
+        setRotationFeedback({...edit.lastScreen,angle:bed.rotation_deg,shift});}
+    };
+    const modifier=(event:KeyboardEvent)=>{if(event.key==='Shift'&&!event.repeat)update(event.type==='keydown');};
+    const blur=()=>update(false);
+    window.addEventListener('keydown',modifier);window.addEventListener('keyup',modifier);
+    window.addEventListener('blur',blur);
+    return ()=>{window.removeEventListener('keydown',modifier);window.removeEventListener('keyup',modifier);window.removeEventListener('blur',blur);};
+  },[]);
   useEffect(()=>{
     const editing=editDrag.current!==null;
     const pointerId=editDrag.current?.pointerId??drag.current?.pointerId;
     editDrag.current=null;
+    setRotationFeedback(null);
     if(svg.current&&pointerId!==undefined&&svg.current.hasPointerCapture(pointerId))svg.current.releasePointerCapture(pointerId);
     drag.current=null;setDragging(false);
     if(editing)editor?.cancel();
@@ -52,6 +74,8 @@ export function Plot({geometry,data,index,selected,onSelect,editor:editorProp}: 
   const fit=useMemo(()=>fittedView(geometry.boundary,viewport.width,viewport.height),[geometry,viewport.width,viewport.height]);
   const view=useMemo(()=>cameraView(fit,zoom,pan),[fit,zoom,pan]);
   const day=data?.days[index], metresPerPixel=view.width/viewport.width;
+  const selectedBed=geometry.beds.find(b=>b.id===selected)?.source;
+  const handleBed=editor?.draft&&editor.draft.kind!=='delete'&&editor.draft.bed.object_id===selected?editor.draft.bed:selectedBed;
   const scaleMetres=metresPerPixel*110<5?2:metresPerPixel*110<10?5:10;
   const updateZoom=(factor:number)=>{setZoom(z=>Math.max(.65,Math.min(6,z*factor)));setHover(null);};
   const shift=(x:number,y:number)=>{setPan(p=>({x:p.x+x*view.width,y:p.y+y*view.height}));setHover(null);};
@@ -61,7 +85,7 @@ export function Plot({geometry,data,index,selected,onSelect,editor:editorProp}: 
       aria-label="Maßstäbliche Grundstücksansicht"
       onClick={e=>{
         if(suppressClick.current){suppressClick.current=false;return;}
-        if(!(e.target as Element).closest('.bed')){onSelect(null);setHover(null);}
+        if(!(e.target as Element).closest('.bed,.rotation-handle')){onSelect(null);setHover(null);}
       }}
       onWheel={e=>{if(!editDrag.current&&!editor?.busy)updateZoom(e.deltaY<0?1.12:1/1.12);}}
       onPointerDown={e=>{
@@ -69,20 +93,22 @@ export function Plot({geometry,data,index,selected,onSelect,editor:editorProp}: 
         suppressClick.current=false;
         if(e.button!==0||editor?.busy)return;
         if(editor) {
-          const bedId=(e.target as Element).closest('[data-bed-id]')?.getAttribute('data-bed-id');
+          const handleId=(e.target as Element).closest('[data-rotation-handle]')?.getAttribute('data-rotation-handle');
+          const bedId=handleId||(e.target as Element).closest('[data-bed-id]')?.getAttribute('data-bed-id');
           const source=geometry.beds.find(b=>b.id===bedId)?.source;
           if(editor.tool==='draw'||source) {
             if(editor.tool==='draw')onSelect(null);
             if(editor.tool==='select'&&source){onSelect(source.object_id);if(source.geometry_locked){editor.blocked();return;}}
             if(editor.tool==='draw'&&(!Number.isFinite(editor.widthM)||editor.widthM<=0))return;
+            editor.beginGesture();
             const bounds=e.currentTarget.getBoundingClientRect();
             const screen={x:e.clientX,y:e.clientY},start=screenToWorld(screen,bounds,view);
-            const kind=editor.tool==='draw'?'create':'move';
-            const bed=kind==='move'?source!:{object_id:crypto.randomUUID(),revision_id:crypto.randomUUID(),
+            const kind=editor.tool==='draw'?'create':handleId?'rotate':'move';
+            const bed=kind!=='create'?source!:{object_id:crypto.randomUUID(),revision_id:crypto.randomUUID(),
               parcel_id:editor.project!.geometry.parcel.object_id,name:`Beet ${geometry.beds.length+1}`,origin:'manual',
               geometry_locked:false,generation_protected:true,source_reference:'Manuell gezeichnet',
               center:start,width_m:editor.widthM,length_m:1,rotation_deg:0};
-            editDrag.current={pointerId:e.pointerId,kind,start,screen,bed,width:editor.widthM,view,bounds,draft:null,moved:false};
+            editDrag.current={pointerId:e.pointerId,kind,start,end:start,screen,lastScreen:screen,bed,width:editor.widthM,view,bounds,draft:null,moved:false};
             e.preventDefault();setHover(null);e.currentTarget.setPointerCapture(e.pointerId);return;
           }
         }
@@ -97,9 +123,12 @@ export function Plot({geometry,data,index,selected,onSelect,editor:editorProp}: 
           if(Math.hypot(e.clientX-edit.screen.x,e.clientY-edit.screen.y)>4)edit.moved=true;
           if(!edit.moved)return;
           const end=screenToWorld({x:e.clientX,y:e.clientY},edit.bounds,edit.view);
-          const bed=edit.kind==='create'?drawnBed(edit.start,end,edit.width,edit.bed):translatedBed(edit.bed,edit.start,end);
+          edit.end=end;edit.lastScreen={x:e.clientX,y:e.clientY};
+          const snap=e.shiftKey||shiftPressed.current;
+          const bed=edit.kind==='create'?drawnBed(edit.start,end,edit.width,edit.bed):edit.kind==='rotate'?rotatedBed(edit.bed,edit.start,end,snap):translatedBed(edit.bed,edit.start,end);
           if(bed){edit.draft={kind:edit.kind,bed};setHover(null);editor.preview(edit.draft);}
           else {edit.draft=null;editor.cancel();}
+          if(edit.kind==='rotate'&&bed)setRotationFeedback({...edit.lastScreen,angle:bed.rotation_deg,shift:snap});
           return;
         }
         const d=drag.current;if(!d||d.pointerId!==e.pointerId)return;
@@ -112,11 +141,11 @@ export function Plot({geometry,data,index,selected,onSelect,editor:editorProp}: 
       onPointerUp={e=>{
         const edit=editDrag.current;
         if(edit&&editor&&edit.pointerId===e.pointerId){
-          editDrag.current=null;suppressClick.current=true;
+          editDrag.current=null;setRotationFeedback(null);suppressClick.current=true;
           if(e.currentTarget.hasPointerCapture(e.pointerId))e.currentTarget.releasePointerCapture(e.pointerId);
           if(edit.moved){
             const end=screenToWorld({x:e.clientX,y:e.clientY},edit.bounds,edit.view);
-            const bed=edit.kind==='create'?drawnBed(edit.start,end,edit.width,edit.bed):translatedBed(edit.bed,edit.start,end);
+            const bed=edit.kind==='create'?drawnBed(edit.start,end,edit.width,edit.bed):edit.kind==='rotate'?rotatedBed(edit.bed,edit.start,end,e.shiftKey||shiftPressed.current):translatedBed(edit.bed,edit.start,end);
             if(bed)void editor.finish({kind:edit.kind,bed});else editor.cancel();
           }
           return;
@@ -125,8 +154,8 @@ export function Plot({geometry,data,index,selected,onSelect,editor:editorProp}: 
         suppressClick.current=drag.current.moved;drag.current=null;setDragging(false);
         if(e.currentTarget.hasPointerCapture(e.pointerId))e.currentTarget.releasePointerCapture(e.pointerId);
       }}
-      onPointerCancel={()=>{if(editDrag.current)editor?.cancel();editDrag.current=null;drag.current=null;setDragging(false);suppressClick.current=false;}}
-      onLostPointerCapture={()=>{if(editDrag.current){editDrag.current=null;editor?.cancel();}drag.current=null;setDragging(false);}}
+      onPointerCancel={()=>{if(editDrag.current)editor?.cancel();editDrag.current=null;drag.current=null;setDragging(false);setRotationFeedback(null);suppressClick.current=false;}}
+      onLostPointerCapture={()=>{if(editDrag.current){editDrag.current=null;editor?.cancel();}drag.current=null;setDragging(false);setRotationFeedback(null);}}
       onPointerLeave={()=>setHover(null)}>
       <defs><pattern id="grid" width="1" height="1" patternUnits="userSpaceOnUse"><path d="M1 0H0V1" fill="none" stroke="#d9ded1" strokeWidth=".018"/></pattern>
         <pattern id="hatch" width=".3" height=".3" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V.3" stroke="#ad8767" strokeWidth=".045"/></pattern></defs>
@@ -138,7 +167,7 @@ export function Plot({geometry,data,index,selected,onSelect,editor:editorProp}: 
         const stage=state?.stage??'unplanned';
         const status=state?stages[state.stage]:'Keine Saisonplanung';
         return <g key={b.id} transform={`translate(${b.x} ${b.y}) rotate(${b.angle})`}
-          data-bed-id={b.id} className={`bed ${selected===b.id?'selected':''} ${hover?.id===b.id?'hovered':''} ${editor?.draft?.kind==='move'&&editor.draft.bed.object_id===b.id?'move-origin':''}`}
+          data-bed-id={b.id} className={`bed ${selected===b.id?'selected':''} ${hover?.id===b.id?'hovered':''} ${editor?.draft&&editor.draft.kind!=='create'&&editor.draft.bed.object_id===b.id?'move-origin':''}`}
           role="button" tabIndex={0} aria-pressed={selected===b.id}
           aria-label={`${b.label}: ${status}${batch?', '+data!.names[batch.plan.profile_id]:''}`}
           aria-describedby={hover?.id===b.id?'bed-tooltip':undefined}
@@ -160,11 +189,13 @@ export function Plot({geometry,data,index,selected,onSelect,editor:editorProp}: 
           {data&&<text transform={`translate(${x+b.width/2} ${y+b.length/2}) rotate(-90)`} textAnchor="middle" className="plant-label">{batch?data.names[batch.plan.profile_id]:'Frei'}</text>}
         </g>;
       })}
-      {editor?.draft&&<g className={`bed-draft ${editor.phase}`} data-testid="bed-draft" pointerEvents="none"
+      {editor?.draft&&editor.draft.kind!=='delete'&&<g className={`bed-draft ${editor.phase}`} data-testid="bed-draft" pointerEvents="none"
         transform={`translate(${editor.draft.bed.center.x} ${-editor.draft.bed.center.y}) rotate(${-editor.draft.bed.rotation_deg})`}>
         <rect x={-editor.draft.bed.width_m/2} y={-editor.draft.bed.length_m/2} width={editor.draft.bed.width_m} height={editor.draft.bed.length_m}/>
       </g>}
+      {editor?.tool==='select'&&!editor.busy&&(!editor.draft||editDrag.current?.kind==='rotate')&&handleBed&&!handleBed.geometry_locked&&<RotationHandle bed={handleBed} metresPerPixel={metresPerPixel}/>}
     </svg>
+    {rotationFeedback&&<RotationReadout value={rotationFeedback} viewport={viewport}/>}
     <nav className="map-tools floating" aria-label="Kartenwerkzeuge">
       <div className="zoom-tools"><button aria-label="Verkleinern" disabled={editor?.busy} onClick={()=>updateZoom(1/1.25)}>−</button>
         <output aria-label="Zoom">{Math.round(zoom*100)} %</output><button aria-label="Vergrößern" disabled={editor?.busy} onClick={()=>updateZoom(1.25)}>+</button>

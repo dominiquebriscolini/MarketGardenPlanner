@@ -48,6 +48,13 @@ class ProjectAPI:
                 return 200, {"valid": True, "issues": [], "revision_id": project.revision_id,
                              "geometry_token": geometry_token(project.geometry)}
             return 200, {"project": project.to_dict()}
+        if method == "DELETE" and bed_id:
+            if body is None or isinstance(body, dict) and "expected_revision" not in body:
+                raise ProjectError("revision_required", "expected_revision is required", 428)
+            fields(body, ("expected_revision",), ("command_id",))
+            project = self.repository.delete_bed(project_id, body["expected_revision"], bed_id,
+                                                command_id=body.get("command_id"))
+            return 200, {"project": project.to_dict()}
         if (method == "PUT" and suffix is None) or (method == "PATCH" and bed_id):
             if isinstance(body, dict) and "expected_revision" not in body:
                 raise ProjectError("revision_required", "expected_revision is required", 428)

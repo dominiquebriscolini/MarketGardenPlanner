@@ -9,6 +9,8 @@ import {ProjectSummary,SavedProject,demoToMap,projectToMap} from './projectView'
 import {getJSON,listProjects,loadProject} from './projectClient';
 import {useBedEditor} from './useBedEditor';
 import {EditorControls} from './EditorControls';
+import {DeleteBedDialog} from './DeleteBedDialog';
+import {deleteShortcut} from './geometryForm';
 
 export function App() {
   const [data,setData]=useState<Demo|null>(null),[demoError,setDemoError]=useState('');
@@ -40,7 +42,7 @@ export function App() {
     return ()=>controller.abort();
   },[mode,refresh]);
   useEffect(()=>{
-    const onKey=(e:KeyboardEvent)=>{if(e.key==='Escape'){setSelected(null);setForecastOpen(false);}};
+    const onKey=(e:KeyboardEvent)=>{if(e.key==='Escape'&&!e.defaultPrevented){setSelected(null);setForecastOpen(false);}};
     let narrow=window.innerWidth<=600;
     const onResize=()=>{const next=window.innerWidth<=600;if(next!==narrow){setForecastPosition(null);narrow=next;}};
     window.addEventListener('keydown',onKey);window.addEventListener('resize',onResize);
@@ -48,12 +50,21 @@ export function App() {
   },[]);
   const demoMode=mode==='demo';
   const activeProject=project?.project_id===mode?project:null;
-  const onSaved=useCallback((saved:SavedProject,bedId:string)=>{
+  const onSaved=useCallback((saved:SavedProject,bedId:string|null)=>{
     setProject(saved);setSelected(bedId);
     const {geometry:_,...summary}=saved;
     setCatalog(items=>items.map(p=>p.project_id===saved.project_id?summary:p));
   },[]);
   const editor=useBedEditor(activeProject,onSaved);
+  useEffect(()=>{
+    const remove=(event:KeyboardEvent)=>{
+      const active=document.activeElement;
+      const input=active instanceof HTMLElement&&(active.isContentEditable||!!active.closest('input,textarea,select,[role="textbox"]'));
+      const bed=activeProject?.geometry.beds.find(b=>b.object_id===selected);
+      if(bed&&!editor.busy&&!editor.deleteTarget&&deleteShortcut(event,input)){event.preventDefault();editor.requestDelete(bed);}
+    };
+    window.addEventListener('keydown',remove);return ()=>window.removeEventListener('keydown',remove);
+  },[activeProject,selected,editor]);
   const geometry=useMemo(()=>demoMode?(data?demoToMap(data):null):(activeProject?projectToMap(activeProject):null),[demoMode,data,activeProject]);
   const day=data?.days[index];
   const occupied=day?Object.values(day.beds).filter(b=>b.stage!=='free').length:0;
@@ -93,7 +104,8 @@ export function App() {
       {activeProject&&<EditorControls editor={editor}/>}
     </div>
     {demoMode&&data&&selected&&<Details data={data} index={index} selected={selected} onClose={()=>setSelected(null)}/>}
-    {!demoMode&&activeProject&&selected&&<ProjectDetails project={activeProject} selected={selected} onClose={()=>setSelected(null)}/>}
+    {!demoMode&&activeProject&&selected&&<ProjectDetails project={activeProject} selected={selected} onClose={()=>setSelected(null)} editor={editor}/>}
+    {activeProject&&editor.deleteTarget&&<DeleteBedDialog editor={editor}/>}
     {demoMode&&data&&day&&forecastOpen&&<ForecastWindow data={data} day={day.date} position={forecastPosition} onPosition={setForecastPosition} onClose={()=>setForecastOpen(false)}/>}
     {demoMode&&data&&day?<section className="season floating" aria-label="Saisonsteuerung"><div className="season-head">
       <div className="season-date"><span className="eyebrow">SAISONZEITPUNKT</span><strong>{fmt(day.date)}</strong></div><span className="occupancy">{occupied} / {data.geometry.beds.length} Beete belegt</span>

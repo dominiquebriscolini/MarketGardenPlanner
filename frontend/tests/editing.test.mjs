@@ -146,6 +146,6 @@ test('Demo ignores editing inputs and keeps original seasonal labels',()=>{
 test('Toolbar exposes explicit width and disables edit tools during confirmation',()=>{
   const markup=renderToStaticMarkup(React.createElement(EditorControls,{editor:{tool:'draw',busy:true,width:'0.65321',widthM:.65321,draft:null,message:'',setTool:()=>{},setWidth:()=>{}}}));
   assert.ok(markup.includes('Beet zeichnen')&&markup.includes('Auswählen'));
-  assert.ok(markup.includes('value="0.65321"'));
+  assert.ok(markup.includes('value="0.65"'));
   assert.equal((markup.match(/disabled=""/g)||[]).length,3);
 });

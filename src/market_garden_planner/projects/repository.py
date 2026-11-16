@@ -10,7 +10,7 @@ import sqlite3
 from ..spatial import GeometryState, dumps, loads, geometry_token, new_id
 from ..spatial.models import require_uuid
 from .errors import ProjectError
-from .geometry_updates import append_bed, reconcile, patch_bed
+from .geometry_updates import append_bed, reconcile, patch_bed, remove_bed
 
 APPLICATION_ID = 0x4D475031  # MGP1
 SCHEMA_VERSION = 1
@@ -140,7 +140,7 @@ class ProjectRepository:
                        (project.project_id, name, project.revision_id, serialized, geometry_token(geometry), now, now))
         return project
 
-    def _change(self, project_id, expected_revision, transform, request, command_id, *, allow_add=False):
+    def _change(self, project_id, expected_revision, transform, request, command_id, *, allow_add=False, allow_remove=False):
         require_uuid(expected_revision)
         if command_id is not None:
             require_uuid(command_id)
@@ -161,8 +161,17 @@ class ProjectRepository:
                 raise ProjectError("revision_conflict", "Project has a newer revision; reload before saving", 409,
                                    expected_revision=expected_revision, current_revision=before.revision_id)
             name, candidate = transform(before)
+            if allow_add:
+                added_id = next(b.object_id for b in candidate.beds if all(b.object_id != old.object_id for old in before.geometry.beds))
+                for receipt in db.execute("SELECT response_json FROM commands WHERE project_id=?", (project_id,)):
+                    try:
+                        retired_id = json.loads(receipt["response_json"]).get("_deleted_bed_id")
+                    except (ValueError, TypeError, AttributeError) as error:
+                        raise ProjectError("corrupt_command", "Stored command receipt is invalid", 500) from error
+                    if retired_id == added_id:
+                        raise ProjectError("retired_id", "Deleted bed IDs cannot be reused in this project")
             project_name(name)
-            geometry = reconcile(before.geometry, candidate, allow_add=allow_add)
+            geometry = reconcile(before.geometry, candidate, allow_add=allow_add, allow_remove=allow_remove)
             if geometry == before.geometry and name == before.name:
                 result = before
             else:
@@ -173,8 +182,11 @@ class ProjectRepository:
                 if updated.rowcount != 1:
                     raise ProjectError("revision_conflict", "Concurrent project modification", 409)
             if command_id:
+                receipt_data = result.to_dict()
+                if allow_remove:
+                    receipt_data["_deleted_bed_id"] = request["bed_id"]
                 db.execute("INSERT INTO commands VALUES (?,?,?,?)",
-                           (project_id, command_id, request_hash, json.dumps(result.to_dict(), allow_nan=False)))
+                           (project_id, command_id, request_hash, json.dumps(receipt_data, allow_nan=False)))
             return result
 
     def save(self, project_id, expected_revision, name, geometry, *, command_id=None):
@@ -192,3 +204,11 @@ class ProjectRepository:
         return self._change(project_id, expected_revision,
                             lambda before: (before.name, append_bed(before.geometry, bed)),
                             request, command_id, allow_add=True)
+
+    def delete_bed(self, project_id, expected_revision, bed_id, *, command_id=None):
+        require_uuid(bed_id)
+        request = {"operation": "delete_bed", "expected_revision": expected_revision, "bed_id": bed_id}
+        # Even callers without an id receive a durable retirement receipt.
+        return self._change(project_id, expected_revision,
+                            lambda before: (before.name, remove_bed(before.geometry, bed_id)),
+                            request, command_id if command_id is not None else new_id(), allow_remove=True)

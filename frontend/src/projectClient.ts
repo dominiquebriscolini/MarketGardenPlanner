@@ -3,7 +3,7 @@ import {decodeProject,decodeProjectList} from './projectView';
 export type ValidationIssue={code:string;object_ids:string[];message:string};
 const messages:Record<string,string>={
   revision_conflict:'Das Projekt wurde inzwischen geändert. Bitte neu laden, bevor Sie weiter bearbeiten.',
-  geometry_locked:'Dieses Beet ist gesperrt und kann nicht verschoben werden.',
+  geometry_locked:'Dieses Beet ist gesperrt und kann nicht verändert oder gelöscht werden.',
   bed_overlap:'Das Beet überschneidet ein anderes Beet.',
   outside_parcel:'Das Beet liegt außerhalb der Grundstücksgrenze oder in einem Polygonloch.',
   invalid_bed:'Die Beetgeometrie ist ungültig.',

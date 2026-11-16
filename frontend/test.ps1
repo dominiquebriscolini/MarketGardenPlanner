@@ -9,11 +9,11 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Test-Build fehlgeschlagen.' }
     & $esbuild src\forecastModel.ts --bundle --platform=node --format=esm --outfile=.test-build\forecastModel.mjs
     if ($LASTEXITCODE -ne 0) { throw 'Prognose-Test-Build fehlgeschlagen.' }
-    foreach ($module in @('projectView','projectClient','editingGeometry','editingClient')) {
+    foreach ($module in @('projectView','projectClient','editingGeometry','editingClient','geometryForm','geometryDisplay')) {
         & $esbuild "src\$module.ts" --bundle --platform=node --format=esm --outfile=".test-build\$module.mjs"
         if ($LASTEXITCODE -ne 0) { throw 'Projekt-Test-Build fehlgeschlagen.' }
     }
-    foreach ($component in @('Plot','ProjectTooltip','EditorControls')) {
+    foreach ($component in @('Plot','ProjectTooltip','EditorControls','BedGeometryForm','DeleteBedDialog','RotationReadout')) {
         & $esbuild "src\$component.tsx" --bundle --packages=external --platform=node --format=esm --outfile=".test-build\$component.mjs"
         if ($LASTEXITCODE -ne 0) { throw 'Beschriftungs-Test-Build fehlgeschlagen.' }
     }
@@ -23,6 +23,6 @@ try {
     $geometryPython = Join-Path (Split-Path $PSScriptRoot -Parent) '.venv\Scripts\python.exe'
     & $geometryPython -B tests\export_project_fixture.py
     if ($LASTEXITCODE -ne 0) { throw 'Projekt-Testdaten konnten nicht erzeugt werden. Geometry-Extra prüfen.' }
-    & $NodeExecutable --test --test-isolation=none tests\interactions.test.mjs tests\forecast.test.mjs tests\projects.test.mjs tests\labels.test.mjs tests\editing.test.mjs
+    & $NodeExecutable --test --test-isolation=none tests\interactions.test.mjs tests\forecast.test.mjs tests\projects.test.mjs tests\labels.test.mjs tests\editing.test.mjs tests\precision.test.mjs tests\polish.test.mjs
     if ($LASTEXITCODE -ne 0) { throw 'Interaktionstests fehlgeschlagen.' }
 } finally { $env:PYTHONPATH = $previousPythonPath; Pop-Location }
