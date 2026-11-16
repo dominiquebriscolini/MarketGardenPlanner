@@ -1,5 +1,13 @@
 # Market Gardening Planner ? Phase 1 und 2
 
+## Geometriekern Phase 3B.1
+
+Separates optionales Paket `market_garden_planner.spatial` mit metrischen
+Polygonen, gedrehten Rechteckbeeten, Validierung, JSON und lesendem Scheduler-Adapter.
+Installation in einer lokalen Python-3.11-Umgebung: `python -m pip install -e ".[geometry]"`.
+[Datenvertrag, vollständige Installation und Tests](docs/phase3b1.md).
+Demo, Frontend und agronomischer Kern bleiben unverändert.
+
 ## Visueller Prototyp Phase 3A.1
 
 Die aktuelle Oberfläche ist das [Map-first Interface der Phase 3A.2](docs/phase3a2.md):
@@ -16,7 +24,7 @@ Python **3.11.9**, Standardbibliothek, keine Laufzeitabhaengigkeiten.
 
 ```powershell
 $env:PYTHONPATH = "$PWD/src"
-py -3.11 -m unittest discover -s tests -v
+.\.venv\Scripts\python.exe -B -m unittest discover -s tests -v
 ```
 
 ## Struktur
