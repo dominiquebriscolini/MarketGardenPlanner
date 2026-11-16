@@ -2,6 +2,10 @@
 
 ## Visueller Prototyp Phase 3A.1
 
+Die aktuelle Oberfläche ist das [Map-first Interface der Phase 3A.2](docs/phase3a2.md):
+bildschirmfüllende Karte, schwebende Bedienfelder und unabhängige Hover-/Beetauswahl.
+Der lokale Startbefehl bleibt unverändert.
+
 Lokaler Start: `powershell -NoProfile -ExecutionPolicy Bypass -File .\start-prototype.ps1`
 und anschließend **http://127.0.0.1:8765** im Browser öffnen.
 Die gebaute React-Oberfläche wird vom Python-3.11-Prozess ausgeliefert.

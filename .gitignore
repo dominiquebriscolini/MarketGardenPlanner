@@ -5,6 +5,7 @@ __pycache__/
 build/
 dist/
 node_modules/
+.test-build/
 
 .pnpm-store/
 sandbox_test.txt
