@@ -1,3 +1,78 @@
+# Roadmap — Status, Abhängigkeiten und Abnahme
+
+Stand: **17.11.2026**, vorhandener Arbeitsstand bis Phase 3C.2.
+Diese Übersicht gleicht bestehende Aufträge und Phasenberichte ab; sie
+beauftragt keine weitere Implementierung und trifft keine neuen Prioritätsentscheidungen.
+[Produkt](PRODUCT.md), [Architektur](ARCHITECTURE.md),
+[Entscheidungen](DECISIONS.md), [offene Fragen](OPEN_QUESTIONS.md).
+
+## Statusübersicht
+
+„Implementiert“ bedeutet durch vorhandenen Code und Phasenbericht belegt.
+„Prüfungen dokumentiert“ bezeichnet einen früheren Prüfbericht, keine hier
+erneut ausgeführten Tests und keine automatische gemeinsame Produktabnahme.
+Eine ausdrücklich dokumentierte offene manuelle Prüfung bleibt offen.
+
+| Phase / Bereich | Stand | Nachweis / verbleibender Umfang |
+|---|---|---|
+| 1 / 2 | Implementiert; automatisierte Prüfungen dokumentiert | [Fachkern](phase1.md), [Scheduler](phase2.md), lokale Kalibrierung weiterhin offen |
+| 3A.1 / 3A.2 | Implementiert; Prüfungen dokumentiert | [Prototyp](phase3a1.md), [Map-first](phase3a2.md), [Ernteprognose](phase3a2-harvest.md) |
+| 3B.0 | Architekturprüfung dokumentiert | Historischer Entwurf unten; spätere Umsetzungen konkretisieren ihn |
+| 3B.1 | Implementiert; Prüfungen dokumentiert | [Geometriekern](phase3b1.md); Shapely 2.1.2 festgelegt |
+| 3B.2 | Implementiert; Prüfungen dokumentiert | [SQLite/API](phase3b2.md); Speicher-/Revisionsvertrag konkretisiert, Schema inzwischen durch 3C.1 erweitert |
+| 3B.3a | Implementiert; Prüfungen dokumentiert | [Projektanzeige](phase3b3a.md) |
+| 3B.3b | Implementiert; Prüfungen dokumentiert | [Zeichnen und Verschieben](phase3b3b.md) |
+| 3B.3c + UI-Feinschliff | Implementiert; Prüfungen dokumentiert, physischer Shift-Drag noch offen | [Präzise Bearbeitung](phase3b3c.md); offene Geräteprüfung im OQ-Register |
+| 3B.3 insgesamt | Teilweise umgesetzt | Grundstücksgrenze, Wege/Sperrflächen, feste Bezugskanten, Entsperren und Undo/Redo sind noch nicht vollständig als UI vorhanden |
+| 3C.1 + UX-Fortschreibung | Implementiert; Prüfungen dokumentiert | [Kulturplanung und Datumsanalyse](phase3c1.md), DEC-029/030 |
+| 3C.2 | Implementiert im Arbeitsstand; Prüfungen dokumentiert | [Projekt-Wochenansicht](phase3c2.md), DEC-031; kein gespeicherter Scheduler-Lauf |
+| 3B.4 | Beschlossenes Ziel, nicht implementiert | Gewächshäuser/Umgebungszuordnung; OQ-013 |
+| 3B.5 | Beschlossenes Ziel, nicht implementiert | Bake und Vergleich; OQ-014/015 |
+| 3B.6 | Beschlossenes Ziel, nicht implementiert | Freigegebene Zonen generieren; OQ-015/016 |
+| 3B.7 | Beschlossenes Darstellungsziel; technische Umsetzung offen | OQ-019; isoliertes Botanical ASCII Lab ist keine Integration |
+| Historische Erträge / GIS | Beschlossene Zukunftsziele, nicht implementiert | OQ-017/018; keine neue Reihenfolge festgelegt |
+
+## Abhängigkeiten und nächste Klärungen
+
+Die bestehende räumliche Reihenfolge bleibt erhalten:
+Geometrie → Persistenz → manueller Editor → Gewächshäuser →
+Bake/Vergleich → zonenbezogene Generierung → zusätzliche Landschaftsansicht.
+Der ergänzende Kulturplanungsstrang 3C.1/3C.2 ist bereits vorhanden; er ersetzt
+weder diese Abhängigkeiten noch die fachlichen Voraussetzungen für Prognosen.
+
+Vor einer nächsten Beauftragung den kleinen konkreten Umfang und seine
+Abnahmekriterien festlegen. Der bereits dokumentierte fachliche Anschluss ist
+Saison-/Räumvertrag, Zuordnung manueller Kulturabsichten zu Scheduler-Läufen
+und revisionsgebundene Ergebnisse (OQ-007 bis OQ-010).
+Diese Nennung ist keine Entscheidung, ihn vor den räumlichen Zielen umzusetzen.
+
+## Qualitäts- und Dokumentationsnachweise
+
+- Bestehende Funktionen und Tests erhalten. Die Regressionsbasis ist die
+  tatsächlich vorhandene Suite zu Beginn des jeweiligen Auftrags, nicht die
+  historische Zahl 32/12 aus Phase 3B.0.
+- Aktuelle Befehle: [README](../README.md). Datierte Testergebnisse stehen im
+  jeweiligen Phasenbericht; jüngster dokumentierter Stand ist [3C.2](phase3c2.md).
+- Code, dokumentierte automatische Prüfungen, offene manuelle Abnahme und
+  Git-/Arbeitsstand getrennt ausweisen; keine Abnahme aus einer Testzahl ableiten.
+- Geometrie, IDs, Revisionen, Datumsgrenzen, Datenherkunft und API-Fehler direkt
+  prüfen; UI-Änderungen zusätzlich im Browser kontrollieren.
+- Querverweise und Status nach jeder Phase abgleichen. Offene Punkte mit
+  [OQ-ID](OPEN_QUESTIONS.md) verknüpfen, Entscheidungen über DEC-IDs fortschreiben.
+- Kein automatischer Git-Commit und keine Änderungen an externen Projekten.
+
+## Historische Planung und unveränderte Abnahmekriterien
+
+Die bisherige Roadmap bleibt vollständig erhalten. Alte Formulierungen wie
+„offen“, „dieser Auftrag“, Versionsauswahl und Testzahlen beziehen sich auf
+die dort genannten Stände. Insbesondere Shapely-Version und lokaler
+Speicher-/Revisionsvertrag sind heute nicht mehr unentschieden.
+Noch ausstehende Detailentscheidungen stehen ausschließlich als aktueller
+Index in [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md); Begründungen bleiben am Ursprung.
+
+<details>
+<summary>Bisherige Roadmap — ursprüngliche Reihenfolge, Aufträge und Abnahmekriterien</summary>
+
 # Phase 3B.0 — Roadmap zur interaktiven Grundstücksplanung
 
 Stand: 16.11.2026. **Vorschlag, noch kein Implementierungsauftrag.**
@@ -24,6 +99,16 @@ Bake vor Generierung ermöglicht einen eingefrorenen Bestandsvergleich, bevor
 ein automatischer Vorschlag zusätzliche Objekte erzeugt.
 
 ## 2. Phasen mit Abnahmekriterien
+
+### Ergänzender Strang 3C.2 — Wochenansicht gespeicherter Projekte
+
+Implementiert auf ausdrücklichen Auftrag: Python projiziert eigene Anbauabsichten
+auf ISO-Wochen, die bestehende Karte und der gemeinsame Regler zeigen diese
+revisionsgebunden an. Kein zusätzlicher Scheduler, PlanRun, SQLite-Vertrag oder
+Ertragsmodell. Fehlende Enden und echte zeitliche Überlagerungen bleiben sichtbar;
+Folgekulturen innerhalb derselben Woche werden davon getrennt.
+[Abnahme und Grenzen](phase3c2.md), DEC-031. Fachliche Saisonprofile, Ist-Daten,
+Räumung und neue Prognosen bleiben eigene zukünftige Aufgaben.
 
 ### Ergänzender Strang 3C.1 — Kulturplanung und manuelle Beetzuweisung
 
@@ -274,3 +359,5 @@ Hierfür werden nur die später erweiterbaren Identitäts-/Objektgrenzen vorbere
 | Wegelängen-/Flächenauswertung | Vor Variantenvergleich 3B.5 verbindlich definieren |
 | Generatorheuristik, Abstände und Gütemaße | 3B.6, reale Betriebsanforderungen vor Optimierungsversprechen |
 | Pflanzenassets, Höhen und Renderingbibliothek | 3B.7; keine neuen Geometriekoordinaten aus Assets |
+
+</details>

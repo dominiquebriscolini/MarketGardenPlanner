@@ -290,3 +290,30 @@ th:first-child,td:first-child {padding-left:0;white-space:nowrap;}.current-week 
   .project-season {padding:8px 14px;}
   .project-season p {margin:3px 0;}
 }
+.bed-fill.project-unplanned,.bed-fill.project-future,.bed-fill.project-gap,.bed-fill.project-completed {fill:#f0f1eb;stroke:#a3ac9d;}
+.bed-fill.project-future {stroke-dasharray:.13 .08;}
+.bed-fill.project-planned {fill:#dce3d5;stroke:#65765d;}
+.bed-fill.project-overlap {fill:#d9dfd3;stroke:#52634c;}
+.bed-fill.project-uncertain,.bed-fill.project-unavailable {fill:#e9ece4;stroke:#7b8575;stroke-dasharray:.08 .08;}
+.project-crop-label {font:var(--label-size) 'Segoe UI',sans-serif;fill:#53634b;pointer-events:none;}
+.planned-week {background:#dce3d5;}
+.overlap-week {background:repeating-linear-gradient(45deg,#d9dfd3,#d9dfd3 3px,#84917d 3px,#84917d 4px);}
+.uncertain-week {background:#e9ece4;border:1px dashed #7b8575!important;}
+.week-summary {padding:6px 0 8px;margin:0 0 8px;border-bottom:1px solid #d9ded1;font-size:10px;line-height:1.5;color:#5b6e51;}
+.week-summary strong,.week-summary>span {display:block;}
+.week-summary>span {font-size:10px;color:#7b8072;}
+.week-summary ul {padding-left:15px;margin:4px 0 0;}
+.week-summary small {font-size:9px;}
+.bed-tooltip .week-summary {margin-bottom:0;}
+.bed-tooltip .muted {margin:8px 0;}
+.project-season-bar .season-head {flex-wrap:wrap;gap:7px 12px;}
+.project-season-bar .season-date strong {font-size:22px;}
+.week-dates {font-size:10px;color:#7b8a70;}
+.project-season-bar .date-navigation {margin-left:auto;}
+.project-season-bar select {font:11px 'Segoe UI',sans-serif;padding:5px;background:#fcfcf7;border:1px solid #c7d0be;color:#4d6244;border-radius:3px;}
+.project-season-bar .season-slider {margin:8px 0 5px;}
+.week-axis {display:flex;justify-content:space-between;gap:8px;font-size:9px;color:#7b8a70;}
+.week-axis small {font-size:9px;text-align:center;}
+.project-season-bar>div[role=alert] {font-size:11px;color:#895b48;}
+.project-season-bar>div[role=alert] p {margin:5px 0;}
+@media(max-width:900px) {.project-season-bar .week-dates {display:none;}.week-axis small {max-width:65%;}}

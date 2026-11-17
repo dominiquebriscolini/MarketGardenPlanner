@@ -1,3 +1,5 @@
+> Historischer Stand. Die aktuelle feste Ansicht und Verschattung sind in [LIGHT-STUDY.md](LIGHT-STUDY.md) dokumentiert.
+
 # Räumliche Tiefe — 17.11.2026
 
 Die bestehende Tomatenpflanze wurde räumlich überarbeitet. **Keine zusätzlichen

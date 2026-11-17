@@ -64,3 +64,43 @@
 - Prüfung: HTTP 200 trotz Cachevalidator, no-store-Header, ausgelieferte app.js
   entspricht der Datei auf Disk; alle drei Winkel im Browser betätigt, keine
   Warnungen oder JavaScript-Fehler in den abgefragten Logs.
+
+## EXP-005 — Feste Standardisometrie und gemeinsame Sonnenverschattung
+
+- Datum: 17.11.2026.
+- Status: im Lab umgesetzt und geprüft.
+- Grundlage: ausdrücklicher Nutzerauftrag „Feste Isometrie und verbesserte Verschattung“.
+- Entscheidung: EXP-004 hinsichtlich der Winkelumschaltung abgelöst: Knöpfe,
+  URL-Steuerung und Renderer-Kameradrehung entfernt. Ausschließlich Standardisometrie
+  bei erhaltener Geometrie, Verdeckung, Pan und Zoom. Gemeinsame feste Sonne aus
+  Bildschirm-links-oben, Lichttiefenfeld für stärkere Eigenverschattung sowie
+  weich gefilterter, geometrisch abgeleiteter Bodenschatten nach rechts unten.
+- Begründung: konstante Orientierung und klarere Raumwirkung bei 5–6 px ohne
+  zusätzliche Pflanzenorgane oder veränderte Wind-/Wachstumslogik.
+- Auswirkungen: frühere Vergleichsseite nur noch historisches Bildarchiv;
+  SUN/LightingField in lighting.js sind für weitere Weltobjekte wiederverwendbar.
+  Hybrid/5 px und Pflanzenpalette bleiben erhalten. Gegenüber EXP-003 ist die
+  damals nur dezente unverschattete Beleuchtung durch echte Sonnenabschattung
+  ersetzt; die opake Kameratiefenprüfung bleibt gültig. Wind und Modell bytegleich.
+- Prüfung: 12 Licht-, 23 feste Tiefen- und 18 bestehende Rendererprüfungen;
+  visuelle Browserkontrolle aller Modi sowie 5/6 px. Details und Grenzen in
+  [LIGHT-STUDY.md](LIGHT-STUDY.md). Kein Eingriff in den Planner.
+
+## EXP-006 — Zwei explizite Paletten und lokal gespeicherte Theme-Auswahl
+
+- Datum: 17.11.2026.
+- Status: im Lab umgesetzt und geprüft.
+- Grundlage: ausdrücklicher Nutzerauftrag „Light/Dark Mode“.
+- Entscheidung: kompakter Sonnen-/Mond-Switch oben rechts, Dark als Standard;
+  Auswahl unter `botanical-ascii-lab:theme` lokal speichern. Zwei Renderer-Paletten
+  und CSS-Variablen für die vollständige UI statt Canvas-Inversion/CSS-Filter.
+- Begründung: Lesbarkeit auf dunklem Grün und warmem Off-White, während geometrische
+  und lichtbezogene Ergebnisse exakt dieselben bleiben.
+- Auswirkungen: Hintergründe #101713 / #F0EEE5. Light erhält dunkles entsättigtes Ink,
+  zurückhaltenden graugrünen Schatten und rote/orange Früchte. Bisherige Dark-Ink-
+  Palette erhalten. Schriftgewicht/Inkdeckkraft sind Darstellungsparameter, keine
+  Änderung von Raster, Punktzahl, Geometrie oder Lichtmodell. Thema invalidiert die
+  Schattenfarbebenen im Cache. EXP-005 bleibt für feste Kamera/Licht/Schatten gültig.
+- Prüfung: 44 Paletten-/Geometrieinvarianzprüfungen; Browservergleich bei 5/6 px,
+  Auswahl nach Neuladen, CSS-Filter none; fünf Kernmodule per Hash unverändert.
+  [Technik und Testergebnisse](THEME-STUDY.md). Keine Planner-Dateien geändert.

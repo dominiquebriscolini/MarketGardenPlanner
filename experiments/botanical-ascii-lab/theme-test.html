@@ -1,0 +1,30 @@
+<!doctype html><html lang="de"><meta charset="utf-8"><title>Theme checks · Botanical Lab</title><style>body{background:#F0EEE5;color:#263e31;font:13px monospace;margin:25px}pre{white-space:pre-wrap}</style><h1>Theme palettes / identical geometry and lighting</h1><pre id="results">Running…</pre><script type="module">
+import {PlantRenderer} from './renderer.js?v=theme04';
+import {createTomato} from './model.js?v=light03';
+import {PALETTES} from './themes.js?v=theme04';
+const lines=[],assert=(label,pass)=>{lines.push(`${pass?'PASS':'FAIL'} ${label}`);if(!pass)throw Error(label);},same=(a,b)=>a.length===b.length&&a.every((v,i)=>v===b[i]);
+try{
+ assert('Requested dark background',PALETTES.dark.background==='#101713');
+ assert('Requested warm light background',PALETTES.light.background==='#F0EEE5');
+ const model=createTomato();
+ for(const size of [5,6])for(const mode of ['ascii','halftone','hybrid']){
+  const canvas=document.createElement('canvas'),r=new PlantRenderer(canvas),options={width:700,height:700,zoom:1,pan:[0,0],size,mode,grid:false,wind:0,time:0};
+  const text=r.ctx.fillText.bind(r.ctx),arc=r.ctx.arc.bind(r.ctx);let marks=[];
+  r.ctx.fillText=(char,x,y)=>{marks.push(`T:${char}:${x}:${y}`);text(char,x,y);};
+  r.ctx.arc=(x,y,radius,...args)=>{marks.push(`P:${x}:${y}:${radius}`);arc(x,y,radius,...args);};
+  const dark=r.render(model,{...options,theme:'dark'}),darkMarks=marks.sort(),darkPixels=r.ctx.getImageData(0,0,700,700).data.slice();
+  const z=r.visibility.z.slice(),owner=r.visibility.owner.slice(),tone=r.visibility.tone.slice(),material=r.visibility.material.slice(),sun=r.visibility.lighting.heights.slice(),softShadow=r.visibility.lighting.softMask.slice();
+  marks=[];const light=r.render(model,{...options,theme:'light'}),lightMarks=marks.sort(),lightPixels=r.ctx.getImageData(0,0,700,700).data.slice();
+  const label=`${mode} ${size}px`;
+  assert(`${label}: identical depths and owners`,same(z,r.visibility.z)&&same(owner,r.visibility.owner));
+  assert(`${label}: identical materials and illumination`,same(tone,r.visibility.tone)&&same(material,r.visibility.material));
+  assert(`${label}: identical sun depths and filtered ground shadow`,same(sun,r.visibility.lighting.heights)&&same(softShadow,r.visibility.lighting.softMask));
+  assert(`${label}: identical glyphs, dot centres and radii`,JSON.stringify(darkMarks)===JSON.stringify(lightMarks));
+  assert(`${label}: identical mark and shadow coverage counts`,dark.glyphs===light.glyphs&&dark.dots===light.dots&&dark.shadowCells===light.shadowCells);
+  assert(`${label}: palette actually changes output pixels`,!same(darkPixels,lightPixels));
+  r.render(model,{...options,theme:'dark'});assert(`${label}: switching back restores every dark pixel`,same(darkPixels,r.ctx.getImageData(0,0,700,700).data));
+ }
+ lines.push(`COMPLETE ${lines.filter(s=>s.startsWith('PASS')).length} checks`);
+}catch(e){lines.push('ERROR '+e.stack);}
+document.getElementById('results').textContent=lines.join('\n');
+</script></html>

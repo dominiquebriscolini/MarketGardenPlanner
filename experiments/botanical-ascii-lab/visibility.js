@@ -1,6 +1,6 @@
 // CPU z-buffer: 3x3 sub-samples per character cell, before any text/stippling.
 // Gaps between output marks reveal background, never an occluded rear layer.
-import {project,depth,rotateZ} from './projection.js?v=light03';
+import {project,depth} from './projection.js?v=light03';
 import {deform} from './wind.js?v=light03';
 import {LightingField} from './lighting.js?v=light03';
 const materials={leaf:1,stem:2,fruit:3,green:4,flower:5};
@@ -12,9 +12,17 @@ const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const U=unit([1,-1,0]),V=unit([1,1,-2]),W=unit([1,1,1]);
 export class VisibilityBuffer {
  build(model,{width,height,zoom,pan,size,wind,time}){
-  const yaw=0; // Fixed orientation: query parameters and renderer options cannot rotate it.
+  const buildStart=performance.now();
+  // Fixed world orientation; no camera angle is accepted.
   const forms=model.map(f=>({...f,points:f.points.map(p=>deform(p,time,wind,f.flex,f.phase))}));
-  this.lighting??=new LightingField();this.lighting.build(forms);
+  this.lighting??=new LightingField();
+  // Only the soft shadow map is cached at 10 Hz. Every visible vertex still
+  // receives the original wind deformation at the full render frame rate.
+  const shadowTime=wind===0?0:Math.floor(time*10);
+  if(this.shadowModel!==model||this.shadowWind!==wind||this.shadowTime!==shadowTime){
+   this.lighting.build(forms);this.shadowModel=model;this.shadowWind=wind;this.shadowTime=shadowTime;
+  }
+  this.shadowMapMs=performance.now()-buildStart;
   const cellX=size*.62,cellY=size;
   this.columns=Math.ceil(width/cellX);this.rows=Math.ceil(height/cellY);
   this.w=this.columns*3;this.h=this.rows*3;this.stepX=cellX/3;this.stepY=cellY/3;
@@ -23,8 +31,8 @@ export class VisibilityBuffer {
   this.z.fill(-Infinity);this.material.fill(0);this.owner.fill(-1);
   const scale=Math.min(height*.46,width*.58)*zoom,metricScale=scale*Math.sqrt(1.5);
   const origin=[width*.5+pan[0],height*.89+pan[1]];
-  const screen=p=>{const r=rotateZ(p,yaw),q=project(r);return [origin[0]+q[0]*scale,origin[1]+q[1]*scale,depth(r)];};
-  const camera=rotateZ(W,-yaw),screenU=rotateZ(U,-yaw),screenV=rotateZ(V,-yaw);
+  const screen=p=>{const q=project(p);return [origin[0]+q[0]*scale,origin[1]+q[1]*scale,depth(p)];};
+  const camera=W,screenU=U,screenV=V;
   const write=(x,y,z,mat,tone,direction,id)=>{
    const i=y*this.w+x;
    if(z>this.z[i]||(z===this.z[i]&&id>this.owner[i])){
@@ -74,7 +82,7 @@ export class VisibilityBuffer {
     for(let j=0;j<points.length;j++){const k=(j+1)%points.length;triangle(p,points[j],points[k],unit(cross(sub(world[j],center),sub(world[k],center))),f,center.map((v,i)=>(v+world[j][i]+world[k][i])/3));}
    }
   }
-  return this;
+  this.rasterMs=performance.now()-buildStart-this.shadowMapMs;return this;
  }
  sample(col,row){
   const middle=(row*3+1)*this.w+col*3+1;if(this.material[middle])return middle;

@@ -3,7 +3,9 @@ import type {BedEditor} from './useBedEditor';
 import {BedGeometryForm} from './BedGeometryForm';
 import {CultivationPanel} from './CultivationPanel';
 import {formatGeometry} from './geometryDisplay';
-export function ProjectDetails({project,selected,onClose,editor,cultivationBusy=false,onCultivationBusy,onSaved}:{project:SavedProject;selected:string;onClose:()=>void;editor?:BedEditor;cultivationBusy?:boolean;onCultivationBusy?:(value:boolean)=>void;onSaved?:(project:SavedProject,bedId:string)=>void}) {
+import {ProjectWeekSummary} from './ProjectWeekSummary';
+import type {SeasonFrame} from './projectSeason';
+export function ProjectDetails({project,selected,onClose,editor,cultivationBusy=false,onCultivationBusy,onSaved,season,seasonMessage}:{project:SavedProject;selected:string;onClose:()=>void;editor?:BedEditor;cultivationBusy?:boolean;onCultivationBusy?:(value:boolean)=>void;onSaved?:(project:SavedProject,bedId:string)=>void;season?:SeasonFrame;seasonMessage?:string}) {
   const bed=project.geometry.beds.find(b=>b.object_id===selected);
   if(!bed)return null;
   const format=formatGeometry;
@@ -11,6 +13,7 @@ export function ProjectDetails({project,selected,onClose,editor,cultivationBusy=
     <div className="detail-header"><div><span className="eyebrow">BEET / PLANUNG</span><h2>{bed.name||'Beet'}</h2></div>
       <button className="close-button" aria-label="Beetdetails schließen" disabled={cultivationBusy} onClick={onClose}>×</button></div>
     <div className="detail-body">
+      <ProjectWeekSummary frame={season} bedId={bed.object_id} message={seasonMessage}/>
       {onSaved&&onCultivationBusy&&<CultivationPanel key={bed.object_id} project={project} bedId={bed.object_id} disabled={!!editor?.draft||!!editor?.deleteTarget||!!editor?.busy&&!cultivationBusy} busy={cultivationBusy} onBusy={onCultivationBusy} onSaved={onSaved}/>}
       <details className="geometry-section" open={!onSaved}><summary>Geometrie <span>{format(bed.width_m)} × {format(bed.length_m)} m · {format(bed.rotation_deg)}°</span></summary>
       {editor&&<BedGeometryForm key={`${bed.object_id}:${bed.revision_id}:${editor.cancelVersion}:${editor.inputVersion}`} bed={bed} editor={editor}/>}

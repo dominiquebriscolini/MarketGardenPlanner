@@ -11,6 +11,8 @@ import {RotationReadout,RotationFeedback} from './RotationReadout';
 import type {BedDraft,ScreenBounds} from './editingGeometry';
 import type {View} from './interactions';
 import type {BedEditor} from './useBedEditor';
+import {projectStages,weekCrops} from './projectSeason';
+import type {SeasonFrame} from './projectSeason';
 
 const Geometry = memo(function Geometry({geometry,demo}: {geometry:MapGeometry;demo:boolean}) {
   const path=useMemo(()=>parcelPath(geometry),[geometry]);
@@ -25,11 +27,12 @@ const Geometry = memo(function Geometry({geometry,demo}: {geometry:MapGeometry;d
   </g>;
 });
 
-export function Plot({geometry,data,index,selected,onSelect,editor:editorProp}: {
-  geometry:MapGeometry; data?:Demo; index:number; selected:string|null; onSelect:(id:string|null)=>void;editor?:BedEditor;
+export function Plot({geometry,data,index,selected,onSelect,editor:editorProp,season:seasonProp,seasonMessage}: {
+  geometry:MapGeometry; data?:Demo; index:number; selected:string|null; onSelect:(id:string|null)=>void;editor?:BedEditor;season?:SeasonFrame;seasonMessage?:string;
 }) {
   // A demo never gets an editing path, even if a caller accidentally supplies controls.
   const editor=data?undefined:editorProp;
+  const season=data?undefined:seasonProp;
   const svg=useRef<SVGSVGElement>(null);
   const [viewport,setViewport]=useState({width:window.innerWidth,height:window.innerHeight});
   const [zoom,setZoom]=useState(1), [pan,setPan]=useState<Point>({x:0,y:0});
@@ -158,18 +161,22 @@ export function Plot({geometry,data,index,selected,onSelect,editor:editorProp}: 
       onLostPointerCapture={()=>{if(editDrag.current){editDrag.current=null;editor?.cancel();}drag.current=null;setDragging(false);setRotationFeedback(null);}}
       onPointerLeave={()=>setHover(null)}>
       <defs><pattern id="grid" width="1" height="1" patternUnits="userSpaceOnUse"><path d="M1 0H0V1" fill="none" stroke="#d9ded1" strokeWidth=".018"/></pattern>
-        <pattern id="hatch" width=".3" height=".3" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V.3" stroke="#ad8767" strokeWidth=".045"/></pattern></defs>
+        <pattern id="hatch" width=".3" height=".3" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V.3" stroke="#ad8767" strokeWidth=".045"/></pattern>
+        <pattern id="week-overlap" width=".3" height=".3" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V.3" stroke="#697668" strokeWidth=".04"/></pattern>
+        <pattern id="week-open" width=".35" height=".35" patternUnits="userSpaceOnUse"><circle cx=".17" cy=".17" r=".025" fill="#7e887b"/></pattern></defs>
       <rect x={view.x} y={view.y} width={view.width} height={view.height} fill="url(#grid)"/>
       <Geometry geometry={geometry} demo={!!data}/>
       {geometry.beds.map(b=>{
         const state=day?.beds[b.id],batch=data?.schedule.batches.find(v=>v.plan.id===state?.batch_id);
         const x=b.centered?-b.width/2:0,y=b.centered?-b.length/2:0;
-        const stage=state?.stage??'unplanned';
-        const status=state?stages[state.stage]:'Keine Saisonplanung';
+        const weekly=season?.week.beds[b.id],crops=season?weekCrops(season,b.id):[];
+        const stage=state?.stage??(weekly?`project-${weekly.stage}`:seasonMessage?'project-unavailable':'unplanned');
+        const status=state?stages[state.stage]:weekly?projectStages[weekly.stage]:seasonMessage??'Keine Saisonplanung';
+        const cropLabel=crops.slice(0,2).map(name=>name.replace(' (Ende offen)',' ?')).join(' / ')+(crops.length>2?` +${crops.length-2}`:'');
         return <g key={b.id} transform={`translate(${b.x} ${b.y}) rotate(${b.angle})`}
           data-bed-id={b.id} className={`bed ${selected===b.id?'selected':''} ${hover?.id===b.id?'hovered':''} ${editor?.draft&&editor.draft.kind!=='create'&&editor.draft.bed.object_id===b.id?'move-origin':''}`}
           role="button" tabIndex={0} aria-pressed={selected===b.id}
-          aria-label={`${b.label}: ${status}${batch?', '+data!.names[batch.plan.profile_id]:''}`}
+          aria-label={`${b.label}: ${status}${batch?', '+data!.names[batch.plan.profile_id]:crops.length?', '+crops.join(', '):''}`}
           aria-describedby={hover?.id===b.id?'bed-tooltip':undefined}
           onPointerEnter={e=>{if(e.pointerType!=='touch'&&!editDrag.current&&editor?.tool!=='draw'&&!editor?.busy)setHover({id:b.id,x:e.clientX,y:e.clientY});}}
           onPointerMove={e=>{if(e.pointerType!=='touch'&&!editDrag.current&&editor?.tool!=='draw'&&!editor?.busy)setHover({id:b.id,x:e.clientX,y:e.clientY});}}
@@ -184,8 +191,10 @@ export function Plot({geometry,data,index,selected,onSelect,editor:editorProp}: 
           <rect className="selection-outline" x={x-.18} y={y-.18} width={b.width+.36} height={b.length+.36} rx=".03"/>
           <rect x={x} y={y} width={b.width} height={b.length} className={`bed-fill ${stage}`} stroke="#829078" strokeWidth=".04"/>
           {stage==='cleanup'&&<rect x={x} y={y} width={b.width} height={b.length} fill="url(#hatch)"/>}
+          {weekly&&(weekly.stage==='overlap'||weekly.uncertain)&&<rect x={x} y={y} width={b.width} height={b.length} fill={`url(#${weekly.stage==='overlap'?'week-overlap':'week-open'})`} pointerEvents="none"/>}
           {/* Cancel only the label's inherited rotation; keep its anchor and bed geometry. */}
           <text x={x+b.width/2} y={y-.5} transform={`rotate(${-b.angle} ${x+b.width/2} ${y-.5})`} textAnchor="middle" className="bed-number">{b.label}</text>
+          {season&&cropLabel&&<text transform={`translate(${x+b.width/2} ${y-.5}) rotate(${-b.angle}) translate(0 ${-12*metresPerPixel})`} textAnchor="middle" className="project-crop-label"><title>{crops.join(' / ')}</title>{cropLabel.length>42?cropLabel.slice(0,39)+'…':cropLabel}</text>}
           {data&&<text transform={`translate(${x+b.width/2} ${y+b.length/2}) rotate(-90)`} textAnchor="middle" className="plant-label">{batch?data.names[batch.plan.profile_id]:'Frei'}</text>}
         </g>;
       })}
@@ -207,6 +216,6 @@ export function Plot({geometry,data,index,selected,onSelect,editor:editorProp}: 
     <div className="map-scale" aria-label={`Maßstab ${scaleMetres} Meter`}><div style={{width:scaleMetres/metresPerPixel}}/><span>{scaleMetres} m</span><small>Lokale Geometrie · m</small></div>
     {!data&&<div className="map-north" aria-label="Norden">N ↑</div>}
     {hover&&data&&<BedTooltip data={data} index={index} hover={hover} viewport={viewport}/>}
-    {hover&&!data&&geometry.beds.find(b=>b.id===hover.id)?.source&&<ProjectTooltip bed={geometry.beds.find(b=>b.id===hover.id)!.source!} hover={hover} viewport={viewport}/>}
+    {hover&&!data&&geometry.beds.find(b=>b.id===hover.id)?.source&&<ProjectTooltip bed={geometry.beds.find(b=>b.id===hover.id)!.source!} hover={hover} viewport={viewport} season={season} seasonMessage={seasonMessage}/>}
   </>;
 }

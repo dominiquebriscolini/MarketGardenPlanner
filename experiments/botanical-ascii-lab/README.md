@@ -1,19 +1,26 @@
 # Botanical ASCII Lab — Experiment 01
 
+Aktuell: **LOCAL STUDY · THEME 04**, http://127.0.0.1:8773/ .
+Oben rechts schaltet Sonne/Mond die gesamte UI und die Renderer-Palette zwischen
+Dark (#101713, Standard) und Light (#F0EEE5) um. Die Auswahl wird lokal gespeichert.
+Geometrie, feste Kamera, Wind und Beleuchtung bleiben identisch. Hybrid/5 px bleiben
+Standard. [Theme-Technik und 44 Prüfungen](THEME-STUDY.md).
+
+Die folgenden Abschnitte beschreiben die vorherigen Geometrie-/Lichtschritte;
+die Theme-Erweiterung ersetzt ausschließlich ihre feste Dark-Farbgebung.
+
 Stand 17.11.2026: räumliche Blattnetze, gemeinsame Tiefenprüfung und feste
 Weltbeleuchtung. [Überarbeitung und aktuelle Testergebnisse](DEPTH-STUDY.md).
-Vergleich im Browser: depth-review.html; neue Prüfungen: depth-test.html.
+Aktuelle Prüfungen: light-test.html, depth-test.html und test.html.
 
-Neu im Folgeauftrag vom 17.11.2026: Direkt über der Zeichenfläche befinden sich
-jetzt die Knöpfe **0° / 45° / 90°**. Direkte URLs:
-http://127.0.0.1:8773/?view=0 · http://127.0.0.1:8773/?view=45 ·
-http://127.0.0.1:8773/?view=90. Der separate gleichzeitige Vergleich bleibt unter
-http://127.0.0.1:8773/depth-review.html erreichbar.
-`start.ps1` startet nun `serve.py`: no-store-Antworten und versionierte
-Modul-/CSS-URLs sorgen für frische Quelldateien. Die sichtbare Kennzeichnung lautet
-**LOCAL STUDY · DEPTH 02**. Der frühere Bericht über bytegleiche UI-Dateien bezieht
-sich auf den davor abgeschlossenen Geometrieschritt; diese kleine UI-Erweiterung
-ist durch den Folgeauftrag ausdrücklich autorisiert. Wind und Geometrie unverändert.
+Aktueller Stand **LOCAL STUDY · LIGHT 03**: feste Standardisometrie ohne
+Winkelumschaltung, gemeinsame Sonne aus Bildschirm-links-oben, stärkere
+Eigenverschattung und ein weicher geometrischer Bodenschatten nach rechts unten.
+Hauptansicht: http://127.0.0.1:8773/ . Zoom und Pan bleiben erhalten.
+Hybrid/5 px bleiben Standard. Keine Änderung an Modell, Wind oder Planner.
+[Architektur und aktuelle Prüfung](LIGHT-STUDY.md).
+`start.ps1` startet `serve.py` mit no-store-Antworten; versionierte Modul-/CSS-URLs
+umgehen alte Browsercaches. Die frühere depth-review.html dient nur noch als Archiv.
 
 Lokaler, unabhängiger Browser-Prototyp einer ausgewachsenen **Solanum lycopersicum**.
 Gestaltetes, synthetisches Anschauungsmodell; keine Vermessung, Sortenrekonstruktion,
@@ -133,8 +140,7 @@ Weltlichtquelle und Flächennormalen liefern dezente diskrete Tonwerte.
 Palette, Glyphenrampe und Punktgrößen-/Dichteabbildung bleiben wie im ersten Stand.
 Der unsichtbare Z-Buffer ist in allen Modi derselbe; Lücken in den Druckzeichen
 geben keine verborgenen Pflanzenteile frei. Das Raster ist in CSS-Pixeln definiert.
-Eine Kameraoption `yaw` ermöglicht die separaten Vergleichsansichten, ohne die
-Hauptoberfläche zu ändern. Details: [DEPTH-STUDY.md](DEPTH-STUDY.md).
+Es gibt keine Kameraoption zur Rotation. Die feste Licht-/Tiefenprüfung ist in allen Modi dieselbe. Details: [LIGHT-STUDY.md](LIGHT-STUDY.md).
 **app.js** verwaltet Kamera, Pointer-/Tastatursteuerung, Regler und die
 `requestAnimationFrame`-Schleife. Bei unveränderter pausierter Ansicht wird nicht
 neu gerendert; Hintergrundtabs halten Zeit und Rendering an. `window.labStats`
@@ -155,7 +161,7 @@ Lokale Architekturentscheidungen: siehe [DECISIONS.md](DECISIONS.md).
 
 - Blattgeometrie besteht aus gekrümmten Dreiecksnetzen ohne Blattdicke.
 - Tiefenprüfung an neun Subrasterproben je Zelle; Silhouetten bleiben rasterabhängig.
-- Keine physikalische Beleuchtung, Schattenwürfe, Stütze, Wachstum oder Sortenauswahl.
+- Vereinfachte diffuse Beleuchtung und gefilterte Schatten; keine Mehrfachreflexion, Stütze, Wachstum oder Sortenauswahl.
 - Sehr grobe Zeichen verlieren Blattzähne und kleine Blüten erwartungsgemäß.
 - Leistungsprofil ist geräteabhängig; konstante 60 fps wurden nicht nachgewiesen.
 - Keine Freigabe oder technische Anbindung an den Haupteditor, keine produktiven

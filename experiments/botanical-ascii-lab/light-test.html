@@ -1,0 +1,33 @@
+<!doctype html><html lang="de"><meta charset="utf-8"><title>LIGHT 03 checks</title><style>body{background:#111714;color:#c5d2b2;font:13px monospace;margin:25px}pre{white-space:pre-wrap}</style><h1>Fixed isometry / lighting checks</h1><pre id="results">Running…</pre><script type="module">
+import {LightingField,SUN,groundProjection} from './lighting.js?v=light03';
+import {PlantRenderer} from './renderer.js?v=light03';
+import {createTomato} from './model.js?v=light03';
+import {project} from './projection.js?v=light03';
+const lines=[],assert=(label,pass)=>{lines.push(`${pass?'PASS':'FAIL'} ${label}`);if(!pass)throw Error(label);};
+try{
+ const lp=project(SUN.direction);assert('Sun projects to upper left',lp[0]<0&&lp[1]<0);
+ const gp=project([...groundProjection([0,0,1]),0]);assert('Ground shadow extends down and right',gp[0]>0&&gp[1]>0);
+ const sheet={id:1,type:'leaf',color:'leaf',points:[[-.2,-.2,1],[.2,-.2,1],[.2,.2,1],[-.2,.2,1]],faces:[[0,1,2],[0,2,3]]};
+ const field=new LightingField().build([sheet]);
+ const under=[-.04,-.04,.25],g=groundProjection(under);
+ // A point on the same sunlight ray as the centre of the upper sheet.
+ const ray=[SUN.direction[0]/SUN.direction[2]*(-.75),SUN.direction[1]/SUN.direction[2]*(-.75),.25];
+ assert('Upper leaf blocks direct sunlight below',field.visibility(ray,[0,0,1])<.2);
+ assert('Exposed point receives direct sunlight',field.visibility([1,1,.25],[0,0,1])>.9);
+ const cam=[1/Math.sqrt(3),1/Math.sqrt(3),1/Math.sqrt(3)];
+ assert('Covered lower leaf substantially darker than exposed upper leaf',field.shade([0,0,1],ray,'leaf',cam)+60<field.shade([0,0,1],[1,1,1.2],'leaf',cam));
+ assert('Light-facing surface brighter than opposite surface',field.shade([0,0,1],[1,1,1.2],'leaf',cam)>field.shade([1,0,0],[1,1,1.2],'leaf',cam)+40);
+ const footprint=groundProjection([0,0,1]);assert('Projected geometry produces ground shadow',field.groundCoverage(...footprint)>.8);
+ assert('No shadow away from geometry',field.groundCoverage(3,3)===0);
+ const r=new PlantRenderer(document.createElement('canvas')),model=createTomato(),options={width:800,height:740,zoom:1,pan:[0,0],size:5,wind:0,time:0,mode:'hybrid',grid:false};
+ const stats=r.render(model,options),pixels=r.ctx.getImageData(0,0,800,740).data.slice();
+ r.render(model,{...options,yaw:Math.PI/2});const rotated=r.ctx.getImageData(0,0,800,740).data;assert('Renderer cannot rotate: yaw ignored',pixels.every((v,i)=>v===rotated[i]));
+ assert('Actual plant creates nonempty ground shadow',stats.shadowCells>100);
+ const tones=[];for(let i=0;i<r.visibility.material.length;i++)if(r.visibility.material[i]===1)tones.push(r.visibility.tone[i]);tones.sort((a,b)=>a-b);
+ assert('Strong canopy contrast at 5 px',tones[Math.floor(tones.length*.9)]-tones[Math.floor(tones.length*.1)]>80);
+ lines.push(`INFO leaf tone p10=${tones[Math.floor(tones.length*.1)]}, p90=${tones[Math.floor(tones.length*.9)]}, shadow cells=${stats.shadowCells}`);
+ lines.push(`INFO stages: map=${stats.shadowMapMs.toFixed(1)}, raster=${stats.rasterMs.toFixed(1)}, ground=${stats.groundMs.toFixed(1)}`); r.render(model,{...options,size:6});const t6=[];for(let i=0;i<r.visibility.material.length;i++)if(r.visibility.material[i]===1)t6.push(r.visibility.tone[i]);t6.sort((a,b)=>a-b);assert('Strong canopy contrast at 6 px',t6[Math.floor(t6.length*.9)]-t6[Math.floor(t6.length*.1)]>80); const timings=[];for(let i=0;i<12;i++)timings.push(r.render(model,{...options,time:i*.1,wind:.55}).ms);timings.sort((a,b)=>a-b);lines.push(`INFO median=${timings[6].toFixed(1)}ms, max=${timings[11].toFixed(1)}ms (800×740)`);
+ lines.push(`COMPLETE ${lines.filter(x=>x.startsWith('PASS')).length} checks`);
+}catch(e){lines.push('ERROR '+e.stack);}
+document.getElementById('results').textContent=lines.join('\n');
+</script></html>

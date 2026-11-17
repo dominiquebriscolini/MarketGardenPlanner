@@ -1,3 +1,5 @@
+> Historischer Stand. Die aktuelle feste Ansicht und Verschattung sind in [LIGHT-STUDY.md](LIGHT-STUDY.md) dokumentiert.
+
 > Historischer Erststand vom 16.11.2026. Die aktuellen Ergebnisse der räumlichen
 > Überarbeitung stehen in [DEPTH-STUDY.md](DEPTH-STUDY.md).
 

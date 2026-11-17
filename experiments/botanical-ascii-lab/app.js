@@ -1,9 +1,17 @@
 import {createTomato} from './model.js?v=light03';
-import {PlantRenderer} from './renderer.js?v=light03';
+import {PlantRenderer} from './renderer.js?v=theme04';
+import {readTheme,setTheme} from './themes.js?v=theme04';
 const canvas=document.querySelector('canvas'),renderer=new PlantRenderer(canvas),model=createTomato();
-const state={mode:'hybrid',size:5,wind:.55,zoom:1,pan:[0,0],grid:false,time:0};
+const state={mode:'hybrid',size:5,wind:.55,zoom:1,pan:[0,0],grid:false,time:0,theme:readTheme()};
 const cleanURL=new URL(location.href);if(cleanURL.searchParams.has('view')){cleanURL.searchParams.delete('view');history.replaceState(null,'',cleanURL);}
 const $=id=>document.getElementById(id);
+const themeSwitch=$('themeSwitch');
+function applyTheme(theme){
+ state.theme=setTheme(theme);themeSwitch.setAttribute('aria-checked',String(state.theme==='light'));
+ themeSwitch.title=state.theme==='dark'?'Zu Light Mode wechseln':'Zu Dark Mode wechseln';
+}
+applyTheme(state.theme);
+themeSwitch.onclick=()=>applyTheme(state.theme==='dark'?'light':'dark');
 const descriptions={ascii:'Echte Schriftzeichen. Eine Glyphe je belegter Rasterzelle.',halftone:'Variable Punktgröße und Punktdichte modellieren die Flächen.',hybrid:'Schriftzeichen für die Struktur. Punkte für die Blattflächen.'};
 document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{state.mode=b.dataset.mode;document.querySelectorAll('[data-mode]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));$('modeLabel').textContent=state.mode.toUpperCase();$('modeDescription').textContent=descriptions[state.mode];});
 for(const id of ['size','wind'])$(id).oninput=e=>{state[id]=+e.target.value/(id==='wind'?100:1);$(id+'Out').textContent=e.target.value+(id==='wind'?' %':' px');};

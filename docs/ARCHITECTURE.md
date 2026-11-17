@@ -1,3 +1,106 @@
+# Architektur — aktueller Bestand und Zielarchitektur
+
+Stand der Bestandsübersicht: **17.11.2026**, Arbeitsstand bis Phase 3C.2,
+einschließlich vorhandener nicht eingecheckter Änderungen. Nachweise sind Code
+und Phasenberichte; diese Dokumentationspflege ist kein neuer Testlauf.
+Beschlüsse: [DECISIONS.md](DECISIONS.md); offene Details:
+[OPEN_QUESTIONS.md](OPEN_QUESTIONS.md).
+
+## Implementierte Struktur
+
+```text
+React / TypeScript / SVG
+  → lokale API v1 (Python-Standardbibliothek, Loopback)
+    → projects: Repository, Änderungen, Kulturabsichten und Wochenprojektion
+      → spatial: metrische Geometrie, JSON, Shapely-Validierung
+      → SQLite: Projekte, Kulturpläne und Änderungsbelege
+
+Separate Demo → vorhandener Python-Scheduler / Agronomiekern
+Lesender spatial.scheduler_adapter → bisherige Scheduler-Bed-Eingaben
+```
+
+| Baustein | Aktueller Vertrag / Grenze | Nachweis |
+|---|---|---|
+| Fachkern | Vorhandene Modelle, Katalog, Berechnung und saisonaler Scheduler; keine zweite Frontend-Agronomie | [Phase 1](phase1.md), [Phase 2](phase2.md), DEC-002/022/023 |
+| `spatial/` | `GeometryState`, ein Grundstück mit Außenring/Löchern, parametrische Rechteckbeete, stabile UUIDs und `revision_id` | [3B.1](phase3b1.md), DEC-003 bis DEC-008 |
+| Geometrie | Meter; X nach Osten, Y nach Norden; Grad gegen den Uhrzeigersinn, Winkel im Vertrag `[0,360)`; SVG-Koordinaten sind abgeleitet | [3B.1](phase3b1.md), [3B.3a](phase3b3a.md) |
+| Validierung | Shapely 2.1.2; Kantenberührung zulässig, positive Überlappung/Einschluss geprüft; technische Flächentoleranz 1e-12 m² und Vergleichstoleranz 1e-6 m; keine Reparatur | `spatial/validation.py`, DEC-007 |
+| `projects/` | SQLite-Repository, gezielte Änderungen, serverseitige Revisionen, gemeinsame erwartete Projektrevision | [3B.2](phase3b2.md), [3B.3c](phase3b3c.md) |
+| Speicherung | SQLite-Schema 2; Geometrie-JSON Version 1 und getrenntes Kulturplan-JSON Version 1; bekannte Schema-1-Datenbanken transaktional migrieren | [3C.1](phase3c1.md), DEC-009/029 |
+| Kulturabsichten | Stabile Vorgangs-ID, Beet-/Profil-ID, Anbauart, Start, optionale geplante Ernte; Nutzereingaben, keine Scheduler-Reservierungen | [3C.1](phase3c1.md), DEC-029 |
+| Datumsanalyse | Rein lesender Vergleich bekannter Planungsabschnitte, inklusive Start/Erntetag; fehlendes Ende bleibt unklar | [3C.1-Fortschreibung](phase3c1.md), DEC-030 |
+| Wochenprojektion | `projects/season_view.py` verwendet vorhandene Kalender-/Intervallhilfen; Jahresantwort an Projekt-/Kulturplanrevision und Geometrie-Token gebunden | [3C.2](phase3c2.md), DEC-031 |
+| Frontend | Projektwahl, inverse metrische Transformation, Beeteditor, kompakte Kulturplanung und gemeinsamer Slider; Demo-/Projektzustände getrennt | [3B.3c](phase3b3c.md), [3C.1](phase3c1.md), [3C.2](phase3c2.md) |
+
+Geometrieänderungen verändern keine Nachbarbeete. Kulturänderungen erhalten
+Geometrie und Token. Ein Beet mit Kulturvorgängen darf erst nach deren
+ausdrücklicher Entfernung gelöscht werden. Erfolgreiche API-Bestätigung ist
+maßgeblich; Konflikte werden nicht durch Überschreiben aufgelöst.
+
+## Vorhandene API — Übersicht
+
+Quelle des aktuellen Routings: `src/market_garden_planner/api/routes.py`.
+Beispiele und Detailverträge bleiben in den verlinkten Phasenberichten.
+
+| Methode / Pfad | Zweck |
+|---|---|
+| GET / POST `/api/v1/projects` | Liste / Projekt erstellen |
+| GET / PUT `/api/v1/projects/{id}` | Laden / vollständigen bestehenden Geometriestand und Namen speichern |
+| GET `/api/v1/projects/{id}/validation` | Gespeicherten Geometriestand prüfen |
+| POST `/api/v1/geometry/validate` | Geometriekandidaten ohne Speicherung prüfen |
+| POST `/api/v1/projects/{id}/beds` | Beet hinzufügen |
+| PATCH / DELETE `/api/v1/projects/{id}/beds/{bed_id}` | Beet gezielt ändern / entfernen |
+| GET `/api/v1/cultures` | Vorhandenen Python-Katalog für die Kulturwahl lesen |
+| GET / POST `/api/v1/projects/{id}/beds/{bed_id}/cultivations` | Vorgänge lesen / hinzufügen |
+| PUT / DELETE `/api/v1/projects/{id}/beds/{bed_id}/cultivations/{cultivation_id}` | Vorgang bearbeiten / entfernen |
+| POST `/api/v1/cultivations/analyze` | Informative Datumsanalyse ohne Speicherung |
+| GET `/api/v1/projects/{id}/season` und `/season/{iso_year}` | Revisionsgebundene ISO-Jahresprojektion |
+| GET `/api/demo` | Separate synthetische Demo mit Scheduler-Ergebnissen |
+
+API-v1-Umschlag, Geometrie-, Kulturplan- und SQLite-Schemaversionen sind
+unterschiedliche Verträge. Schreiboperationen bestehender Projekte verlangen
+`expected_revision`; veraltete Basis ergibt HTTP 409. Wiederholbare Command-IDs
+gelten für unterstützte Änderungen, nicht pauschal für Projekterstellung.
+Der PUT-Vertrag ersetzt keine Befehle zum Anlegen/Löschen von Beet-IDs.
+Die generische Geometrievorschau garantiert keine gültige Projektrevision
+oder Sperrprüfung; endgültige Änderungen validiert der Server transaktional.
+
+## Bestehende Grenzen und beschlossene Erweiterungsziele
+
+- Ein Grundstück je Geometriezustand; Wege, Gebäude und zusätzliche Hindernisse
+  noch keine eigenen gespeicherten Objektarten. Polygonlöcher sind vorhanden.
+- Keine gespeicherten `PlanRun`-Ergebnisse, Bake-Varianten oder automatischen
+  Generatorläufe. Geometrie-Token bereiten Ergebnisbezüge vor; vollständige
+  Prognose-/Stale-UI ist noch Zukunft (DEC-008/014).
+- Projekt-Wochenstatus ist eine lesende Planungsprojektion, kein Scheduler-Lauf.
+  Ernteereignisse der Demo sind davon getrennt. Keine neue Projekt-Ernteprognose.
+- Gewächshäuser, explizite Umgebungen und dieselbe Geometrie in einer späteren
+  zweiten Ansicht bleiben beschlossene Ziele mit offenen Details (DEC-016/019).
+- Lokaler HTTP-Handler und SQLite sind implementiert (DEC-009). Kein FastAPI,
+  öffentliches Hosting, Benutzerverwaltung oder Authentisierung vorhanden.
+- Physische Geräteabnahme, Skalierung, Beschriftung und Aktualität externer
+  Änderungen sind nicht vollständig geklärt; siehe [offene Fragen](OPEN_QUESTIONS.md).
+
+## Unverbindliche technische Entwürfe
+
+Die nachfolgend erhaltenen Snapshot-/PlanRun-Tabellen, generischen
+Command-Endpunkte, FastAPI/Pydantic-Empfehlungen, Import-/Rendereroptionen
+und Undo/Redo-Skizzen sind keine bereits implementierten Verträge.
+FastAPI ist keine beschlossene Pflichtmigration. Shapely-Auswahl, SQLite und
+reale `revision_id`-Felder sind dagegen durch Umsetzung konkretisiert.
+Offene Ausgestaltung wird im OQ-Register geführt; keine neuen Bibliotheken
+oder Datenmigrationen werden durch diesen Text freigegeben.
+
+## Historischer Architekturentwurf und bisherige Fortschreibungen
+
+Die folgende Fassung bleibt vollständig erhalten. Ihre Bestandsaufnahme,
+Testzahlen, Vorschläge und Formulierungen „noch nicht vorhanden“ gelten für
+die jeweils genannten historischen Stände. Für den heutigen Bestand gilt
+die Übersicht oben; ihre alten API-Beispiele sind kein Ersatz des aktuellen Routings.
+
+<details>
+<summary>Bisherige Architektur — historische Analyse, Begründungen und Zielentwürfe</summary>
+
 # Phase 3B.0 — Architekturentscheidung für interaktive Grundstücksplanung
 
 Stand: 16.11.2026. **Architekturvorschlag zur Prüfung, keine Implementierung.**
@@ -195,6 +298,15 @@ synthetischer Testfall, keine Anbauempfehlung. Bei anderem Reihenabstand muss
 die Kapazität trotz größerer Fläche nicht steigen.
 
 ## 5. Räumliche Identität, Belegung und Scheduler
+
+**Fortschreibung 3C.2:** Eine rein lesende Python-Jahresprojektion verwendet
+gespeicherte Kulturabsichten und die vorhandenen Kalender-/Intervallhilfen.
+Sie ist eine Präsentationssicht, kein zweiter Allocator oder agronomischer
+Scheduler. Antworten tragen Projekt-/Kulturplanrevision und Geometrie-Token;
+React wählt nur serverseitig berechnete ISO-Wochen aus. Keine SQLite-Migration,
+neuen Prognosen oder Termin-/Geometrieänderungen. Unbekannte Enden bleiben
+ausdrücklich unklar. DEC-031 und [Phase 3C.2](phase3c2.md) konkretisieren die
+Wochenregeln; die nachfolgende PlanRun-Architektur bleibt weiterhin Zukunft.
 
 **Umsetzung Phase 3C.1:** `CultivationIntent` verknüpft stabile Vorgangs-ID,
 Beet-ID und vorhandene Python-Katalogprofil-ID mit expliziten Nutzerdaten
@@ -440,3 +552,5 @@ und später `sqlite3` aus der Standardbibliothek. FastAPI/Pydantic erst mit
 Schreib-API. React/TypeScript/SVG weiterverwenden. Derzeit weder GIS-Framework,
 zweite JavaScript-Geometrie-Engine noch 3D-Engine erforderlich. Versionsauswahl
 und Windows-Installation werden Bestandteil der jeweiligen Implementierungsphase.
+
+</details>

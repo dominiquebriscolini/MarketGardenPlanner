@@ -1,3 +1,104 @@
+# Market Garden Planner
+
+Lokaler Market-Gardening-Planer für maßhaltige Grundstücks- und Beetplanung
+sowie nachvollziehbare agronomische Berechnungen. Python-Fachkern und Scheduler,
+React/TypeScript-Oberfläche mit SVG. Rhino und Grasshopper sind optional.
+
+## Aktueller Implementierungsstand — 17.11.2026
+
+Geprüft am vorhandenen Arbeitsstand bis Phase 3C.2, einschließlich noch nicht
+eingecheckter Änderungen. „Implementiert“ bezeichnet Code und vorhandene
+Phasenberichte, keine erneute Abnahme durch diese Dokumentationspflege.
+
+- Gespeicherte SQLite-Projekte auswählen und als bildschirmfüllende Karte öffnen:
+  unregelmäßiges Grundstück mit Löchern, metrische und frei rotierte Rechteckbeete.
+- Beete zeichnen, auswählen, verschieben, drehen, numerisch bearbeiten und nach
+  Bestätigung löschen; Sperren, zentrale Geometrievalidierung und Revisionskonflikte.
+- Kulturvorgänge je Beet hinzufügen, bearbeiten, entfernen und dauerhaft speichern;
+  informative Hinweise auf bekannte oder unklare zeitliche Überschneidungen.
+- ISO-Jahr und Kalenderwoche für gespeicherte Projekte wählen. Python leitet den
+  Wochenstatus aus eigenen Kulturabsichten ab; keine botanische Wachstumssimulation.
+- Separate, schreibgeschützte synthetische Demo mit Tagesregler und
+  schedulerbasierter wöchentlicher Ernteprognose.
+
+Gespeicherte Projekte besitzen noch keine neue Ernteprognose oder gespeicherten
+Scheduler-Läufe. Gewächshäuser, Bake, räumliche Generierung und eine zusätzliche
+Landschaftsansicht sind Zukunftsziele, keine vorhandenen Funktionen.
+Details: [Produkt](docs/PRODUCT.md), [Architektur](docs/ARCHITECTURE.md),
+[Roadmap](docs/ROADMAP.md) und [offene Fragen](docs/OPEN_QUESTIONS.md).
+
+## Lokal starten
+
+In einer bereits eingerichteten Python-3.11-Umgebung im Repository:
+
+```powershell
+.\.venv\Scripts\python.exe -B -m market_garden_planner.api.server
+```
+
+[Anwendung öffnen](http://127.0.0.1:8766), oben links ein gespeichertes Projekt
+oder die gekennzeichnete Demo wählen. Standarddatenbank:
+`.local/projects.sqlite3`. Strg+C beendet den Server.
+Installation und API-Beispiele: [Phase 3B.2](docs/phase3b2.md);
+aktuelle Saisonbedienung: [Phase 3C.2](docs/phase3c2.md).
+Die API verwendet SQLite-Schema 2 mit transaktionaler Migration bekannter
+Schema-1-Datenbanken; die räumliche JSON-Struktur bleibt Version 1.
+
+Der Python-Kern benötigt nur die Standardbibliothek. Projektgeometrie/API
+benötigen zusätzlich das vorhandene Extra `geometry` mit Shapely 2.1.2.
+Die gebaute Oberfläche liegt in `frontend/dist`; der normale Start benötigt
+keinen Node-Prozess. Installation in eine vorhandene Umgebung bei Bedarf:
+`python -m pip install -e ".[geometry]"`.
+
+Die bisherige reine Demo bleibt über `start-prototype.ps1` auf
+[Port 8765](http://127.0.0.1:8765) separat startbar.
+
+## Entwicklung und Prüfungen
+
+```powershell
+.\.venv\Scripts\python.exe -B -m unittest discover -s tests -q
+powershell -NoProfile -ExecutionPolicy Bypass -File frontend\test.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File frontend\build.ps1
+```
+
+Der Frontend-Build enthält die TypeScript-Prüfung. Die Skripte erlauben
+`-NodeExecutable <absoluter Node-Pfad>`; vorhandene Frontend-Abhängigkeiten
+werden vorausgesetzt. [Bauhinweise](docs/phase3a1.md) und
+[aktuell dokumentierte Prüfung](docs/phase3c2.md).
+Testzahlen bleiben im jeweiligen datierten Phasenbericht; sie sind kein
+Nachweis eines neuen Testlaufs. `docs/test-results.txt` gehört historisch zu Phase 2.
+
+## Dokumentation und Zuständigkeiten
+
+| Einstieg | Zuständigkeit |
+|---|---|
+| [AGENTS.md](AGENTS.md) | Verbindliche Arbeits- und Pflegeregeln für Codex |
+| [PRODUCT.md](docs/PRODUCT.md) | Produktzweck, Umfang, Zukunftsziele und Sammlung von Nutzerideen |
+| [DECISIONS.md](docs/DECISIONS.md) | Verbindliche Beschlüsse, vorgeschlagene Optionen und ihre Historie |
+| [OPEN_QUESTIONS.md](docs/OPEN_QUESTIONS.md) | Konsolidierte offene Fragen mit stabilen OQ-IDs und DEC-Bezügen |
+| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | Aktuelle technische Struktur und getrennte Erweiterungsentwürfe |
+| [ROADMAP.md](docs/ROADMAP.md) | Phasenstatus, Abhängigkeiten und Abnahmekriterien |
+| [Agronomiequellen](docs/agronomy-sources.md) | Datenherkunft, Geltung und fachliche Lücken |
+| [Ursprüngliche Abnahme](docs/acceptance.md) | Fachliche Rechenfälle aus Phase 1/2 |
+
+Die `docs/phase*.md` bleiben historische Umsetzungs-, Bedienungs- und Prüfberichte.
+Aktuelle Editorbeschreibung: [3B.3c](docs/phase3b3c.md);
+Kulturplanung: [3C.1](docs/phase3c1.md); Wochenansicht: [3C.2](docs/phase3c2.md).
+Funktionsspezifikationen werden bei Bedarf in `docs/features/` ergänzt;
+derzeit besteht kein eigenes Spezifikationsverzeichnis.
+
+Das [Botanical ASCII Lab](experiments/botanical-ascii-lab/README.md) bleibt ein
+isoliertes Experiment mit eigenem Entscheidungsprotokoll. Es ist kein
+Produktionsrenderer und wird nicht durch seine Dokumentation zur Integration freigegeben.
+
+## Historischer Einstieg
+
+Die bisherige README bleibt unten vollständig erhalten. Ihre Funktions-,
+Abhängigkeits- und Testangaben gelten für die dort genannten früheren Phasen;
+für den aktuellen Stand gelten die Abschnitte oben.
+
+<details>
+<summary>Bisherige README — historischer Inhalt unverändert</summary>
+
 # Market Gardening Planner ? Phase 1 und 2
 
 ## Projektanzeige Phase 3B.3a
@@ -91,3 +192,5 @@ py -3.11 examples/synthetic_scheduler.py
 Das Beispiel verwendet ausschliesslich synthetische Agronomieparameter.
 Alle sieben urspruenglichen Abnahmefaelle sind jetzt automatisiert; 30 Tests bestehen.
 Satzplanung, Ernteprognose und Beetbelegung sind in getrennten Modulen umgesetzt.
+
+</details>

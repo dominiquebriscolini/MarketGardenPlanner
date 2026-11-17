@@ -4,6 +4,7 @@ from ..projects.errors import ProjectError
 from ..spatial import loads, geometry_token
 from ..projects.catalogue import load_catalogue, catalogue_payload
 from ..projects.cultivation_checks import analyze_input
+from ..projects.season_view import project_season
 
 
 def fields(body, required, optional=()):
@@ -20,6 +21,12 @@ class ProjectAPI:
         self.repository = repository
 
     def dispatch(self, method, path, body=None):
+        season = re.fullmatch(r"/api/v1/projects/([^/]+)/season(?:/([0-9]+))?", path)
+        if season:
+            if method != "GET":
+                raise ProjectError("method_not_allowed", "Use GET", 405)
+            project_id, year = season.groups()
+            return 200, {"season": project_season(self.repository.get(project_id), int(year) if year is not None else None)}
         if path == "/api/v1/cultivations/analyze":
             if method != "POST":
                 raise ProjectError("method_not_allowed", "Use POST", 405)

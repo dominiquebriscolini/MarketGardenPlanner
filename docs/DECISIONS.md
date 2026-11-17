@@ -1,5 +1,16 @@
 # Verbindliches Entscheidungsprotokoll
 
+> Dokumentationspflege **17.11.2026**: Der aktuelle Arbeitsstand reicht bis
+> Phase 3C.2 (DEC-031); die unten genannten Erstfassungsstände und die damalige
+> Konsistenzprüfung bleiben historische Nachweise. Die aktuellen Übersichten
+> stehen in [PRODUCT](PRODUCT.md), [ARCHITECTURE](ARCHITECTURE.md) und
+> [ROADMAP](ROADMAP.md). Offene Details und überholte Offen-Punkte werden in
+> [OPEN_QUESTIONS](OPEN_QUESTIONS.md) konsolidiert.
+> Diese Ergänzung und stabile Linkanker ändern keine DEC-ID, keinen Beschluss
+> und keine frühere Begründung. Es wird keine neue Produktentscheidung getroffen.
+
+
+
 Erstfassung: **16.11.2026**. Dokumentationsstand: Phase 3B.3b,
 Git-Stand `46db28f`. Dieses Protokoll wird vor jeder neuen Entwicklungsphase
 gelesen und berücksichtigt. Es hält Produkt- und Architekturentscheidungen
@@ -45,6 +56,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
 
 ## Grundarchitektur, Geometrie und Bearbeitung
 
+<a id="dec-001"></a>
+
 ### DEC-001 — Verbindliche Dokumentation und kleine Entwicklungsschritte
 
 - **Datum:** 16.11.2026, Erfassung und ausdrücklicher Protokollauftrag.
@@ -59,6 +72,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
 - **Auswirkungen:** Jede Phase prüft Entscheidungen, Umfang, Regressionen und
   Dokumentationsbedarf. Dieses Dokument allein beauftragt keine Funktionsentwicklung.
 - **Quelle:** AGENTS.md und Protokollauftrag.
+
+<a id="dec-002"></a>
 
 ### DEC-002 — Python-Kern, React/TypeScript und SVG
 
@@ -75,6 +90,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
   gesondert zu entscheiden; der lokale Prototyp ist keine fertige öffentliche Web-API.
 - **Quelle:** ARCHITECTURE.md, phase3a1.md, phase3b2.md; frühere Nutzeraufträge.
 
+<a id="dec-003"></a>
+
 ### DEC-003 — Ein metrischer Weltraum unabhängig von der Ansicht
 
 - **Datum:** 16.11.2026, Erfassung; Geometrievertrag in Phase 3B.1 dokumentiert.
@@ -90,6 +107,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
   Der aktuelle Leser akzeptiert Winkel in `[0,360)` und repariert sie nicht still.
 - **Quelle:** AGENTS.md, ARCHITECTURE.md, phase3b1.md, phase3b3a.md, phase3b3b.md.
 
+<a id="dec-004"></a>
+
 ### DEC-004 — Freie Grundstücksformen und parametrische Rechteckbeete
 
 - **Datum:** 16.11.2026, Erfassung; räumliches Modell seit Phase 3B.1 dokumentiert.
@@ -104,6 +123,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
   nichtrechteckige Beete benötigen eine spätere ausdrückliche Erweiterung.
 - **Quelle:** PRODUCT.md, ARCHITECTURE.md, phase3b1.md; Protokollauftrag.
 
+<a id="dec-005"></a>
+
 ### DEC-005 — Neue Grundstücke, Bestand und kombinierte Planung
 
 - **Datum:** 16.11.2026, Erfassung; als Produktabläufe in Phase 3B.0 dokumentiert.
@@ -117,6 +138,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
 - **Auswirkungen:** Öffnen, Importieren und Scheduler-Aufrufe aktivieren keinen
   räumlichen Generator. Der automatische Teil bleibt ein zukünftiger eigener Dienst.
 - **Quelle:** PRODUCT.md, ARCHITECTURE.md §6, ROADMAP.md; Protokollauftrag.
+
+<a id="dec-006"></a>
 
 ### DEC-006 — Sperren und lokale Änderungen respektieren
 
@@ -133,6 +156,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
   noch kein Werkzeug. Keine stillschweigende Anpassung anderer Beetmaße.
 - **Quelle:** AGENTS.md, phase3b1.md, phase3b2.md, phase3b3b.md; Protokollauftrag.
 
+<a id="dec-007"></a>
+
 ### DEC-007 — Zentrale Validierung ohne stillschweigende Reparatur
 
 - **Datum:** 16.11.2026, Erfassung; umgesetzt in Phase 3B.1.
@@ -147,6 +172,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
   bis 1e-12 m² sind keine praktische Überstandserlaubnis. Erforderliche Pflegewege,
   Betriebsabstände und reale Messgenauigkeit sind zusätzlich zu spezifizieren.
 - **Quelle:** phase3b1.md, phase3b2.md, phase3b3b.md; ARCHITECTURE.md §4.
+
+<a id="dec-008"></a>
 
 ### DEC-008 — Stabile Identitäten und revisionsgebundene Ableitungen
 
@@ -164,6 +191,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
   Scheduler-Läufe oder vollständige Stale-Anzeige. Das reale Feld heißt `revision_id`.
 - **Quelle:** AGENTS.md, ARCHITECTURE.md §5, phase3b1.md, phase3b2.md.
 
+<a id="dec-009"></a>
+
 ### DEC-009 — SQLite, bestehendes JSON und revisionssichere lokale API
 
 - **Datum:** 16.11.2026, Erfassung; Entscheidung in Phase 3B.2 dokumentiert.
@@ -179,6 +208,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
   Projekterstellung ist davon zu unterscheiden. FastAPI/Pydantic bleibt eine
   spätere Option bei begründetem Bedarf, keine bereits beschlossene Migration.
 - **Quelle:** phase3b2.md, phase3b3b.md; ARCHITECTURE.md §8/§9.
+
+<a id="dec-010"></a>
 
 ### DEC-010 — Aktueller Editor: Achsenzeichnung, Translation, bestätigte Übernahme
 
@@ -199,6 +230,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
 
 ## Automatische Beetaufteilung und Varianten
 
+<a id="dec-011"></a>
+
 ### DEC-011 — Einstellbare Aufteilungsparameter
 
 - **Datum:** 16.11.2026, durch den Protokollauftrag ausdrücklich festgehalten.
@@ -213,6 +246,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
   keine garantierte geometrische Machbarkeit. Kein Generator ist damit implementiert.
 - **Quelle:** Protokollauftrag; grundsätzlich vorbereitet in ROADMAP.md Phase 3B.6.
 
+<a id="dec-012"></a>
+
 ### DEC-012 — Gleichrangige Ziele mit veränderbaren Nutzerprioritäten
 
 - **Datum:** 16.11.2026, durch den Protokollauftrag ausdrücklich festgehalten.
@@ -226,6 +261,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
   machen. Fachliche Gleichrangigkeit legt noch keine numerische Zielfunktion,
   Normalisierung, Gewichtskoeffizienten oder Auswahlmethode fest; siehe DEC-015.
 - **Quelle:** Protokollauftrag; bisherige Roadmap ließ Gütemaße ausdrücklich offen.
+
+<a id="dec-013"></a>
 
 ### DEC-013 — Arbeitswege über ein tatsächliches Wegenetz bewerten
 
@@ -242,6 +279,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
   Eingaben keine vermeintlich gemessene Arbeitswegeeffizienz ausgeben.
 - **Quelle:** Protokollauftrag; ARCHITECTURE.md §3/§8 unterscheidet Wegefläche
   und explizit definierte Mittellinienlänge, enthält aber noch keine Netzbewertung.
+
+<a id="dec-014"></a>
 
 ### DEC-014 — Mehrere Varianten vergleichen und mit Bake sichern
 
@@ -263,6 +302,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
 - **Quelle:** PRODUCT.md, ARCHITECTURE.md §8, ROADMAP.md Phase 3B.5/3B.6;
   Protokollauftrag.
 
+<a id="dec-015"></a>
+
 ### DEC-015 — Optimierungsverfahren und Bewertungsdefinitionen
 
 - **Datum:** 16.11.2026, als offene Detailentscheidung erfasst.
@@ -281,6 +322,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
 
 ## Gebäude, Darstellung und Import
 
+<a id="dec-016"></a>
+
 ### DEC-016 — Gewächshäuser als eigenständige räumliche Objekte
 
 - **Datum:** 16.11.2026, Erfassung; Zielarchitektur in Phase 3B.0 dokumentiert.
@@ -295,6 +338,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
   Wachstums- oder Ertragsfaktoren erfinden. Umsetzung, Stationseinbindung und
   gruppenübergreifende Saisonzuordnung bleiben zukünftige Arbeitspakete.
 - **Quelle:** PRODUCT.md, ARCHITECTURE.md §7, ROADMAP.md Phase 3B.4; Protokollauftrag.
+
+<a id="dec-017"></a>
 
 ### DEC-017 — Monochrome Living Landscape und Miniaturmodell-Anmutung
 
@@ -313,6 +358,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
   weder Fachgeometrie noch die Lesbarkeit technischer Angaben; siehe DEC-025.
 - **Quelle:** AGENTS.md, PRODUCT.md, ARCHITECTURE.md §10; Protokollauftrag.
 
+<a id="dec-018"></a>
+
 ### DEC-018 — Technische 2D-Karte als dauerhafte Arbeitsansicht
 
 - **Datum:** 16.11.2026, Erfassung; Map-first seit Phase 3A.2 dokumentiert.
@@ -328,6 +375,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
   Hover und Auswahl bleiben unabhängig; Zoom/Pan verändern keine Geometrie.
 - **Quelle:** phase3a2.md, phase3a2-harvest.md, phase3b3a.md, phase3b3b.md;
   Nutzerauftrag zur Korrektur der Beetbeschriftungen; Protokollauftrag.
+
+<a id="dec-019"></a>
 
 ### DEC-019 — Perspektive/Isometrie als zukünftige Option derselben Geometrie
 
@@ -345,6 +394,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
 - **Quelle:** AGENTS.md, PRODUCT.md, ARCHITECTURE.md §10, ROADMAP.md Phase 3B.7;
   Protokollauftrag.
 
+<a id="dec-020"></a>
+
 ### DEC-020 — Satellitenkarten-/GIS-Import als zukünftiges Produktziel
 
 - **Datum:** 16.11.2026, im Protokollauftrag ausdrücklich als Ziel festgehalten.
@@ -359,6 +410,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
   und Transformationsvertrag. Noch kein Importdienst oder Format implementiert.
 - **Quelle:** Protokollauftrag; ARCHITECTURE.md §3 und ROADMAP.md lassen
   Fremdformate und Georeferenz bisher ausdrücklich offen.
+
+<a id="dec-021"></a>
 
 ### DEC-021 — Technische GIS-/Kartenauswahl
 
@@ -375,6 +428,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
 - **Quelle:** ARCHITECTURE.md §3, ROADMAP.md offene Entscheidungen; Protokollauftrag.
 
 ## Agronomie, Daten und Namensfindung
+
+<a id="dec-022"></a>
 
 ### DEC-022 — Saisonentwicklung und Ernteprognose aus dem Python-Scheduler
 
@@ -394,6 +449,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
 - **Quelle:** AGENTS.md, phase2.md, phase3a1.md, phase3a2-harvest.md,
   phase3b3a.md, phase3b3b.md; Protokollauftrag.
 
+<a id="dec-023"></a>
+
 ### DEC-023 — Echte Daten, Schätzungen und Demo-Daten unterscheiden
 
 - **Datum:** 16.11.2026, Erfassung; Herkunftsvertrag seit Phase 1 dokumentiert.
@@ -411,6 +468,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
   Synthetische Fixtures bleiben von produktiven Kulturdaten getrennt.
 - **Quelle:** AGENTS.md, phase1.md, phase2.md, PRODUCT.md; Protokollauftrag.
 
+<a id="dec-024"></a>
+
 ### DEC-024 — Historische Erträge und spätere betriebliche Kalibrierung
 
 - **Datum:** 16.11.2026, Erfassung; Produktziel vor Phase 3B.0 dokumentiert.
@@ -426,6 +485,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
   Katalogs oder pauschale Übertragung vergangener Erträge.
 - **Quelle:** PRODUCT.md, ROADMAP.md „Historische Erträge“; Protokollauftrag.
 
+<a id="dec-025"></a>
+
 ### DEC-025 — Konkrete Landschaftsdarstellung und Pflanzenassets
 
 - **Datum:** 16.11.2026, als offene Detailentscheidung erfasst.
@@ -440,6 +501,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
 - **Quelle:** ROADMAP.md Phase 3B.7 und offene Asset-/Renderingentscheidung;
   Protokollauftrag.
 
+<a id="dec-026"></a>
+
 ### DEC-026 — Namenskandidaten
 
 - **Datum:** 16.11.2026, im Protokollauftrag dokumentiert; frühere Datierung unbekannt.
@@ -452,6 +515,8 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
   ändern. Auswahlkriterien, endgültiger Name und Verfügbarkeit der Namen/Domains
   sind offen und wurden in diesem Auftrag nicht geprüft.
 - **Quelle:** Protokollauftrag.
+
+<a id="dec-027"></a>
 
 ### DEC-027 — Präzise Beetänderungen und bestätigte Einzel-Löschung
 
@@ -478,6 +543,8 @@ Fortschreibung zu DEC-010: Die dort für den Stand 3B.3b als offen bezeichneten
 numerischen Bearbeitungs- und Löschfunktionen werden durch diesen ausdrücklichen
 Auftrag konkretisiert. Die ursprüngliche Beschreibung bleibt als Verlauf erhalten;
 Zeichnen, Translation und bestätigte Übernahme gelten unverändert weiter.
+
+<a id="dec-028"></a>
 
 ### DEC-028 — Kompakte Anzeige und ausdrückliches Shift-Snapping
 
@@ -541,6 +608,8 @@ auftrag wurden keine Anwendungstests, Builds oder Funktionen geändert.
 - **Bereitstellung (DEC-002/DEC-009):** Desktop-Paketierung bzw. öffentlicher
   Webbetrieb und dessen zusätzliche technische Anforderungen.
 
+<a id="dec-029"></a>
+
 ### DEC-029 — Persistente Kulturabsichten ohne erfundene Saisonwerte
 
 - **Datum:** 16.11.2026, Nutzerauftrag Phase 3C.1.
@@ -565,6 +634,8 @@ auftrag wurden keine Anwendungstests, Builds oder Funktionen geändert.
   Zuordnung, Sorten außerhalb des Katalogs, historische und tatsächliche Ernten.
   Diese bleiben spätere, getrennte Datensätze gemäß DEC-008/022–024.
 
+<a id="dec-030"></a>
+
 ### DEC-030 — Informative Datumsüberschneidungen und kompakte Beetplanung
 
 - **Datum:** 17.11.2026, Nutzerauftrag Kulturplanung UX und Überschneidungen.
@@ -588,6 +659,33 @@ auftrag wurden keine Anwendungstests, Builds oder Funktionen geändert.
 - **Offen:** Tatsächliche Belegungs-/Räumintervalle, Mischkulturverträglichkeit,
   Teilbeetbelegung und Scheduler-Integration bleiben spätere Aufgaben.
 
+<a id="dec-031"></a>
+
+### DEC-031 — Revisionsgebundene ISO-Wochenansicht aus Kulturabsichten
+
+- **Datum:** 17.11.2026, Nutzerauftrag Phase 3C.2.
+- **Status:** beschlossen.
+- **Entscheidung:** Python projiziert gespeicherte Anbauabsichten auf ISO-Wochen
+  (Montag bis Sonntag, ISO-Jahr einschließlich 52/53 und Jahreswechsel).
+  Ein bekannter Planungstag genügt für Sichtbarkeit in der Woche. Start bis
+  geplante Ernte zählen inklusive; danach ist der Vorgang nur nach Plan beendet,
+  nicht als tatsächlich geerntet oder geräumt bestätigt. Ohne Ernte ist nur der
+  Starttag sicher bekannt, später bleibt die mögliche Fortdauer ausdrücklich offen.
+- **Begründung:** Zeitliche Planungsansicht benötigt weder erfundene Saisonprofile
+  noch einen zweiten Allocator. `DateWindow`, Kalenderhilfen und DEC-030 werden
+  wiederverwendet; der bestehende agronomische Scheduler bleibt unverändert.
+- **Auswirkungen:** Rein lesende Jahresprojektion mit Projekt-/Kulturplanrevision
+  und Geometrie-Token; Frontend zeigt ausschließlich passende Antworten.
+  Wochenwechsel innerhalb eines geladenen ISO-Jahres benötigt keinen neuen Abruf.
+  Gleichzeitige bekannte Tage sind Überlagerung; mehrere nacheinander aktive
+  Vorgänge derselben Woche sind Folgekulturen. Unklare mögliche Überlagerungen
+  werden davon getrennt. Bei API-Fehler kein vermeintlich freies Beet anzeigen.
+  Auswahl von ISO-Jahr/Woche ist eine lokale, projektbezogene Ansichtspräferenz
+  im Sitzungsspeicher, keine Änderung der SQLite-Daten oder Fachrevisionen.
+- **Grenzen:** Keine Prognose, Wachstumssimulation, Ist-Ernte, Räumung,
+  automatische Planung oder Botanical-ASCII-Lab-Integration. Bestehende
+  Demo-Tagesansicht und deren Scheduler-Ergebnisse bleiben getrennt erhalten.
+
 ## Änderungsverlauf
 
 | Datum | Änderung | Grundlage |
@@ -597,3 +695,4 @@ auftrag wurden keine Anwendungstests, Builds oder Funktionen geändert.
 | 16.11.2026 | DEC-028 ergänzt: kompakte Anzeige ohne Verlust interner Präzision und optionales Shift-Winkelraster. | Ausdrücklicher UI-Feinschliff-Auftrag; keine Änderung der Standardrotation oder Fachgeometrie. |
 | 16.11.2026 | DEC-029 ergänzt: persistente Nutzereingaben zur Kulturplanung, Schema-2-Migration und Löschschutz zugewiesener Beete. | Phase 3C.1; vorhandener Katalog, getrennte Geometrie und keine neuen Agronomieannahmen. |
 | 17.11.2026 | DEC-030 ergänzt: kompakte Planung und informative, Python-basierte Datumsprüfung einschließlich unklarer Zeiträume. | Ausdrücklicher UX-/Überschneidungsauftrag vor Phase 3C.2; keine Speicherblockade. |
+| 17.11.2026 | DEC-031 ergänzt: ISO-Wochenprojektion gespeicherter Projekte, Unsicherheiten und Trennung von Folge-/Mischkulturen. | Phase 3C.2; kein neuer Scheduler oder SQLite-Vertrag. |

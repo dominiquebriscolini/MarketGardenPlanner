@@ -9,11 +9,11 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Test-Build fehlgeschlagen.' }
     & $esbuild src\forecastModel.ts --bundle --platform=node --format=esm --outfile=.test-build\forecastModel.mjs
     if ($LASTEXITCODE -ne 0) { throw 'Prognose-Test-Build fehlgeschlagen.' }
-    foreach ($module in @('projectView','projectClient','editingGeometry','editingClient','geometryForm','geometryDisplay','cultivationModel','cultivationClient','cultivationChecks')) {
+    foreach ($module in @('projectView','projectClient','editingGeometry','editingClient','geometryForm','geometryDisplay','cultivationModel','cultivationClient','cultivationChecks','projectSeason')) {
         & $esbuild "src\$module.ts" --bundle --platform=node --format=esm --outfile=".test-build\$module.mjs"
         if ($LASTEXITCODE -ne 0) { throw 'Projekt-Test-Build fehlgeschlagen.' }
     }
-    foreach ($component in @('Plot','ProjectTooltip','EditorControls','BedGeometryForm','DeleteBedDialog','RotationReadout','CultivationPanel','CultivationReview','ProjectDetails')) {
+    foreach ($component in @('Plot','ProjectTooltip','EditorControls','BedGeometryForm','DeleteBedDialog','RotationReadout','CultivationPanel','CultivationReview','ProjectDetails','SeasonSlider','ProjectSeasonBar','ProjectWeekSummary')) {
         & $esbuild "src\$component.tsx" --bundle --packages=external --platform=node --format=esm --outfile=".test-build\$component.mjs"
         if ($LASTEXITCODE -ne 0) { throw 'Beschriftungs-Test-Build fehlgeschlagen.' }
     }
@@ -23,6 +23,8 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Scheduler-Testdaten konnten nicht erzeugt werden.' }
     & $geometryPython -B tests\export_project_fixture.py
     if ($LASTEXITCODE -ne 0) { throw 'Projekt-Testdaten konnten nicht erzeugt werden. Geometry-Extra prüfen.' }
-    & $NodeExecutable --test --test-isolation=none tests\interactions.test.mjs tests\forecast.test.mjs tests\projects.test.mjs tests\labels.test.mjs tests\editing.test.mjs tests\precision.test.mjs tests\polish.test.mjs tests\cultivation.test.mjs tests\cultivation-checks.test.mjs
+    & $geometryPython -B tests\export_season_fixture.py
+    if ($LASTEXITCODE -ne 0) { throw 'Projekt-Saison-Testdaten konnten nicht erzeugt werden.' }
+    & $NodeExecutable --test --test-isolation=none tests\interactions.test.mjs tests\forecast.test.mjs tests\projects.test.mjs tests\labels.test.mjs tests\editing.test.mjs tests\precision.test.mjs tests\polish.test.mjs tests\cultivation.test.mjs tests\cultivation-checks.test.mjs tests\project-season.test.mjs
     if ($LASTEXITCODE -ne 0) { throw 'Interaktionstests fehlgeschlagen.' }
 } finally { $env:PYTHONPATH = $previousPythonPath; Pop-Location }
