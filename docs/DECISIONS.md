@@ -541,6 +541,53 @@ auftrag wurden keine Anwendungstests, Builds oder Funktionen geändert.
 - **Bereitstellung (DEC-002/DEC-009):** Desktop-Paketierung bzw. öffentlicher
   Webbetrieb und dessen zusätzliche technische Anforderungen.
 
+### DEC-029 — Persistente Kulturabsichten ohne erfundene Saisonwerte
+
+- **Datum:** 16.11.2026, Nutzerauftrag Phase 3C.1.
+- **Status:** beschlossen.
+- **Entscheidung:** Projektbezogene Anbauvorgänge erhalten eigene stabile UUIDs,
+  Revisionen und Beet-/Katalogprofilreferenzen. Startdatum bezeichnet bei
+  Direktsaat die Aussaat ins Beet, bei Pflanzung das Pflanzen ins Beet; ein
+  optionales geplantes Erntedatum ist eine Nutzereingabe, kein Rechenergebnis.
+  Die Profil-Anbauart muss passen. Geometriesperren sperren nur Geometrie.
+- **Begründung:** Der vorhandene Scheduler plant aus Zielen und vollständigen
+  Saisonprofilen; er bildet manuelle Beetzuweisungen bisher nicht direkt ab.
+  Eine Eingabe ist daher kein Scheduler-Lauf und keine belastbare Prognose.
+- **Auswirkungen:** SQLite-Schema 2 ergänzt einen getrennten, versionierten
+  Kulturplan je Projekt, mit transaktionaler Migration aus Schema 1. Kultur-
+  änderungen erhöhen Projekt-/Kulturplanrevision, erhalten Geometrie und Token.
+  Alle Schreiboperationen teilen die erwartete Projektrevision. Beete mit
+  Anbauvorgängen dürfen erst nach deren ausdrücklicher Entfernung gelöscht
+  werden; keine versteckte Kaskade. Keine Demo-Erträge, automatische Termine,
+  Belegungsdauer, Konfliktfreiheit der Kulturfolge oder Scheduler-Neuberechnung
+  behaupten. Geplantes Erntedatum ist ausdrücklich kein Räumdatum.
+- **Offen:** Belegungsintervalle/Räumung, reale Saisonprofile, Run-/Intent-
+  Zuordnung, Sorten außerhalb des Katalogs, historische und tatsächliche Ernten.
+  Diese bleiben spätere, getrennte Datensätze gemäß DEC-008/022–024.
+
+### DEC-030 — Informative Datumsüberschneidungen und kompakte Beetplanung
+
+- **Datum:** 17.11.2026, Nutzerauftrag Kulturplanung UX und Überschneidungen.
+- **Status:** beschlossen.
+- **Entscheidung:** Die Oberfläche zeigt kompakte Vorgangszeilen und einklappbare
+  Geometrie-/Herkunftsangaben. Eine rein lesende Python-Prüfung vergleicht bekannte
+  Planungsabschnitte vom Start bis einschließlich geplanter Ernte auf demselben
+  Beet. Gleicher Starttag ist auch ohne Erntedatum eine bekannte Gemeinsamkeit.
+  Fehlt das Ende eines früher gestarteten Vorgangs, ist eine spätere mögliche
+  Überschneidung unklar, nicht automatisch vorhanden oder ausgeschlossen.
+- **Begründung:** Nutzer sollen Terminkonflikte sehen, ohne Mischkulturen zu
+  verbieten oder fehlende Zeitspannen zu erfinden. Der Erntetag ist kein Räumtag.
+- **Auswirkungen:** Vorhandene Datumsvalidierung und `DateWindow.overlaps` werden
+  wiederverwendet; inklusive Planungstage werden nur für den Vergleich in
+  halboffene Intervalle übersetzt. Ergebnisse nennen betroffene Vorgangs-IDs und
+  bekannte gemeinsame Tage. Prüfung auch für gültige Formularentwürfe, ohne
+  SQLite-Schreibzugriff oder neue Persistenzfelder. Keine Terminänderungen,
+  Speicherverbote, Prognosen oder Aussage über tatsächliche Beetverfügbarkeit
+  nach einer Ernte. DEC-029 bleibt erhalten; die dort noch nicht implementierte
+  Datumsprüfung wird hier ausdrücklich als informativer Vergleich ergänzt.
+- **Offen:** Tatsächliche Belegungs-/Räumintervalle, Mischkulturverträglichkeit,
+  Teilbeetbelegung und Scheduler-Integration bleiben spätere Aufgaben.
+
 ## Änderungsverlauf
 
 | Datum | Änderung | Grundlage |
@@ -548,3 +595,5 @@ auftrag wurden keine Anwendungstests, Builds oder Funktionen geändert.
 | 16.11.2026 | Erstfassung DEC-001 bis DEC-026; historische Einordnung und offene Details aufgenommen. | Bestehende Dokumentation und ausdrücklicher Auftrag zum dauerhaften Entscheidungsprotokoll. Keine neuen Funktionen, kein Git-Commit. |
 | 16.11.2026 | DEC-027 ergänzt; Bezug zu den bislang offenen Editorfunktionen in DEC-010 ausdrücklich fortgeschrieben. | Nutzerauftrag Phase 3B.3c; Mittelpunkt-Anker und revisionssichere Einzel-Löschung mit dauerhafter ID-Sperre. |
 | 16.11.2026 | DEC-028 ergänzt: kompakte Anzeige ohne Verlust interner Präzision und optionales Shift-Winkelraster. | Ausdrücklicher UI-Feinschliff-Auftrag; keine Änderung der Standardrotation oder Fachgeometrie. |
+| 16.11.2026 | DEC-029 ergänzt: persistente Nutzereingaben zur Kulturplanung, Schema-2-Migration und Löschschutz zugewiesener Beete. | Phase 3C.1; vorhandener Katalog, getrennte Geometrie und keine neuen Agronomieannahmen. |
+| 17.11.2026 | DEC-030 ergänzt: kompakte Planung und informative, Python-basierte Datumsprüfung einschließlich unklarer Zeiträume. | Ausdrücklicher UX-/Überschneidungsauftrag vor Phase 3C.2; keine Speicherblockade. |

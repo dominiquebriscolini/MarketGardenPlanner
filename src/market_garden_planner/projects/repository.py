@@ -9,11 +9,13 @@ import sqlite3
 
 from ..spatial import GeometryState, dumps, loads, geometry_token, new_id
 from ..spatial.models import require_uuid
+from ..spatial.serialization import unique_keys, reject_constant
 from .errors import ProjectError
 from .geometry_updates import append_bed, reconcile, patch_bed, remove_bed
+from .cultivation import CultivationPlan, change_plan
+from .catalogue import load_catalogue
+from .schema import APPLICATION_ID, SCHEMA_VERSION, ensure_schema
 
-APPLICATION_ID = 0x4D475031  # MGP1
-SCHEMA_VERSION = 1
 
 
 @dataclass(frozen=True)
@@ -24,11 +26,13 @@ class Project:
     geometry: GeometryState
     created_at: str
     updated_at: str
+    cultivation_plan: CultivationPlan
 
     def to_dict(self):
         return {"project_id": self.project_id, "name": self.name, "revision_id": self.revision_id,
                 "geometry": json.loads(dumps(self.geometry)), "geometry_token": geometry_token(self.geometry),
-                "created_at": self.created_at, "updated_at": self.updated_at}
+                "created_at": self.created_at, "updated_at": self.updated_at,
+                "cultivation_plan": self.cultivation_plan.to_dict()}
 
 
 def project_name(name):
@@ -43,32 +47,7 @@ class ProjectRepository:
         if str(path) == ":memory:":
             raise ProjectError("database_path", "Use a local file database")
         with self._connection(write=True) as db:
-            version = db.execute("PRAGMA user_version").fetchone()[0]
-            app = db.execute("PRAGMA application_id").fetchone()[0]
-            tables = {r[0] for r in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
-            if version == 0 and app == 0 and not tables:
-                db.execute("""CREATE TABLE projects (
-                    project_id TEXT PRIMARY KEY NOT NULL,
-                    name TEXT NOT NULL CHECK(length(name) BETWEEN 1 AND 200),
-                    revision_id TEXT NOT NULL,
-                    geometry_json TEXT NOT NULL,
-                    geometry_token TEXT NOT NULL CHECK(length(geometry_token)=64),
-                    created_at TEXT NOT NULL, updated_at TEXT NOT NULL)""")
-                db.execute("""CREATE TABLE commands (
-                    project_id TEXT NOT NULL REFERENCES projects(project_id),
-                    command_id TEXT NOT NULL, request_hash TEXT NOT NULL,
-                    response_json TEXT NOT NULL,
-                    PRIMARY KEY(project_id, command_id))""")
-                db.execute(f"PRAGMA application_id={APPLICATION_ID}")
-                db.execute(f"PRAGMA user_version={SCHEMA_VERSION}")
-            elif version != SCHEMA_VERSION or app != APPLICATION_ID:
-                raise ProjectError("database_schema", "Unsupported/foreign database; explicit migration required", 500)
-            for table, columns in {
-                "projects": {"project_id", "name", "revision_id", "geometry_json", "geometry_token", "created_at", "updated_at"},
-                "commands": {"project_id", "command_id", "request_hash", "response_json"},
-            }.items():
-                if {r[1] for r in db.execute(f"PRAGMA table_info({table})")} != columns:
-                    raise ProjectError("database_schema", "Database table schema mismatch", 500)
+            ensure_schema(db)
 
     @contextmanager
     def _connection(self, write=False):
@@ -105,8 +84,15 @@ class ProjectRepository:
             geometry = loads(row["geometry_json"])
             if geometry_token(geometry) != row["geometry_token"]:
                 raise ValueError("Geometry checksum mismatch")
+            if "plan_json" in row:
+                plan = CultivationPlan.from_dict(json.loads(row["plan_json"], object_pairs_hook=unique_keys, parse_constant=reject_constant))
+            elif "cultivation_plan" in row:
+                plan = CultivationPlan.from_dict(row["cultivation_plan"])
+            else:
+                plan = CultivationPlan.empty(row["project_id"])
+            plan.validate_beds(geometry)
             return Project(row["project_id"], row["name"], row["revision_id"], geometry,
-                           row["created_at"], row["updated_at"])
+                           row["created_at"], row["updated_at"], plan)
         except (ValueError, TypeError, KeyError) as error:
             raise ProjectError("corrupt_project", "Stored project failed validation/integrity check", 500) from error
 
@@ -115,7 +101,10 @@ class ProjectRepository:
         row = db.execute("SELECT * FROM projects WHERE project_id=?", (project_id,)).fetchone()
         if row is None:
             raise ProjectError("project_not_found", "Project not found", 404)
-        return self._decode(row)
+        plan_row = db.execute("SELECT plan_json FROM cultivation_plans WHERE project_id=?", (project_id,)).fetchone()
+        if plan_row is None:
+            raise ProjectError("corrupt_project", "Cultivation plan is missing", 500)
+        return self._decode({**dict(row), "plan_json": plan_row[0]})
 
     def get(self, project_id) -> Project:
         with self._connection() as db:
@@ -125,8 +114,9 @@ class ProjectRepository:
         with self._connection() as db:
             summaries = []
             for row in db.execute("SELECT * FROM projects ORDER BY created_at, project_id"):
-                item = self._decode(row).to_dict()
+                item = self._get(db, row["project_id"]).to_dict()
                 item.pop("geometry")
+                item.pop("cultivation_plan")
                 summaries.append(item)
             return summaries
 
@@ -134,13 +124,15 @@ class ProjectRepository:
         project_name(name)
         serialized = dumps(geometry)
         now = datetime.now(timezone.utc).isoformat()
-        project = Project(new_id(), name, new_id(), geometry, now, now)
+        project_id = new_id()
+        project = Project(project_id, name, new_id(), geometry, now, now, CultivationPlan.empty(project_id))
         with self._connection(write=True) as db:
             db.execute("INSERT INTO projects VALUES (?,?,?,?,?,?,?)",
                        (project.project_id, name, project.revision_id, serialized, geometry_token(geometry), now, now))
+            db.execute("INSERT INTO cultivation_plans VALUES (?,?)", (project_id, json.dumps(project.cultivation_plan.to_dict())))
         return project
 
-    def _change(self, project_id, expected_revision, transform, request, command_id, *, allow_add=False, allow_remove=False):
+    def _change(self, project_id, expected_revision, transform, request, command_id, *, allow_add=False, allow_remove=False, cultivation_transform=None):
         require_uuid(expected_revision)
         if command_id is not None:
             require_uuid(command_id)
@@ -172,15 +164,24 @@ class ProjectRepository:
                         raise ProjectError("retired_id", "Deleted bed IDs cannot be reused in this project")
             project_name(name)
             geometry = reconcile(before.geometry, candidate, allow_add=allow_add, allow_remove=allow_remove)
-            if geometry == before.geometry and name == before.name:
+            plan = cultivation_transform(before) if cultivation_transform else before.cultivation_plan
+            plan.validate_beds(geometry)
+            if geometry == before.geometry and name == before.name and plan == before.cultivation_plan:
                 result = before
             else:
                 result = Project(project_id, name, new_id(), geometry, before.created_at,
-                                 datetime.now(timezone.utc).isoformat())
-                updated = db.execute("UPDATE projects SET name=?,revision_id=?,geometry_json=?,geometry_token=?,updated_at=? WHERE project_id=? AND revision_id=?",
-                                     (name, result.revision_id, dumps(geometry), geometry_token(geometry), result.updated_at, project_id, expected_revision))
+                                 datetime.now(timezone.utc).isoformat(), plan)
+                if geometry == before.geometry:
+                    updated = db.execute("UPDATE projects SET name=?,revision_id=?,updated_at=? WHERE project_id=? AND revision_id=?",
+                                         (name, result.revision_id, result.updated_at, project_id, expected_revision))
+                else:
+                    updated = db.execute("UPDATE projects SET name=?,revision_id=?,geometry_json=?,geometry_token=?,updated_at=? WHERE project_id=? AND revision_id=?",
+                                         (name, result.revision_id, dumps(geometry), geometry_token(geometry), result.updated_at, project_id, expected_revision))
                 if updated.rowcount != 1:
                     raise ProjectError("revision_conflict", "Concurrent project modification", 409)
+                if plan != before.cultivation_plan:
+                    db.execute("UPDATE cultivation_plans SET plan_json=? WHERE project_id=?",
+                               (json.dumps(plan.to_dict(), allow_nan=False), project_id))
             if command_id:
                 receipt_data = result.to_dict()
                 if allow_remove:
@@ -212,3 +213,16 @@ class ProjectRepository:
         return self._change(project_id, expected_revision,
                             lambda before: (before.name, remove_bed(before.geometry, bed_id)),
                             request, command_id if command_id is not None else new_id(), allow_remove=True)
+
+    def change_cultivation(self, project_id, expected_revision, bed_id, operation, values=None, cultivation_id=None, *, command_id=None):
+        if operation not in ("add", "update", "delete"):
+            raise ProjectError("invalid_operation", "Unknown cultivation operation")
+        if cultivation_id is not None:
+            require_uuid(cultivation_id)
+        catalogue = load_catalogue()
+        request = {"operation": "cultivation_" + operation, "expected_revision": expected_revision,
+                   "bed_id": bed_id, "cultivation_id": cultivation_id, "values": values}
+        return self._change(project_id, expected_revision, lambda before: (before.name, before.geometry),
+                            request, command_id,
+                            cultivation_transform=lambda before: change_plan(before.cultivation_plan, before.geometry,
+                                catalogue, operation, bed_id, values, cultivation_id))

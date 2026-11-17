@@ -1,0 +1,31 @@
+<!doctype html><html lang="de"><meta charset="utf-8"><title>Botanical Lab — rendering checks</title><style>body{background:#111714;color:#d4d9cd;font:14px monospace;margin:30px}canvas{max-width:32%;vertical-align:top}pre{white-space:pre-wrap}</style><h1>Renderer checks</h1><pre id="results">Running…</pre><div id="canvases"></div><script type="module">
+import {createTomato} from './model.js';import {project} from './projection.js';import {deform} from './wind.js';import {PlantRenderer} from './renderer.js';
+const results=[],assert=(name,pass)=>{results.push(`${pass?'PASS':'FAIL'} ${name}`);if(!pass)throw Error(name);};
+try {
+ const model=createTomato();assert('Deterministic geometry',JSON.stringify(model)===JSON.stringify(createTomato()));
+ assert('Finite 3D geometry',model.every(f=>f.points.flat().every(Number.isFinite)));
+ const axes=[[1,0,0],[0,1,0],[0,0,1]].map(project);assert('Equal isometric axis lengths',axes.every(p=>Math.abs(Math.hypot(...p)-1)<1e-12));assert('30 degree ground axis',Math.abs(Math.atan2(axes[0][1],axes[0][0])-Math.PI/6)<1e-12);
+ assert('Wind root fixed',deform([0,0,0],22,1).every(v=>v===0));
+ const p=[.5,0,1.2];assert('Zero wind preserves geometry',JSON.stringify(deform(p,22,0))===JSON.stringify(p));
+ const delta=(a,b)=>Math.hypot(...a.map((v,i)=>v-b[i]));
+ assert('Outer foliage moves visibly',delta(deform(p,0,1),deform(p,22,1))>.03);
+ assert('Wind continuous across gust boundary',delta(deform(p,8.99999,1),deform(p,9.00001,1))<.00001);
+ assert('Shared attachment independent of primitive',JSON.stringify(deform(p,15,1,.1,0))===JSON.stringify(deform(p,15,1,1,20)));
+ const base={width:800,height:740,zoom:1,pan:[0,0],size:5,wind:0,time:0,grid:false};
+ for(const mode of ['ascii','halftone','hybrid']){
+  const canvas=document.createElement('canvas');document.getElementById('canvases').append(canvas);const r=new PlantRenderer(canvas);
+  let text=0,arcs=0;const originalText=r.ctx.fillText.bind(r.ctx),originalArc=r.ctx.arc.bind(r.ctx);
+  r.ctx.fillText=(...args)=>{text++;originalText(...args);};r.ctx.arc=(...args)=>{arcs++;originalArc(...args);};
+  const s=r.render(model,{...base,mode});
+  assert(`${mode}: expected actual canvas primitives`,mode==='ascii'?text>500&&arcs===0:mode==='halftone'?text===0&&arcs>500:text>100&&arcs>100);
+  const image=r.ctx.getImageData(0,0,800,740).data;r.render(model,{...base,mode});const again=r.ctx.getImageData(0,0,800,740).data;
+  assert(`${mode}: identical pixels at fixed time`,image.every((v,i)=>v===again[i]));
+  const coarse=r.render(model,{...base,mode,size:12});assert(`${mode}: coarse cells reduce resolution`,coarse.columns<s.columns&&coarse.rows<s.rows&&(coarse.glyphs+coarse.dots)<(s.glyphs+s.dots));
+  const durations=[];for(let i=0;i<30;i++)durations.push(r.render(model,{...base,mode,time:i*.1,wind:.55}).ms);
+  durations.sort((a,b)=>a-b);results.push(`INFO ${mode}: glyphs=${s.glyphs}, dots=${s.dots}, median=${durations[15].toFixed(1)}ms, p95=${durations[28].toFixed(1)}ms (800×740)`);
+  r.render(model,{...base,mode});
+ }
+ results.push('COMPLETE');
+}catch(e){results.push('ERROR '+e.stack);}
+document.getElementById('results').textContent=results.join('\n');
+</script></html>

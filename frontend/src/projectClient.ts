@@ -3,6 +3,11 @@ import {decodeProject,decodeProjectList} from './projectView';
 export type ValidationIssue={code:string;object_ids:string[];message:string};
 const messages:Record<string,string>={
   revision_conflict:'Das Projekt wurde inzwischen geändert. Bitte neu laden, bevor Sie weiter bearbeiten.',
+  bed_has_cultivations:'Dieses Beet hat Anbauvorgänge. Entfernen Sie diese zuerst ausdrücklich in der Kulturplanung.',
+  unknown_profile:'Kulturprofil nicht im Python-Katalog gefunden.',
+  invalid_date:'Ungültiges Datum. Geplante Ernte darf nicht vor Aussaat oder Pflanzung liegen.',
+  establishment_mismatch:'Die Anbauart passt nicht zum Katalogprofil.',
+  invalid_cultivation:'Die Angaben zum Anbauvorgang sind ungültig.',
   geometry_locked:'Dieses Beet ist gesperrt und kann nicht verändert oder gelöscht werden.',
   bed_overlap:'Das Beet überschneidet ein anderes Beet.',
   outside_parcel:'Das Beet liegt außerhalb der Grundstücksgrenze oder in einem Polygonloch.',

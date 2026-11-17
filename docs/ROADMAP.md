@@ -25,6 +25,21 @@ ein automatischer Vorschlag zusätzliche Objekte erzeugt.
 
 ## 2. Phasen mit Abnahmekriterien
 
+### Ergänzender Strang 3C.1 — Kulturplanung und manuelle Beetzuweisung
+
+Auf ausdrücklichen Auftrag nach 3B.3c implementiert: dauerhafte Kulturabsichten
+mit eigenen IDs, Katalogprofilreferenzen, expliziten Nutzerdaten und getrennter
+Kulturplanrevision. SQLite-Schema 2 migriert bekannte Version 1 transaktional;
+bestehende Geometrie bleibt erhalten. Formular und chronologische Liste im
+Beetpanel; revisionssichere CRUD-API und Schutz vor verwaisten Vorgängen.
+[Abnahme, 106 Python-/66 Frontend-Tests und Grenzen](phase3c1.md), DEC-029.
+Keine neue Saisonvisualisierung, Prognose oder Änderung des Schedulers.
+
+Nächster fachlicher Anschluss (noch nicht beauftragt): Saison-/Räumvertrag,
+Intent-/Run-Zuordnung und ausdrücklich ausgelöster Scheduler-Lauf für manuelle
+Zuweisungen; Ergebnisse an Geometrie-Token, Kulturplanrevision und Profilstand
+binden. Die bisherigen räumlichen Zukunftsphasen bleiben davon unberührt.
+
 ### 3B.0 — Architekturprüfung (dieser Auftrag)
 
 Ergebnis: Bestandsaufnahme, Koordinaten-/Identitätsentscheidung, räumliches

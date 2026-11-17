@@ -1,0 +1,20 @@
+<!doctype html><html lang="de"><meta charset="utf-8"><title>Botanical Lab · Räumliche Tiefe</title><style>
+*{box-sizing:border-box}body{margin:0;padding:28px;background:#111714;color:#c5d2b2;font:12px Consolas,monospace}h1{font:24px Georgia,serif;font-weight:400}p{color:#91a480;line-height:1.8}nav{display:flex;gap:25px;margin:24px 0}a{color:#c5d2b2;text-underline-offset:5px}.views{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}figure{margin:0;min-width:0}canvas{width:100%;height:auto;display:block;border-top:1px solid #303a32}figcaption{font:11px Consolas,monospace;letter-spacing:1px;padding:15px 0}.before{grid-template-columns:repeat(2,minmax(0,1fr))}footer{margin-top:25px;border-top:1px solid #303a32;padding-top:16px;color:#91a480}</style>
+<h1>Botanical ASCII Lab — Räumliche Tiefe</h1><p id="caption"></p><nav><a href="?mode=hybrid">Hybrid</a><a href="?mode=ascii">ASCII</a><a href="?mode=halftone">Halftone</a><a href="?before=1">Vorher / Nachher</a><a href="depth-test.html">Tiefenprüfungen</a><a href="./">Prototyp</a><a id="export" download>PNG exportieren</a></nav><div class="views" id="views"></div><footer id="summary"></footer>
+<script type="module">
+import {createTomato} from './model.js';import {PlantRenderer} from './renderer.js';
+import {createTomato as beforeModel} from './.qa/before-depth/model.js';import {PlantRenderer as BeforeRenderer} from './.qa/before-depth/renderer.js';
+const params=new URLSearchParams(location.search),mode=['ascii','halftone','hybrid'].includes(params.get('mode'))?params.get('mode'):'hybrid',before=params.has('before');
+const model=createTomato(),views=document.getElementById('views');if(before)views.classList.add('before');
+document.getElementById('caption').textContent=before?'Gleiche Kamera, gleiches Raster, gleicher Zeitpunkt. Links: Experiment 01. Rechts: überarbeitete Raumgeometrie und Verdeckung.':`${mode.toUpperCase()} · dieselbe Pflanze aus 0°, 45° und 90° · isometrische Elevation unverändert · Zeichengröße 5 px · Wind 0 · feste Weltlichtquelle`;
+const list=before?[['VORHER · 0°',0,true],['NACHHER · 0°',0,false]]:[['0°',0,false],['45°',Math.PI/4,false],['90°',Math.PI/2,false]];
+for(const [label,yaw,old]of list){const figure=document.createElement('figure'),canvas=document.createElement('canvas'),caption=document.createElement('figcaption');caption.textContent=label;figure.append(caption,canvas);views.append(figure);new (old?BeforeRenderer:PlantRenderer)(canvas).render(old?beforeModel():model,{width:700,height:850,zoom:1,pan:[0,0],size:5,mode:before?'hybrid':mode,wind:0,time:0,grid:false,yaw});}
+document.getElementById('summary').textContent=`13 zusammengesetzte Blätter · 143 Einzelblättchen · 12 Früchte · 4 Blüten · keine zusätzlichen Blätter · keine Änderung an Wind, Hauptoberfläche oder Farbpalette`;
+
+// Export exactly the already-rendered canvases at their native resolution.
+const plate=document.createElement('canvas');plate.width=list.length*700;plate.height=960;
+const ctx=plate.getContext('2d');ctx.fillStyle='#111714';ctx.fillRect(0,0,plate.width,960);ctx.fillStyle='#c5d2b2';ctx.font='21px Consolas,monospace';ctx.fillText('BOTANICAL ASCII LAB / SPATIAL DEPTH / '+(before?'BEFORE & AFTER':mode.toUpperCase()),25,30);
+[...views.querySelectorAll('canvas')].forEach((canvas,i)=>{ctx.font='17px Consolas,monospace';ctx.fillText(list[i][0],i*700+25,65);ctx.drawImage(canvas,i*700,75);});
+ctx.font='13px Consolas,monospace';ctx.fillStyle='#91a480';ctx.fillText('5 px / wind 0 / same plant and camera scale / fixed world light / 143 leaflets',25,948);
+const link=document.getElementById('export');link.download=before?'depth-before-after.png':`depth-${mode}-0-45-90.png`;link.href=plate.toDataURL('image/png');
+</script></html>

@@ -1,4 +1,4 @@
-import {useCallback,useEffect,useMemo,useState} from 'react';
+import {useCallback,useEffect,useMemo,useRef,useState} from 'react';
 import {Demo,fmt,stages} from './types';
 import {Plot} from './Plot';
 import {Details} from './Details';
@@ -17,6 +17,9 @@ export function App() {
   const [mode,setMode]=useState('demo'),[project,setProject]=useState<SavedProject|null>(null);
   const [catalog,setCatalog]=useState<ProjectSummary[]>([]),[listError,setListError]=useState(''),[listLoading,setListLoading]=useState(true);
   const [projectError,setProjectError]=useState(''),[projectLoading,setProjectLoading]=useState(false),[refresh,setRefresh]=useState(0);
+  const [cultivationBusy,setCultivationBusy]=useState(false);
+  const cultivationWorking=useRef(false);
+  const onCultivationBusy=useCallback((value:boolean)=>{cultivationWorking.current=value;setCultivationBusy(value);},[]);
   const [index,setIndex]=useState(101),[selected,setSelected]=useState<string|null>(null);
   const [legendOpen,setLegendOpen]=useState(false),[forecastOpen,setForecastOpen]=useState(false);
   const [forecastPosition,setForecastPosition]=useState<Point|null>(null);
@@ -42,7 +45,7 @@ export function App() {
     return ()=>controller.abort();
   },[mode,refresh]);
   useEffect(()=>{
-    const onKey=(e:KeyboardEvent)=>{if(e.key==='Escape'&&!e.defaultPrevented){setSelected(null);setForecastOpen(false);}};
+    const onKey=(e:KeyboardEvent)=>{if(e.key==='Escape'&&!e.defaultPrevented&&!cultivationWorking.current){setSelected(null);setForecastOpen(false);}};
     let narrow=window.innerWidth<=600;
     const onResize=()=>{const next=window.innerWidth<=600;if(next!==narrow){setForecastPosition(null);narrow=next;}};
     window.addEventListener('keydown',onKey);window.addEventListener('resize',onResize);
@@ -55,7 +58,9 @@ export function App() {
     const {geometry:_,...summary}=saved;
     setCatalog(items=>items.map(p=>p.project_id===saved.project_id?summary:p));
   },[]);
-  const editor=useBedEditor(activeProject,onSaved);
+  const bedEditor=useBedEditor(activeProject,onSaved);
+  const editor={...bedEditor,busy:bedEditor.busy||cultivationBusy};
+  const selectBed=(id:string|null)=>{if(!cultivationWorking.current)setSelected(id);};
   useEffect(()=>{
     const remove=(event:KeyboardEvent)=>{
       const active=document.activeElement;
@@ -75,7 +80,7 @@ export function App() {
   const synthetic=activeProject&&/syntheti/i.test([activeProject.name,activeProject.geometry.parcel.source_reference,...activeProject.geometry.beds.map(b=>b.source_reference)].join(' '));
   const mapError=demoMode?demoError:projectError;
   return <main className={`map-app ${forecastOpen&&demoMode?'forecast-open':''} ${demoMode?'demo-mode':'project-mode'}`}>
-    {geometry&&<Plot key={mode} geometry={geometry} data={demoMode?data??undefined:undefined} index={index} selected={selected} onSelect={setSelected} editor={activeProject?editor:undefined}/>}
+    {geometry&&<Plot key={mode} geometry={geometry} data={demoMode?data??undefined:undefined} index={index} selected={selected} onSelect={selectBed} editor={activeProject?editor:undefined}/>}
     {!geometry&&<div className="map-message floating" role={mapError?'alert':'status'}>
       <h2>{mapError?'Ansicht konnte nicht geladen werden':projectLoading?'Projekt wird geladen …':'Daten werden geladen …'}</h2>
       <p>{mapError||'Die Karte erscheint nach dem Laden.'}</p>{mapError&&<button onClick={reload}>Erneut versuchen</button>}
@@ -99,12 +104,12 @@ export function App() {
       <div className="map-secondary"><div className="legend floating">
         <button aria-expanded={legendOpen} aria-controls="legend-items" onClick={()=>setLegendOpen(v=>!v)}><span className="legend-icon" aria-hidden="true">◫</span> Legende <span>{legendOpen?'−':'+'}</span></button>
         {legendOpen&&<div id="legend-items">{demoMode?Object.entries(stages).map(([key,label])=><span key={key}><i className={key}/>{label}</span>):<><span><i className="unplanned"/>Beetgeometrie</span><span><i className="hole"/>Grundstücksaussparung</span></>}
-          <small>{demoMode?'Schematische Planphasen':'Keine Kulturbelegung hinterlegt'}</small></div>}
+          <small>{demoMode?'Schematische Planphasen':'Geometrie · keine berechneten Saisonphasen'}</small></div>}
       </div><button className="floating forecast-toggle" aria-expanded={demoMode&&forecastOpen} disabled={!demoMode||!data} title={demoMode?'':'Keine Scheduler-Ergebnisse für dieses Projekt'} onClick={()=>setForecastOpen(v=>!v)}>Ernteprognose ↗</button></div>
       {activeProject&&<EditorControls editor={editor}/>}
     </div>
     {demoMode&&data&&selected&&<Details data={data} index={index} selected={selected} onClose={()=>setSelected(null)}/>}
-    {!demoMode&&activeProject&&selected&&<ProjectDetails project={activeProject} selected={selected} onClose={()=>setSelected(null)} editor={editor}/>}
+    {!demoMode&&activeProject&&selected&&<ProjectDetails project={activeProject} selected={selected} onClose={()=>selectBed(null)} editor={editor} cultivationBusy={cultivationBusy} onCultivationBusy={onCultivationBusy} onSaved={onSaved}/>}
     {activeProject&&editor.deleteTarget&&<DeleteBedDialog editor={editor}/>}
     {demoMode&&data&&day&&forecastOpen&&<ForecastWindow data={data} day={day.date} position={forecastPosition} onPosition={setForecastPosition} onClose={()=>setForecastOpen(false)}/>}
     {demoMode&&data&&day?<section className="season floating" aria-label="Saisonsteuerung"><div className="season-head">
@@ -113,6 +118,6 @@ export function App() {
         <input aria-label="Datum wählen" type="date" min={data.days[0].date} max={data.days.at(-1)!.date} value={day.date} onChange={e=>{const i=data.days.findIndex(d=>d.date===e.target.value);if(i>=0)setIndex(i);}}/></div>
       </div><input className="season-slider" aria-label="Saisontag" aria-valuetext={fmt(day.date)} type="range" min="0" max={data.days.length-1} value={index} onChange={e=>setIndex(Number(e.target.value))}/>
       <div className="months">{['MÄR','APR','MAI','JUN','JUL','AUG','SEP','OKT','NOV'].map(m=><span key={m}>{m}</span>)}</div>
-    </section>:!demoMode&&<section className="season floating project-season" aria-label="Saisonplanung nicht verfügbar"><span className="eyebrow">GEOMETRIEANSICHT</span><p>Keine Saisonplanung für dieses Projekt hinterlegt.</p><small>Saisonregler und Ernteprognose sind nur im Demo-Modus verfügbar.</small></section>}
+    </section>:!demoMode&&<section className="season floating project-season" aria-label="Saisonplanung nicht verfügbar"><span className="eyebrow">PROJEKTPLANUNG</span><p>Keine berechnete Saisonplanung für dieses Projekt.</p><small>Kulturvorgänge im Beetdetail planen. Saisonregler und Ernteprognose sind nur im Demo-Modus verfügbar.</small></section>}
   </main>;
 }

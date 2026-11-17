@@ -1,10 +1,13 @@
 import type { Bed, Demo } from './types';
+import {decodeCultivationPlan} from './cultivationModel';
+import type {CultivationPlan} from './cultivationModel';
 
 export type WorldPoint = {x:number;y:number};
 type ObjectMeta = {object_id:string;revision_id:string;name:string;origin:string;geometry_locked:boolean;generation_protected:boolean;source_reference:string|null};
 export type SpatialBed = ObjectMeta & {parcel_id:string;center:WorldPoint;width_m:number;length_m:number;rotation_deg:number};
 export type SavedProject = {
   project_id:string;name:string;revision_id:string;geometry_token:string;created_at:string;updated_at:string;
+  cultivation_plan?:CultivationPlan;
   geometry:{format:string;schema_version:number;revision_id:string;frame:{unit:string;x_axis:string;y_axis:string;angle:string};
     parcel:ObjectMeta & {outer:WorldPoint[];holes:WorldPoint[][]};beds:SpatialBed[]};
 };
@@ -58,6 +61,7 @@ export function decodeProject(value:unknown, expectedId:string):SavedProject {
     if(b.parcel_id!==g.parcel.object_id||!Number.isFinite(b.width_m)||b.width_m<=0||!Number.isFinite(b.length_m)||b.length_m<=0||!Number.isFinite(b.rotation_deg)||b.rotation_deg<0||b.rotation_deg>=360)throw Error('Ungültige Beetgeometrie.');
   }
   if(new Set([g.parcel.object_id,...g.beds.map((b:SpatialBed)=>b.object_id)]).size!==g.beds.length+1)throw Error('Doppelte Objekt-IDs.');
+  if(p.cultivation_plan!==undefined)decodeCultivationPlan(p.cultivation_plan,g.beds.map((b:SpatialBed)=>b.object_id));
   return p as SavedProject;
 }
 

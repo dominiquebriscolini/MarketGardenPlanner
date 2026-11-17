@@ -2,6 +2,13 @@
 
 ## Aktueller Umfang
 
+Fortschreibung Phase 3C.1: Gespeicherte Projektbeete erhalten persistente,
+manuell bearbeitbare Kulturabsichten aus dem bestehenden Python-Katalog:
+Direktsaat/Pflanzung, Startdatum und optional geplante Ernte. Mehrere Vorgänge
+je Beet, stabile IDs und klare Nutzereingabe-Kennzeichnung; keine abgeleiteten
+Saisonphasen oder neuen Ernteprognosen. [Bedienung und Grenzen](phase3c1.md).
+Die folgenden früheren Umfangsbeschreibungen bleiben als Historie erhalten.
+
 Phase 3A.2 stellt die lokale, maßstäbliche Karte, unabhängige Beetdetails und
 eine kalenderwochengenaue Ernteprognose auf Basis des Python-Schedulers bereit.
 Phase 3B.1 ergänzt einen getrennten, optionalen Python-Geometriekern; die

@@ -196,6 +196,19 @@ die Kapazität trotz größerer Fläche nicht steigen.
 
 ## 5. Räumliche Identität, Belegung und Scheduler
 
+**Umsetzung Phase 3C.1:** `CultivationIntent` verknüpft stabile Vorgangs-ID,
+Beet-ID und vorhandene Python-Katalogprofil-ID mit expliziten Nutzerdaten
+(Direktsaat/Pflanzung, Startdatum, optionale geplante Ernte). Ein getrenntes
+`CultivationPlan`-JSON mit eigener Revision liegt in SQLite-Schema 2; bekannte
+Schema-1-Projekte erhalten transaktional einen leeren Plan. Gemeinsame erwartete
+Projektrevision schützt Kultur- und Geometrieänderungen voreinander. Geometrie-
+Token und räumliches JSON bleiben bei Kulturänderungen unverändert. Ein Beet
+mit Vorgängen wird erst nach deren ausdrücklicher Entfernung löschbar.
+Dies sind Eingabeabsichten, noch keine Reservierungen oder Scheduler-Läufe;
+Räumung, Zeitkonflikte und Ertrag werden nicht abgeleitet. DEC-029 und
+[Vertrag, Migration und Abnahme](phase3c1.md) konkretisieren diesen Schritt.
+Die nachfolgende Run-/Snapshot-Architektur bleibt das Ziel späterer Phasen.
+
 ```text
 GeometrySnapshot --object_id--> BedGeometry
      |                              |
