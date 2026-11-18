@@ -25,7 +25,7 @@ function initialDarkMode() {
   return window.matchMedia('(prefers-color-scheme: dark)').matches;
 }
 
-export function App() {
+export function App({preview=false}: {preview?:boolean}) {
   const [isometric,setIsometric]=useState(false);
   const [creatingProject,setCreatingProject]=useState(false);
   const [dark,setDark]=useState(initialDarkMode);
@@ -46,25 +46,28 @@ export function App() {
   const [forecastPosition,setForecastPosition]=useState<Point|null>(null);
   useEffect(()=>{
     const controller=new AbortController();setDemoError('');
-    getJSON('/api/demo',controller.signal).then(value=>setData(value as Demo)).catch(e=>{if(!controller.signal.aborted)setDemoError(String(e.message));});
+    getJSON(preview?'./season.json':'/api/demo',controller.signal).then(value=>setData(value as Demo)).catch(e=>{
+      if(!controller.signal.aborted)setDemoError(preview?'Saisondatei konnte nicht geladen werden.':String(e.message));
+    });
     return ()=>controller.abort();
-  },[refresh]);
+  },[preview,refresh]);
   useEffect(()=>{
+    if(preview)return;
     const controller=new AbortController();setListLoading(true);setListError('');
     listProjects(controller.signal).then(value=>{if(!controller.signal.aborted)setCatalog(value);})
       .catch(e=>{if(!controller.signal.aborted)setListError(e.message);})
       .finally(()=>{if(!controller.signal.aborted)setListLoading(false);});
     return ()=>controller.abort();
-  },[refresh]);
+  },[preview,refresh]);
   useEffect(()=>{
     const controller=new AbortController();setProjectError('');setProject(null);
-    if(mode==='demo'){setProjectLoading(false);return ()=>controller.abort();}
+    if(preview||mode==='demo'){setProjectLoading(false);return ()=>controller.abort();}
     setProjectLoading(true);
     loadProject(mode,controller.signal).then(value=>{if(!controller.signal.aborted)setProject(value);})
       .catch(e=>{if(!controller.signal.aborted)setProjectError(e.message);})
       .finally(()=>{if(!controller.signal.aborted)setProjectLoading(false);});
     return ()=>controller.abort();
-  },[mode,refresh]);
+  },[mode,preview,refresh]);
   useEffect(()=>{
     const onKey=(e:KeyboardEvent)=>{if(e.key==='Escape'&&!document.querySelector('dialog[open]')&&!e.defaultPrevented&&!cultivationWorking.current){setSelected(null);setForecastOpen(false);}};
     let narrow=window.innerWidth<=600;
@@ -100,7 +103,7 @@ export function App() {
   const step=(delta:number)=>{if(data)setIndex(i=>seasonStep(i,delta,data.days.length));};
   const changeMode=(value:string)=>{setSelected(null);setForecastOpen(false);setForecastPosition(null);setMode(value);};
   const reload=()=>{setSelected(null);setRefresh(v=>v+1);};
-  const title=demoMode?'Versuchsfeld Nord':activeProject?.name||'Gespeichertes Projekt';
+  const title=demoMode?data?.title??'Versuchsfeld Nord':activeProject?.name||'Gespeichertes Projekt';
   const synthetic=activeProject&&/syntheti/i.test([activeProject.name,activeProject.geometry.parcel.source_reference,...activeProject.geometry.beds.map(b=>b.source_reference)].join(' '));
   const mapError=demoMode?demoError:projectError;
   const mapProps={data:demoMode?data??undefined:undefined,index,selected,onSelect:selectBed,season:projectSeason.frame,seasonMessage};
@@ -125,9 +128,9 @@ export function App() {
     <div className="top-left-stack">
       <header className="project-title floating"><span className="eyebrow">MARKET GARDEN / {demoMode?'SAISONATLAS':'PROJEKTANSICHT'}</span>
         <h1 title={title}>{title}{demoMode&&<span>2026</span>}</h1>
-        <p className={demoMode||synthetic?'demo-notice':'project-notice'}>{demoMode?'Demo-Modus · synthetische Daten · schreibgeschützt':synthetic?'Synthetisches Testprojekt':'Gespeichertes Projekt'}</p>
+        <p className={demoMode||synthetic?'demo-notice':'project-notice'}>{preview?'Vorschau · synthetische Daten · schreibgeschützt':demoMode?'Demo-Modus · synthetische Daten · schreibgeschützt':synthetic?'Synthetisches Testprojekt':'Gespeichertes Projekt'}</p>
         {activeProject&&<p className="project-parcel" title={activeProject.project_id}>{activeProject.geometry.parcel.name||'Grundstück'} · {activeProject.geometry.beds.length} Beete</p>}
-        <div className="project-picker"><label className="sr-only" htmlFor="project-choice">Ansicht / Projekt</label>
+        {!preview&&<><div className="project-picker"><label className="sr-only" htmlFor="project-choice">Ansicht / Projekt</label>
           <select id="project-choice" value={mode} disabled={editor.busy} onChange={e=>changeMode(e.target.value)}>
             <option value="demo">Demo · Saison 2026 (synthetisch)</option>
             {mode!=='demo'&&!catalog.some(p=>p.project_id===mode)&&<option value={mode}>Ausgewähltes Projekt</option>}
@@ -135,7 +138,22 @@ export function App() {
           </select><button aria-label="Projektliste neu laden" disabled={editor.busy} onClick={reload}>↻</button>
         </div>
         <button type="button" className="new-project-button" disabled={listLoading||editor.busy||!!editor.draft||!!editor.deleteTarget}
-          onClick={()=>setCreatingProject(true)}>+ Neues Projekt</button>
+          onClick={()=>setCreatingProject(true)}>+ Neues Projekt</button></>}
+        {preview&&data&&<div className="project-picker">
+          <select aria-label="Kultur im Saisonverlauf zeigen" value="" onChange={event=>{
+            const batch=data.schedule.batches.find(item=>item.plan.id===event.target.value);
+            if(!batch)return;
+            const dayIndex=data.days.findIndex(item=>item.date===batch.plan.first_harvest);
+            if(dayIndex<0)return;
+            const reservation=data.schedule.reservations.find(item=>item.batch_id===batch.plan.id);
+            setIndex(dayIndex);
+            setSelected(reservation?.bed_id??null);
+          }}>
+            <option value="" disabled>Kultur im Saisonverlauf zeigen</option>
+            {[...data.schedule.batches].sort((a,b)=>a.plan.first_harvest.localeCompare(b.plan.first_harvest)).map(({plan})=>
+              <option key={plan.id} value={plan.id}>{data.names[plan.profile_id]} · {fmt(plan.first_harvest)}</option>)}
+          </select>
+        </div>}
         <div className="view-switches">
           <button type="button" role="switch" aria-label="Kulturplanung" aria-checked={isometric}
             disabled={!geometry||editor.busy||!!editor.draft||!!editor.deleteTarget} onClick={switchView}
@@ -146,7 +164,7 @@ export function App() {
             <span>Hell</span><i aria-hidden="true"/><span>Dunkel</span>
           </button>
         </div>
-        {listLoading&&<p className="catalog-message" role="status">Projektliste wird geladen …</p>}
+        {!preview&&listLoading&&<p className="catalog-message" role="status">Projektliste wird geladen …</p>}
         {!listLoading&&listError&&<p className="catalog-message error" role="alert">{listError}</p>}
         {!listLoading&&!listError&&catalog.length===0&&<p className="catalog-message" role="status">Noch keine Projekte gespeichert. Demo ist verfügbar.</p>}
       </header>
@@ -162,7 +180,7 @@ export function App() {
           <small>{demoMode?'Schematische Planphasen':'Wochenplanung · keine Wachstumssimulation'}</small></div>}
       </div><button className="floating forecast-toggle" aria-expanded={demoMode&&forecastOpen} disabled={!demoMode||!data} title={demoMode?'':'Keine Scheduler-Ergebnisse für dieses Projekt'} onClick={()=>setForecastOpen(v=>!v)}>Ernteprognose ↗</button></div>
       {!isometric&&activeProject&&<EditorControls editor={editor}/>}
-      {isometric&&<p className="iso-note floating">ASCII-Pflanzen · schematisches Wachstum</p>}
+      {isometric&&<p className="iso-note floating">Pflanzensymbole · schematisches Wachstum</p>}
     </div>
     {demoMode&&data&&selected&&<Details data={data} index={index} selected={selected} cultivationMode={isometric} onClose={()=>setSelected(null)}/>}
     {!demoMode&&activeProject&&selected&&<ProjectDetails project={activeProject} selected={selected} onClose={()=>selectBed(null)} editor={editor} cultivationMode={isometric} cultivationBusy={cultivationBusy} onCultivationBusy={onCultivationBusy} onSaved={onSaved} season={projectSeason.frame} seasonMessage={seasonMessage}/>}

@@ -52,6 +52,7 @@ technische Grenze. Herkunft, Zuordnungen und Einschränkungen stehen im
 | Projekt-Wochenansicht | Serverseitige ISO-Wochenprojektion, Folge-/gleichzeitige Kulturen, fehlende Erntetermine und eigene Kennzeichnung von Beeten ohne Kulturplanung, ohne Ertrags- oder Wachstumsannahmen | [3C.2](phase3c2.md), DEC-031, [DEC-039](DECISIONS.md#dec-039) |
 | Isometrie und Darstellung | Informative SVG-Isometrie mit gemeinsamer Auswahl und Saisonposition, Pan und Zoom bei festem Blickwinkel, horizontalen Beetnamen, gleichmäßige VIS-GRAIN-004-Füllung mit vier schematischen Größenstufen und gemeinsamem Hell-/Dunkelmodus | [DEC-034](DECISIONS.md#dec-034), [DEC-035](DECISIONS.md#dec-035), [Umsetzung](phase-garden-views.md) |
 | Demo | Getrennte synthetische Tagesansicht und schedulerbasierte Wochen-Ernteprognose; schreibgeschützt | [3A.2](phase3a2.md), [Ernteprognose](phase3a2-harvest.md) |
+| Saisonvorschau | Schreibgeschützter Testgarten mit vollständiger Katalogabdeckung und Kultursprüngen, lokal und öffentlich über GitHub Pages | [Saisonvorschau](features/season-preview.md), [DEC-046](DECISIONS.md#dec-046--lokale-statische-saisonvorschau), [DEC-047](DECISIONS.md#dec-047--öffentliche-github-pages-saisonvorschau) |
 
 Geplante Ernte ist keine tatsächliche Ernte und kein Räumdatum. Die Projektansicht
 zeigt zeitliche Planungsdaten; gespeicherte Projekte erhalten damit keine
@@ -151,8 +152,8 @@ ASCII-Posen derselben Tomatenreferenz und zehn versetzt animierten Pflanzen.
 
 Dieser Abschnitt ist der vorgesehene Einstieg zur Sammlung der Vorstellungen
 des Nutzers. Er enthält noch keine zusätzlichen Anforderungen oder erfundenen
-Präferenzen. Vorhandene Referenzbilder unter `design/references/` bleiben
-Quellenmaterial; ihre bloße Ablage ist kein verbindlicher Beschluss.
+Präferenzen. Visuelle Referenzen können bei Bedarf mit ihrem konkreten
+Nutzen und ihrer Herkunft dokumentiert werden.
 
 Künftige Beiträge werden in drei Bereiche eingeordnet:
 

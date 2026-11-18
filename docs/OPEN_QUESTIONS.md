@@ -384,7 +384,7 @@ erzeugt keine neuen Anforderungen und gibt keine Implementierung frei.
 - **Vor:** einer Umsetzung, die bislang nicht konkretisierte Nutzerwünsche benötigt.
 - **Bezug/Quellen:** [DEC-017](DECISIONS.md#dec-017),
   [DEC-018](DECISIONS.md#dec-018), [DEC-025](DECISIONS.md#dec-025),
-  [Produktsammlung](PRODUCT.md), [Designreferenzen](../design/references/).
+  [Produktsammlung](PRODUCT.md).
   Herkunft der Sammlungsstruktur: ausdrücklicher Docs-as-Code-Auftrag vom 17.11.2026.
 
 ## Name, Bereitstellung und technische Optionen

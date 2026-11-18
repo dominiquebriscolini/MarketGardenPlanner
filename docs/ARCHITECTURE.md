@@ -66,7 +66,8 @@ den gespeicherten Stand in der Oberfläche. Beide Karten verwenden dieselben
 Muster für Wochenbelegung und fehlende Erntetermine.
 [DEC-039](DECISIONS.md#dec-039).
 [DEC-037](DECISIONS.md#dec-037), [DEC-038](DECISIONS.md#dec-038). Die Perspektive, schematische Symbolpositionen und der lokal
-eingebundene VIS-GRAIN-004-Atlas sind reine Darstellungsdaten.
+eingebundene SVG-Pflanzensatz sind reine Darstellungsdaten. Planner und Vorschau
+der bereinigten Kopie verwenden denselben Pflanzensatz.
 Ein separates Canvas verwendet einen geometrisch gleichmäßigen
 Darstellungsabstand. Die SVG-Karte führt die Interaktion.
 [DEC-045](DECISIONS.md#dec-045).
@@ -102,6 +103,13 @@ unterschiedliche Verträge. Schreiboperationen bestehender Projekte verlangen
 `expected_revision`; veraltete Basis ergibt HTTP 409. Wiederholbare Command-IDs
 gelten für unterstützte Änderungen, nicht pauschal für Projekterstellung.
 Der PUT-Vertrag ersetzt keine Befehle zum Anlegen/Löschen von Beet-IDs.
+Der [statische Vorschau-Build](features/season-preview.md) verwendet die
+Demoansichten mit einem eigenen synthetischen Testgarten. Python erzeugt
+`season.json` beim Build. Der Browser lädt die Datei relativ zum Einstiegspunkt.
+Die Vorschau hat keine Projektwahl, Schreibwerkzeuge oder API-Anfragen.
+Der öffentliche Build bindet eigene SVG-Pflanzensymbole ein und liegt als
+statisches Paket in einem separaten GitHub-Pages-Repository.
+
 Die generische Geometrievorschau garantiert keine gültige Projektrevision
 oder Sperrprüfung; endgültige Änderungen validiert der Server transaktional.
 

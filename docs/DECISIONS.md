@@ -1017,6 +1017,45 @@ Kulturzuordnung, zeitliche Gültigkeit und Referenzertrag aus DEC-044 gelten wei
 - **Quelle:** Ausdrücklicher Nutzerauftrag zur ASCII-Füllung und
   Wachstumsdarstellung vom 18.11.2026. [Prüfstand](phase-garden-views.md).
 
+### DEC-046 — Lokale statische Saisonvorschau
+
+- **Datum und Status:** 18.11.2026, ausdrücklich bestätigt und für die lokale
+  Umsetzung freigegeben.
+- **Entscheidung:** Getrennte, schreibgeschützte Vorschau mit synthetischem
+  Testgarten für die gesamte Saison und allen aktuellen Katalogprofilen.
+  Die Vorschau soll die vorhandenen Ansichten und vorberechnete Scheduler-Daten
+  verwenden.
+- **Begründung:** Ein später teilbarer Browser-Build soll den Saisonverlauf
+  ohne den Projektserver oder die lokale Projektdatenbank zeigen.
+- **Auswirkungen:** Python bleibt die Quelle der Saison- und Belegungszustände
+  und exportiert sie beim Build. Die Vorschau führt keine Projektaktionen aus.
+  Veröffentlichung und Zugriffsmodell bleiben einer späteren Beauftragung
+  vorbehalten.
+- **Quelle:** Nutzerbestätigung und ausdrücklicher Umsetzungsauftrag für die
+  lokale Vorschau, den neuen Testgarten und die Saisonfüllung.
+  [Spezifikation und Prüfstand](features/season-preview.md).
+
+### DEC-047 — Öffentliche GitHub-Pages-Saisonvorschau
+
+- **Datum und Status:** 18.11.2026, ausdrücklich bestätigt und zur Einrichtung
+  freigegeben.
+- **Entscheidung:** GitHub Pages aus dem separaten öffentlichen Repository
+  `MarketGardenPlanner-Preview` bereitstellen. Das Hauptrepository bleibt privat.
+- **Begründung:** Externe können den Testgarten unabhängig vom lokalen Rechner
+  aufrufen. Eigene Vektorsymbole vermeiden die Weitergabe des bisherigen
+  Pflanzenbildsatzes mit ungeklärter Freigabe für externe Veröffentlichung.
+- **Auswirkungen:** Das öffentliche Repository enthält die gebauten statischen
+  Vorschau-Dateien und synthetischen Saisondaten. Der lokale Build mit
+  bestehendem Bildsatz bleibt separat verfügbar. DEC-046 gilt weiterhin für
+  die schreibgeschützte Saisonvorschau und den Python-Export.
+- **Fortschreibung am 18.11.2026:** Auf ausdrücklichen Auftrag wurde der
+  Vorschau-Build in die bereinigte Prüfkopie übernommen. Nach Entfernung
+  der historischen Atlasdateien verwenden dort beide Einstiege den eigenen
+  SVG-Pflanzensatz. Das private Hauptrepository bleibt bis zur Prüfung privat.
+- **Quelle:** Nutzerbestätigung zur öffentlichen GitHub-Pages-Vorschau, zum
+  separaten Repository und zu eigenen Pflanzensymbolen.
+  [Spezifikation und Prüfstand](features/season-preview.md).
+
 ## Änderungsverlauf
 
 ### Lokale Experimentfreigabe VIS-GRAIN-004
@@ -1101,3 +1140,5 @@ Kulturzuordnung, zeitliche Gültigkeit und Referenzertrag aus DEC-044 gelten wei
 | 18.11.2026 | DEC-043 ergänzt. | Nutzerbestätigung zu veröffentlichten Ertragsreferenzen und Auftrag zur Visualisierung. |
 | 18.11.2026 | DEC-044 ergänzt. | Nutzerbestätigung zur kulturabhängigen Anordnung und zeitlichen Reihenzuordnung. |
 | 18.11.2026 | DEC-045 ergänzt. | Nutzerauftrag zur gleichmäßigen ASCII-Füllung mit Wachstumsstufen. |
+| 18.11.2026 | DEC-046 ergänzt. | Ausdrückliche Bestätigung und Umsetzungsauftrag für die lokale Saisonvorschau. |
+| 18.11.2026 | DEC-047 ergänzt. | Ausdrücklicher Auftrag für GitHub Pages aus einem separaten öffentlichen Vorschau-Repository. |

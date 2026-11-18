@@ -1,5 +1,7 @@
 # VIS-001 — Etappe 1 · Technischer Abschlussbericht
 
+Die erwähnten Rohmessungen, Bilder und Atlanten sind historische Versuchsartefakte und in der bereinigten Kopie nicht enthalten.
+
 Datum: 17.11.2026. Basis: Git-HEAD `20e6a63`, vorhandener uncommitteter Stand.
 Status: implementiert, automatisch und im Browser geprüft. **Fachliche Abnahme
 ausstehend.** Keine Freigabe einer Planner-Integration oder der Etappe 2.
@@ -122,16 +124,16 @@ Verdeckung einer hinteren Instanz entlang desselben Kamerastrahls. Die bisherige
 Modus-/Theme-Prüfungen decken die gemeinsamen Ausgabealgorithmen zusätzlich ab.
 Die Einzelansicht wurde im Browser mit verborgenem A/B/C-Schalter und 100 % geprüft.
 
-Rohprotokolle und Exporte: [.qa/vis001/](.qa/vis001/).
+Rohprotokolle und Exporte: `.qa/vis001/`.
 Es wurde keine Planner-Suite ausgeführt: Planner-Code wurde nicht verändert;
 seine vorhandenen uncommitteten Änderungen gehören nicht zu diesem Auftrag.
 
 ## Tatsächliche visuelle Ergebnisse
 
 Alle sechs nativen Vergleichs-PNGs wurden betrachtet:
-[Dark A](.qa/vis001/dark-A.png), [Dark B](.qa/vis001/dark-B.png),
-[Dark C](.qa/vis001/dark-C.png), [Light A](.qa/vis001/light-A.png),
-[Light B](.qa/vis001/light-B.png), [Light C](.qa/vis001/light-C.png).
+Dark A (`dark-A.png`), Dark B (`dark-B.png`),
+Dark C (`dark-C.png`), Light A (`light-A.png`),
+Light B (`light-B.png`), Light C (`light-C.png`).
 
 A zeigt eine mittige diagonale Pflanzenreihe mit freien Beetstreifen. B und C
 verbreitern die Krone über die Beetfläche; im C-Bild entsteht ein weitgehend

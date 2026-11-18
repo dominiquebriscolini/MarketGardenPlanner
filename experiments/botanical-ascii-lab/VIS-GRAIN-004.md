@@ -1,5 +1,7 @@
 # VIS-GRAIN-004 – Grainrad-Pflanzen für die Gartenübersicht
 
+Die erwähnten Rohmessungen, Bilder und Atlanten sind historische Versuchsartefakte und in der bereinigten Kopie nicht enthalten.
+
 18.11.2026 · Lokaler Experimentstand auf Git-HEAD `20e6a63` mit bereits
 vorhandenen Änderungen. [Experimentfreigabe](../../docs/DECISIONS.md#lokale-experimentfreigabe-vis-grain-004).
 Gemeinsame Designabnahme offen.
@@ -40,7 +42,7 @@ einen Bestand. Seine drei Teilpflanzen geben keine Pflanzabstände vor.
 
 ## Bildsatz und Verwendung des ersten Stands
 
-- [Atlas](vis-grain-004/atlas.png) und [Mapping](vis-grain-004/atlas.json)
+- Atlas (`atlas.png`) und Mapping (`atlas.json`)
   liegen neben der lokalen Testansicht. Der erste Atlas maß 1392 × 3480 px
   und belegte dekodiert rund 18,5 MiB RGBA. Die Kacheln messen je
   460 × 576 px und haben einen transparenten Rand von zwei Pixeln.
@@ -73,7 +75,7 @@ Motive innerhalb der Kachel, transparente Umgebung, stabile Fußzone,
 pixelidentische Atlasrechtecke und die Zuordnung aller 15 Profile.
 Chrome prüfte sechs animierte Kulturen, reduzierte Bewegung beim Start
 und 390 px Ansichtsbreite. 126 Python- und 16 Lab-Tests bestanden.
-[Browserbild](.qa/vis-grain-004/preview.png).
+Browserbild (`preview.png`).
 Kein Git-Commit.
 
 Im kleinsten Maßstab verlieren Radieschen und Zwiebeln zuerst feine
@@ -99,7 +101,7 @@ feine Zeichenkanten deckender. Die Anpassung erfolgt beim Zeichnen des
 vorhandenen Atlas. Chrome prüfte alle sechs Kulturen in beiden Modi,
 den Erhalt der pausierten Haltung beim Umschalten und die Breite von
 390 px im Hellmodus.
-[Dunkel](.qa/vis-grain-004/preview.png) · [Hell](.qa/vis-grain-004/preview-light.png).
+Dunkel (`preview.png`) · Hell (`preview-light.png`).
 
 ## Vorheriger Versuch mit Beetschnitt
 
@@ -145,11 +147,11 @@ Sichthilfe ohne räumliches Tiefenmaß.
 
 Je Phase ein Atlas mit denselben sechs Art-IDs, drei Windhaltungen und
 dem gemeinsamen Fußpunkt (225, 491). Die Ansicht lädt den aktuell
-gewählten Atlas. Der [bestehende Atlas](vis-grain-004/atlas.json) liefert
+gewählten Atlas. Der bestehende Atlas (`atlas.json`) liefert
 die ausgewachsene Phase. Die übrigen Mappings sind
-[Auflaufen](vis-grain-004/atlas-sprout.json),
-[Jungpflanze](vis-grain-004/atlas-juvenile.json) und
-[Ausbildung](vis-grain-004/atlas-developing.json).
+Auflaufen (`atlas-sprout.json`),
+Jungpflanze (`atlas-juvenile.json`) und
+Ausbildung (`atlas-developing.json`).
 
 Für die drei zusätzlichen Phasen `assets.py prepare-growth` verwenden,
 den Browser für den vorhandenen Export mit `https://grainrad.com/#growth`
@@ -179,7 +181,7 @@ reduzierter Bewegung wird die Zielgröße unmittelbar dargestellt.
 Die Tomate behält so ihre Silhouette. Die Größenstufen sind eine
 Darstellung ohne Zuordnung zu fachlichen Scheduler-Phasen.
 
-Der [aktuelle Atlas](vis-grain-004/atlas.json) enthält 30 Windframes
+Der aktuelle Atlas (`atlas.json`) enthält 30 Windframes
 bei 1392 × 5800 px. Das Mapping enthält die vier Größenfaktoren
 unter `growthScale`. Die früheren Entwicklungsbilder bleiben in
 den historischen Phasenatlanten dokumentiert. Für die vier
@@ -193,10 +195,10 @@ Katalog-Mapping und 30 unterschiedliche Posen innerhalb ihrer
 jeweiligen Kultur. Der Browsertest prüfte alle zehn Kulturen, vier
 Größenstufen, einen animierten Zwischenschritt, reduzierte Bewegung,
 Hell/Dunkel und den Erdschleier bei allen vier Wurzel- und Zwiebelkulturen.
-[Klein](.qa/vis-grain-004/preview-sprout-light.png) ·
-[Jungpflanze](.qa/vis-grain-004/preview-juvenile-light.png) ·
-[Herangewachsen](.qa/vis-grain-004/preview-developing-light.png) ·
-[Ausgewachsen](.qa/vis-grain-004/preview-light.png).
+Klein (`preview-sprout-light.png`) ·
+Jungpflanze (`preview-juvenile-light.png`) ·
+Herangewachsen (`preview-developing-light.png`) ·
+Ausgewachsen (`preview-light.png`).
 
 ### Lesbarkeit und Größenverhältnisse
 

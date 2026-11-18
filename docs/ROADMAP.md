@@ -32,6 +32,7 @@ Eine ausdrücklich dokumentierte offene manuelle Prüfung bleibt offen.
 | 3B.6 | Beschlossenes Ziel, nicht implementiert | Freigegebene Zonen generieren; OQ-015/016 |
 | 3B.7 | Erste Ausbaustufe umgesetzt, gemeinsame Abnahme offen | Ansichtswechsel, gemeinsame Daten und ASCII-Tomaten nach DEC-034 sowie Pan und Zoom nach DEC-035 sowie Beetbeschriftungen nach DEC-036. Aufgabenverteilung nach DEC-037 und automatisches Speichern von Kulturfeldern nach DEC-038 umgesetzt. Pflanzraster und X in der Beetplanung nach DEC-042 umgesetzt. VIS-GRAIN-004, schematische Wachstumsstufen und Referenzertrag nach DEC-043 umgesetzt. Mischkultur-Raster nach DEC-044 und unabhängige ASCII-Füllung nach DEC-045 umgesetzt. Lokale Ertragskalibrierung und Verträglichkeitsregeln bleiben offen. [Phasenbericht](phase-garden-views.md), OQ-019. |
 | Historische Erträge / GIS | Beschlossene Zukunftsziele, nicht implementiert | OQ-017/018; keine neue Reihenfolge festgelegt |
+| Saisonvorschau | Lokal umgesetzt und mit eigenen Pflanzensymbolen auf GitHub Pages veröffentlicht; gemeinsame visuelle Abnahme offen | [Testgarten und Prüfstand](features/season-preview.md), [DEC-046](DECISIONS.md#dec-046--lokale-statische-saisonvorschau), [DEC-047](DECISIONS.md#dec-047--öffentliche-github-pages-saisonvorschau) |
 
 [Historischer Abgleich und Git-Schnappschuss vom 17.11.2026](history/HISTORISCHER_ABGLEICH_2026-11-17.md):
 Historische Commitlücken sind dort ergänzt, frühere Berichte unverändert.

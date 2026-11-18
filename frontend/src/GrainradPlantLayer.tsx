@@ -1,9 +1,9 @@
 import {useEffect,useRef} from 'react';
-import {grainradPlantAtlas,grainradPlantForProfile} from './grainradPlants';
+import {plantSymbolAtlas,plantSymbolForProfile} from './plantSymbols';
 import type {GrowthPhase} from './projectSeason';
 import type {Point,View} from './interactions';
 
-type Sprite = NonNullable<ReturnType<typeof grainradPlantForProfile>>;
+type Sprite = NonNullable<ReturnType<typeof plantSymbolForProfile>>;
 export type PlantingSpriteGrid = {
   columns:number;positions:number;asset:Sprite;phase:GrowthPhase;origin:Point;across:Point;along:Point;
 };
@@ -12,7 +12,7 @@ function visiblePlants(grids:PlantingSpriteGrid[],view:View,unitsPerPixel:number
   const plants:{x:number;y:number;asset:Sprite;scale:number;phaseOffset:number}[]=[];
   const spriteWidth=Math.max(38*unitsPerPixel,1.2);
   for(const {columns,positions,asset,phase,origin,across,along} of grids) {
-    const scale=spriteWidth*asset.sprite.previewScale*grainradPlantAtlas.growthScale[phase]/460;
+    const scale=spriteWidth*asset.sprite.previewScale*plantSymbolAtlas.growthScale[phase]/460;
     // A plant can still be visible when its foot is outside the viewport.
     const [footX,footY]=asset.sprite.foot;
     const margin=scale*Math.max(footX,footY,...asset.sprite.frames.map(
@@ -53,16 +53,16 @@ function atlasTexture(dark:boolean) {
     const image=new Image();
     image.onload=()=>{
       const canvas=document.createElement('canvas');
-      canvas.width=grainradPlantAtlas.width;canvas.height=grainradPlantAtlas.height;
+      canvas.width=plantSymbolAtlas.width;canvas.height=plantSymbolAtlas.height;
       const ctx=canvas.getContext('2d');
       if(!ctx){reject(Error('Pflanzenatlas konnte nicht vorbereitet werden.'));return;}
-      const style=dark?grainradPlantAtlas.presentation.dark:grainradPlantAtlas.presentation.light;
+      const style=dark?plantSymbolAtlas.presentation.dark:plantSymbolAtlas.presentation.light;
       ctx.filter=style.spriteFilter;
       for(let i=0;i<=style.spritePasses;i++)ctx.drawImage(image,0,0);
       resolve(canvas);
     };
     image.onerror=()=>reject(Error('Pflanzenatlas konnte nicht geladen werden.'));
-    image.src=grainradPlantAtlas.url;
+    image.src=plantSymbolAtlas.url;
   }).catch(error=>{textures.delete(dark);throw error;});
   textures.set(dark,texture);
   return texture;
@@ -90,8 +90,8 @@ export function GrainradPlantLayer({grids,view,unitsPerPixel,dark}:{grids:Planti
       const elapsed=performance.now();
       for(const {x,y,asset,scale,phaseOffset} of plants) {
         const frames=asset.sprite.frames;
-        const pose=motion.matches?'center':grainradPlantAtlas.sequence[
-          Math.floor((elapsed+phaseOffset)/grainradPlantAtlas.poseMs)%grainradPlantAtlas.sequence.length];
+        const pose=motion.matches?'center':plantSymbolAtlas.sequence[
+          Math.floor((elapsed+phaseOffset)/plantSymbolAtlas.poseMs)%plantSymbolAtlas.sequence.length];
         const frame=frames.find(candidate=>candidate.name===pose)??frames[1];
         const size=scale/unitsPerPixel;
         const [footX,footY]=asset.sprite.foot;
@@ -103,7 +103,7 @@ export function GrainradPlantLayer({grids,view,unitsPerPixel,dark}:{grids:Planti
       clearInterval(timer);
       if(!texture||document.hidden)return;
       paint();
-      if(!motion.matches)timer=setInterval(paint,240);
+      if(!motion.matches&&plantSymbolAtlas.sequence.length>1)timer=setInterval(paint,240);
     };
     void atlasTexture(dark).then(loaded=>{
       if(cancelled)return;

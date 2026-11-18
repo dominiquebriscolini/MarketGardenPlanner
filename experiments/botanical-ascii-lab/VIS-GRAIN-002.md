@@ -1,5 +1,7 @@
 # VIS-GRAIN-002 – Automatisierter Grainrad-Test
 
+Die erwähnten Rohmessungen, Bilder und Atlanten sind historische Versuchsartefakte und in der bereinigten Kopie nicht enthalten.
+
 18.11.2026 · Git-HEAD `20e6a63` mit vorhandenen uncommitteten Änderungen.
 Isolierter Versuch gemäß Nutzerauftrag. Exportdateien automatisch ausgewertet,
 PNG und Atlas visuell geprüft. Gemeinsame Designabnahme offen.
@@ -7,7 +9,7 @@ PNG und Atlas visuell geprüft. Gemeinsame Designabnahme offen.
 
 ## Aufbau
 
-- Vorhandene [Tomatenreferenz](../../design/references/02_vegetation/%7BC9BFABF6-B80E-4268-ADBD-E2BF970A8116%7D.png), 469 × 588 px. Das synthetische Test-GIF verwendet dieselbe Vorlage mit zyklischen horizontalen Verschiebungen von 0, +12, 0 und −12 px bei jeweils 250 ms.
+- Historische Tomatenreferenz, 469 × 588 px. Die Bildvorlage wurde aus dem Arbeitsstand entfernt. Das synthetische Test-GIF verwendet dieselbe Vorlage mit zyklischen horizontalen Verschiebungen von 0, +12, 0 und −12 px bei jeweils 250 ms.
 - Playwright CLI 0.1.24, vorhandenes Headless Chrome 157 unter Windows, Grainrad mit WebGPU. Import über `setInputFiles` am Dateifeld, Wahl von ASCII und Download über die sichtbaren Bedienelemente. Ein direkter Klick auf das Dateifeld scheiterte an der darüberliegenden Dropzone.
 - ASCII-Einstellungen: Scale 2, Spacing 0, Output Width 0, STANDARD, Original,
   schwarzer Hintergrund, Intensity 1 und Gamma 1. GIF-Preset Medium, 15 fps,
@@ -32,7 +34,7 @@ Die Automatisierung hängt an der öffentlichen Oberfläche und deren Einstellun
 
 Die drei eindeutigen Zustände aus dem ersten GIF ohne Grain wurden verlustfrei
 nach dem Dekodieren in drei PNG-Kacheln zu je 460 × 576 px gepackt. Der
-[Testatlas](.qa/vis-grain-002/atlas-proof.png) misst 1380 × 576 px.
+Testatlas (`atlas-proof.png`) misst 1380 × 576 px.
 Alle Kacheln sind vollständig opak, und der helle Vorlagenhintergrund erscheint
 als dichtes Zeichenfeld. Für frei platzierbare Pflanzen wären eine Alphamaske,
 ein konsistenter Fußpunkt und gepolsterte Kacheln für gefiltertes Sampling nötig.
@@ -43,8 +45,8 @@ Variante wurde hier nur für das statische PNG geprüft.
 
 ## Artefakte und Wiederholung
 
-- [PNG ohne Grain](.qa/vis-grain-002/clean-1.png), [synthetisches Eingabe-GIF](.qa/vis-grain-002/tomato-input.gif), [ASCII-GIF ohne Grain](.qa/vis-grain-002/clean-1.gif), [ASCII-GIF mit Grain](.qa/vis-grain-002/tomato-ascii.gif).
-- [Messwerte mit Dateihashes, RGBA-Hashes und Framefolge](.qa/vis-grain-002/measurements.json).
+- PNG ohne Grain (`clean-1.png`), synthetisches Eingabe-GIF (`tomato-input.gif`), ASCII-GIF ohne Grain (`clean-1.gif`), ASCII-GIF mit Grain (`tomato-ascii.gif`).
+- Messwerte mit Dateihashes, RGBA-Hashes und Framefolge (`measurements.json`).
 - Im Repo-Stamm `playwright-cli -s=grain002 open https://grainrad.com --browser=chrome` und anschließend
   `playwright-cli -s=grain002 run-code --filename=experiments/botanical-ascii-lab/.qa/vis-grain-002/grainrad.playwright.js` ausführen. Das Skript überschreibt seine fünf Exportdateien.
   [Auswertung](.qa/vis-grain-002/inspect.py) verwendet Python mit vorhandenem Pillow (getestet mit 13.0.0 aus der Codex-Runtime) und schreibt den Testatlas.

@@ -5,12 +5,16 @@ Kulturflächen gleichmäßig mit ASCII-Symbolen. Vier Größenstufen folgen
 schematisch dem geplanten Zeitraum. Die Demo nutzt denselben Atlas für
 ihre Scheduler-Zustände. Gemeinsame Abnahme offen. [Prüfstand](../phase-garden-views.md). [Lab-Bericht](../../experiments/botanical-ascii-lab/VIS-GRAIN-004.md).
 
-## Vorbereitetes Paket
+Dieser Bericht dokumentiert die historische Grainrad-Integration. In der
+bereinigten Kopie verwenden Planner und Vorschau
+[eigene SVG-Pflanzensymbole](../../frontend/src/plantSymbols.ts).
 
-Der [Atlas](../../frontend/src/assets/grainrad-plants/atlas.png) und das
-[Manifest](../../frontend/src/assets/grainrad-plants/manifest.json) enthalten
+## Historisches Paket
+
+Der frühere Atlas und das
+[Manifest](../../frontend/src/assets/grainrad-plants/manifest.json) enthielten
 zehn Katalogkulturen und 30 transparente Frames. Der
-[TypeScript-Einstieg](../../frontend/src/grainradPlants.ts) liefert Atlas-URL,
+damalige TypeScript-Einstieg liefert Atlas-URL,
 Frame-Rechtecke, Fußpunkte, Windfolge, Größenstufen und Darstellungsparameter.
 Er löst Katalogprofil- und Demo-Art-IDs getrennt auf. Unbekannte IDs ergeben
 `undefined`. Die Auflösung arbeitet ohne Netzwerk und ohne Lab-Abhängigkeit
@@ -69,7 +73,7 @@ TypeScript, separater esbuild-Bundle-Test des Adapters mit gültigen und
 unbekannten IDs sowie Lab-Browserprüfung erfolgreich. Die Mehrkultur-
 Darstellung in der Planner-Isometrie ist noch nicht eingebunden.
 
-## Aktueller Umfang
+## Damaliger Umfang
 
 [DEC-045](../DECISIONS.md#dec-045) zeichnet Projektpflanzen nach
 projizierter Tiefe in einem HTML-Canvas über der Karten-SVG.

@@ -5,7 +5,7 @@ import {stages} from './types';
 import type {DisplayBed, MapGeometry} from './projectView';
 import type {GrowthPhase,SeasonFrame} from './projectSeason';
 import {projectStages, schematicGrowth, weeklyVisualCultures, weekCrops} from './projectSeason';
-import {grainradPlantForProfile,grainradPlantForSpecies} from './grainradPlants';
+import {plantSymbolForProfile,plantSymbolForSpecies} from './plantSymbols';
 import {GrainradPlantLayer} from './GrainradPlantLayer';
 import type {PlantingSpriteGrid} from './GrainradPlantLayer';
 import {ProjectWeekPatterns,projectWeekPattern} from './ProjectWeekPatterns';
@@ -146,7 +146,8 @@ export function IsometricGarden({geometry,data,index,selected,onSelect,season,se
         const state=day.beds[bed.id];
         const batch=state?.batch_id?batches.get(state.batch_id):undefined;
         if(!batch||(state.stage!=='growth'&&state.stage!=='harvest'))return [];
-        const asset=grainradPlantForSpecies(batch.plan.profile_id);
+        const id=batch.plan.profile_id;
+        const asset=plantSymbolForProfile(id)??plantSymbolForSpecies(id);
         if(!asset)return [];
         const reservation=data.schedule.reservations.find(item=>item.bed_id===bed.id&&item.batch_id===batch.plan.id);
         const phase=state.stage==='harvest'?'mature':schematicGrowth(
@@ -159,7 +160,7 @@ export function IsometricGarden({geometry,data,index,selected,onSelect,season,se
     }
     if(!season)return [];
     return layout.beds.flatMap(({bed})=>weeklyVisualCultures(season,bed.id).flatMap(({layout:grid,entry,centres})=>{
-      const asset=grainradPlantForProfile(entry.profile_id);
+      const asset=plantSymbolForProfile(entry.profile_id);
       if(!asset)return [];
       const phase=schematicGrowth(entry,season.week,season.week.beds[bed.id]?.row_layout_day);
       if(!centres||!grid)return [visualGrid(bed,0,bed.width,asset,phase)];

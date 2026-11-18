@@ -58,6 +58,23 @@ keinen Node-Prozess. Installation in eine vorhandene Umgebung bei Bedarf:
 Die bisherige reine Demo bleibt über `start-prototype.ps1` auf
 [Port 8765](http://127.0.0.1:8765) separat startbar.
 
+### Schreibgeschützte Saisonvorschau
+
+[Öffentliche Vorschau auf GitHub Pages](https://dominiquebriscolini.github.io/MarketGardenPlanner-Preview/)
+
+Für den lokalen Vorschau-Build:
+
+```powershell
+./frontend/build.ps1 -Preview
+.\.venv\Scripts\python.exe -m http.server 8778 --bind 127.0.0.1 --directory frontend/dist/preview
+```
+
+[Testgarten öffnen](http://127.0.0.1:8778/). Der synthetische Garten
+zeigt alle 15 Kulturprofile des Katalogs von März bis November 2026. Die
+Auswahl „Kultur im Saisonverlauf zeigen“ springt zum Erntebeginn und öffnet
+das zugehörige Beet. Die Vorschau läuft als statischer Build mit vorberechneter
+Saisondatei. [Umfang und Prüfstand](docs/features/season-preview.md).
+
 ## Entwicklung und Prüfungen
 
 ```powershell

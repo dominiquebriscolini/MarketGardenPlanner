@@ -12,11 +12,11 @@ GEOMETRY = {
 }
 
 
-def p(value, unit):
-    return AgronomicParameter(value, unit, "Synthetic phase 3A.1 demonstration", "synthetic")
+def profile(id, method, days, unit, mode="single", amounts=(1,),
+            *, source="Synthetic phase 3A.1 demonstration"):
+    def p(value, parameter_unit):
+        return AgronomicParameter(value, parameter_unit, source, "synthetic")
 
-
-def profile(id, method, days, unit, mode="single", amounts=(1,)):
     crop = CropProfile(id, id, None, method, p(.2, "kg/plant"), p(.9, "fraction"),
                        p(.9, "fraction"), p(.3, "m"), p(.3, "m"), p(100, "seeds/g"))
     periods = tuple(YieldPeriod(p(i * 7, "d"), p(7 if mode == "continuous" else 0, "d"),

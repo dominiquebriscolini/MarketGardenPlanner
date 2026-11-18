@@ -6,12 +6,16 @@ from .demo import build_demo, GEOMETRY, NOTICE, START, END
 
 def payload():
     result, profiles, names = build_demo()
+    return season_payload(result, profiles, names, GEOMETRY, START, END, NOTICE)
+
+
+def season_payload(result, profiles, names, geometry, start, end, notice):
     batches = {b.plan.id: b for b in result.batches}
     days = []
-    day = START
-    while day <= END:
+    day = start
+    while day <= end:
         states = {}
-        for bed in GEOMETRY["beds"]:
+        for bed in geometry["beds"]:
             active = next((r for r in result.reservations if r.bed_id == bed["id"] and r.window.contains(day)), None)
             stage = "free"
             if active:
@@ -21,7 +25,7 @@ def payload():
         days.append({"date": day.isoformat(), "beds": states})
         day += timedelta(days=1)
     return {
-        "schema_version": 1, "notice": NOTICE, "geometry": GEOMETRY, "days": days,
+        "schema_version": 1, "notice": notice, "geometry": geometry, "days": days,
         "names": names, "schedule": asdict(result),
         "harvest_modes": {id: p.harvest_mode for id, p in profiles.items()},
     }

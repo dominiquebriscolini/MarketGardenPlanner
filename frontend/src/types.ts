@@ -30,6 +30,7 @@ export type Batch = {
 };
 export type Demo = {
     notice: string;
+    title?: string;
     geometry: {
         unit: string;
         boundary: number[][];

@@ -1,5 +1,7 @@
 # VIS-GRAIN-003 – Transparente ASCII-Tomate im Wind
 
+Die erwähnten Rohmessungen, Bilder und Atlanten sind historische Versuchsartefakte und in der bereinigten Kopie nicht enthalten.
+
 18.11.2026 · Git-HEAD `20e6a63` mit vorhandenen uncommitteten Änderungen.
 Isolierter Nutzerauftrag, implementiert und im Browser geprüft.
 Gemeinsame Designabnahme offen. [Experimentfreigabe](../../docs/DECISIONS.md#lokale-experimentfreigabe-vis-grain-003)
@@ -25,8 +27,8 @@ Grund dient der Kontrolle der transparenten Zeichenkanten.
 
 ## Bilder und Transparenz
 
-- Die [vorhandene Tomatenreferenz](../../design/references/02_vegetation/%7BC9BFABF6-B80E-4268-ADBD-E2BF970A8116%7D.png)
-  liefert alle drei Haltungen. Eine zeilenweise horizontale Verformung
+- Die historische Tomatenreferenz lieferte alle drei Haltungen. Die
+  Bildvorlage wurde aus dem Arbeitsstand entfernt. Eine zeilenweise horizontale Verformung
   nimmt nach unten stetig ab, ist ab Quellzeile 380 null und oben auf
   ±6 Quellpixel begrenzt. Die Vorlage bleibt 469 × 588 px. Die Bewegung
   ist synthetisch.
@@ -43,10 +45,10 @@ Grund dient der Kontrolle der transparenten Zeichenkanten.
   höchstens um einen 8-Bit-Schritt. Die aus der Quelle abgeleitete Maske
   begrenzt die Deckkraft pro 10 × 16-px-Zelle. Damit bleiben auch dunkle
   Pflanzendetails und teiltransparente Zeichenkanten erhalten.
-- [Links](vis-grain-003/left.png), [Mitte](vis-grain-003/center.png) und
-  [rechts](vis-grain-003/right.png) sind 460 × 576 px große RGBA-PNGs.
-  Der [Atlas](vis-grain-003/atlas.png) ist 1392 × 580 px groß, mit je zwei
-  transparenten Randpixeln um jede Kachel. [Atlas-JSON](vis-grain-003/atlas.json)
+- Links (`left.png`), Mitte (`center.png`) und
+  rechts (`right.png`) sind 460 × 576 px große RGBA-PNGs.
+  Der Atlas (`atlas.png`) ist 1392 × 580 px groß, mit je zwei
+  transparenten Randpixeln um jede Kachel. Atlas-JSON (`atlas.json`)
   enthält die Kachelrechtecke und den gemeinsamen Fußpunkt (225, 491)
   in Kachelkoordinaten. Die drei unteren Ausschnitte ab Ausgabezeile 380
   sind bytegleich, einschließlich des sichtbaren Fußpunkts. Jede
@@ -90,17 +92,17 @@ RGBA-Bildsatz trotz geringerer Framezahl. Mit 2,09 MiB für einen
 Canvas-Backing-Store ergibt sich für VIS-GRAIN-003 eine rechnerische
 Pixelnutzlast von rund 5,17 MiB. DP-001 liegt mit seinen zwei
 Canvas-Flächen und dem 8-Frame-Satz bei rund 4,87 MiB.
-[Rohmessung](.qa/vis-grain-003/benchmark.json).
+Rohmessung (`benchmark.json`).
 
 ## Änderungen, Nachweise und Wiederholung
 
 - `vis-grain-003/` enthält Testansicht, Wiedergabe, drei RGBA-Bilder,
   Atlas/JSON, Offline-Aufbereitung und die beiden Playwright-Skripte.
-- [.qa/vis-grain-003](.qa/vis-grain-003/) enthält Quelldateien, Masken,
+- `.qa/vis-grain-003` enthält Quelldateien, Masken,
   Schwarz-/Weißexporte und Prüfdaten. Browserbilder
-  [dunkel](.qa/vis-grain-003/demo-dark.png) und
-  [hell](.qa/vis-grain-003/demo-light.png). Die
-  [GIF-Vorschau](.qa/vis-grain-003/animation.gif) zeigt einen vollständigen
+  dunkel (`demo-dark.png`) und
+  hell (`demo-light.png`). Die
+  GIF-Vorschau (`animation.gif`) zeigt einen vollständigen
   Zyklus aus den 20 tatsächlichen Canvas-Zuständen der Testansicht.
 - Die Browserprüfung erfasst alle 20 Zeitschritte und bestätigt zehn
   Instanzen mit drei gleichzeitig sichtbaren Haltungen. Jede Instanz
@@ -109,7 +111,7 @@ Canvas-Flächen und dem 8-Frame-Satz bei rund 4,87 MiB.
   390 px breites Fenster ohne horizontalen Überlauf. Beide vorhandenen
   Lab-Testsuiten für die Szene liefen zusammen mit 16/16 Prüfungen durch.
   Die Planner-Suite wurde für den isolierten Versuch nicht ausgeführt.
-- Zur Asset-Wiederholung `assets.py prepare` mit vorhandenem Pillow
+- Zur Asset-Wiederholung `assets.py prepare --source <Pfad-zur-Vorlage>` mit vorhandenem Pillow
   ausführen (getestet mit der Codex-Runtime, Pillow 13.0.0). Im Repo-Stamm
   `playwright-cli -s=grain003 open https://grainrad.com --browser=chrome`
   und `playwright-cli -s=grain003 run-code --filename=experiments/botanical-ascii-lab/vis-grain-003/export.playwright.js`

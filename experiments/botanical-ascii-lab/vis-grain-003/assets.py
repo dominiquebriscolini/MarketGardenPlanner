@@ -8,7 +8,6 @@ from PIL import Image
 
 HERE = Path(__file__).resolve().parent
 QA = HERE.parent / ".qa/vis-grain-003"
-SOURCE = HERE.parents[2] / "design/references/02_vegetation/{C9BFABF6-B80E-4268-ADBD-E2BF970A8116}.png"
 POSES = {"left": -1, "center": 0, "right": 1}
 SIZE = (460, 576)
 CELL = (10, 16)
@@ -16,9 +15,10 @@ FOOT = (225, 491)
 PADDING = 2
 
 
-def prepare():
+def prepare(source_path):
+    with Image.open(source_path) as source_image:
+        source = source_image.convert("RGB")
     QA.mkdir(parents=True, exist_ok=True)
-    source = Image.open(SOURCE).convert("RGB")
     width, height = source.size
     matte = Image.new("L", source.size)
     matte.putdata([
@@ -95,4 +95,11 @@ def pack():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("step", choices=["prepare", "pack"])
-    {"prepare": prepare, "pack": pack}[parser.parse_args().step]()
+    parser.add_argument("--source", type=Path, help="Path to the source image for prepare")
+    args = parser.parse_args()
+    if args.step == "prepare":
+        if args.source is None or not args.source.is_file():
+            parser.error("prepare requires --source with an existing image file")
+        prepare(args.source)
+    else:
+        pack()

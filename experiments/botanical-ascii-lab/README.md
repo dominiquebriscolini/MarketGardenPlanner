@@ -1,16 +1,19 @@
 # Botanical ASCII Lab — Experiment 01
 
+Die genannten Rohmessungen und Bilder dokumentieren historische Versuche.
+Die Testansichten VIS-GRAIN-003 und VIS-GRAIN-004 benötigen lokal neu
+erzeugte Atlanten.
+
 ## VIS-GRAIN-004 — zehn Pflanzensymbole (18.11.2026)
 
-Lab [starten](#start) und [Testszene öffnen](http://127.0.0.1:8773/vis-grain-004/).
+Nach lokaler Atlas-Erzeugung das Lab [starten](#start) und die [Testszene öffnen](http://127.0.0.1:8773/vis-grain-004/).
 [Kulturbestand, Bildsatz und Prüfstand](VIS-GRAIN-004.md).
 
 ## VIS-GRAIN-003 — transparente ASCII-Tomaten (18.11.2026)
 
-Lab wie [unten beschrieben](#start) starten. In der
+Nach lokaler Atlas-Erzeugung das Lab wie [unten beschrieben](#start) starten. In der
 [Testansicht](http://127.0.0.1:8773/vis-grain-003/) lassen sich die zehn
-Pflanzen pausieren und auf hellem Hintergrund betrachten. Der fertige Atlas
-liegt lokal vor. [Quellen, Messwerte und Grenzen](VIS-GRAIN-003.md).
+Pflanzen pausieren und auf hellem Hintergrund betrachten. [Quellen, Messwerte und Grenzen](VIS-GRAIN-003.md).
 
 ## DP-001 — separater Design-Prototyp (17.11.2026)
 
@@ -192,7 +195,7 @@ stellt die zuletzt gemessenen Zähler für lokale Diagnose bereit.
 VIS-001: `node --test experiments/botanical-ascii-lab/scene.test.mjs` (13 Tests),
 `vis001-test.html` (36 UI-/Zustandsprüfungen) und `vis001-render-test.html`
 (6 gemeinsame Tiefen-/Schattenprüfungen). Browser-Vergleichsexporte bei identischen
-1280 × 900 CSS-Pixeln und 5-px-Zeichenraster: [.qa/vis001/](.qa/vis001/).
+1280 × 900 CSS-Pixeln und 5-px-Zeichenraster: `.qa/vis001/`.
 Keine Raster-/Kontraststudie der Etappe 2. Die Messungen zeigen deutlich reduzierte
 Animationsleistung bei 30 Pflanzen; siehe aktuellen Bericht.
 
