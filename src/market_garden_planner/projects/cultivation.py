@@ -32,6 +32,7 @@ class CultivationIntent:
     start_date: str
     planned_harvest_date: str | None = None
     input_status: str = "user_input"
+    row_numbers: tuple[int, ...] | None = None
 
     def __post_init__(self):
         for value in (self.cultivation_id, self.revision_id, self.bed_id):
@@ -40,9 +41,32 @@ class CultivationIntent:
             raise ProjectError("invalid_culture", "Katalogprofil erforderlich.")
         if self.establishment not in ("direct", "transplant") or self.input_status != "user_input":
             raise ProjectError("invalid_cultivation", "Anbauart oder Eingabeherkunft ungültig.")
+        if self.row_numbers is not None:
+            rows = self.row_numbers
+            if (not isinstance(rows, (tuple, list)) or not rows
+                    or any(type(row) is not int or not 1 <= row <= 2**53 - 1 for row in rows)
+                    or len(set(rows)) != len(rows)):
+                raise ProjectError("invalid_rows", "Reihennummern müssen eindeutige positive Ganzzahlen sein.")
+            object.__setattr__(self, "row_numbers", tuple(sorted(rows)))
         start = calendar_date(self.start_date)
         if self.planned_harvest_date is not None and calendar_date(self.planned_harvest_date) < start:
             raise ProjectError("invalid_date", "Geplante Ernte darf nicht vor Aussaat/Pflanzung liegen.")
+
+
+def decode_cultivation_entry(entry):
+    required = set(CultivationIntent.__dataclass_fields__) - {"row_numbers"}
+    if not isinstance(entry, dict) or not required <= set(entry) <= required | {"row_numbers"}:
+        raise ValueError("Incomplete cultivation entry")
+    return CultivationIntent(**entry)
+
+
+def cultivation_dict(entry):
+    result = asdict(entry)
+    if entry.row_numbers is None:
+        del result["row_numbers"]
+    else:
+        result["row_numbers"] = list(entry.row_numbers)
+    return result
 
 
 @dataclass(frozen=True)
@@ -64,16 +88,13 @@ class CultivationPlan:
 
     def to_dict(self):
         return {"schema_version": 1, "revision_id": self.revision_id,
-                "entries": [asdict(e) for e in self.entries]}
+                "entries": [cultivation_dict(e) for e in self.entries]}
 
     @classmethod
     def from_dict(cls, value):
         if not isinstance(value, dict) or set(value) != {"schema_version", "revision_id", "entries"} or type(value["schema_version"]) is not int or value["schema_version"] != 1 or not isinstance(value["entries"], list):
             raise ValueError("Unsupported cultivation plan format")
-        required = set(CultivationIntent.__dataclass_fields__)
-        if any(not isinstance(e, dict) or set(e) != required for e in value["entries"]):
-            raise ValueError("Incomplete cultivation entry")
-        return cls(value["revision_id"], tuple(CultivationIntent(**entry) for entry in value["entries"]))
+        return cls(value["revision_id"], tuple(decode_cultivation_entry(entry) for entry in value["entries"]))
 
     def validate_beds(self, geometry):
         ids = {b.object_id for b in geometry.beds}
@@ -91,9 +112,10 @@ def change_plan(plan, geometry, catalogue: CultureDatabase, operation, bed_id, v
     if operation == "delete":
         entries = tuple(e for e in plan.entries if e != before)
     else:
-        allowed = {"profile_id", "establishment", "start_date", "planned_harvest_date"}
+        allowed = {"profile_id", "establishment", "start_date", "planned_harvest_date", "row_numbers"}
         if not isinstance(values, dict) or set(values) - allowed or not {"profile_id", "establishment", "start_date"} <= set(values):
-            raise ProjectError("invalid_fields", "Katalogprofil, Anbauart und Startdatum erforderlich; nur geplantes Erntedatum optional.")
+            raise ProjectError("invalid_fields", "Katalogprofil, Anbauart und Startdatum erforderlich. Erntedatum und Reihen sind optional.")
+        values = {"row_numbers": before.row_numbers if before else None, **values}
         entry = CultivationIntent(before.cultivation_id if before else new_id(),
                                   before.revision_id if before else new_id(), bed_id, **values)
         profile = next((p for p in catalogue.profiles if p.id == entry.profile_id), None)

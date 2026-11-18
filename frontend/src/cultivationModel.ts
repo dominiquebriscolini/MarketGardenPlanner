@@ -1,5 +1,5 @@
 export type CultureProfile={profile_id:string;species_id:string;name:string;variety_id:string|null;variety_name:string|null;establishment:'direct'|'transplant'};
-export type CultivationValues={profile_id:string;establishment:'direct'|'transplant';start_date:string;planned_harvest_date:string|null};
+export type CultivationValues={profile_id:string;establishment:'direct'|'transplant';start_date:string;planned_harvest_date:string|null;row_numbers?:number[]|null};
 export type Cultivation= CultivationValues & {cultivation_id:string;revision_id:string;bed_id:string;input_status:'user_input'};
 export type CultivationPlan={schema_version:1;revision_id:string;entries:Cultivation[]};
 const uuid=(v:unknown)=>typeof v==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(v);
@@ -12,6 +12,9 @@ export function validateCultivation(values:CultivationValues):string {
   if(!values.profile_id||!['direct','transplant'].includes(values.establishment))return 'Bitte eine Kultur mit passender Anbauart auswählen.';
   if(!validCalendarDate(values.start_date))return 'Bitte ein gültiges Aussaat- oder Pflanzdatum eingeben.';
   if(values.planned_harvest_date!==null&&(!validCalendarDate(values.planned_harvest_date)||values.planned_harvest_date<values.start_date))return 'Geplante Ernte muss am oder nach dem Startdatum liegen.';
+  if(values.row_numbers!=null&&(!Array.isArray(values.row_numbers)||!values.row_numbers.length||
+    values.row_numbers.some(row=>!Number.isSafeInteger(row)||row<1)||
+    new Set(values.row_numbers).size!==values.row_numbers.length))return 'Bitte eindeutige positive Reihennummern eingeben.';
   return '';
 }
 export function decodeCultivationPlan(value:any,bedIds:string[]):asserts value is CultivationPlan {

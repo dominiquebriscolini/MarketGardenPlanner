@@ -6,7 +6,7 @@ import {renderToStaticMarkup} from 'react-dom/server';
 import {decodeProject} from '../.test-build/projectView.mjs';
 import {decodeCultivationPlan,validateCultivation,validCalendarDate} from '../.test-build/cultivationModel.mjs';
 import {commitCultivation,loadCultures} from '../.test-build/cultivationClient.mjs';
-import {CultivationPanel} from '../.test-build/CultivationPanel.mjs';
+import {CultivationPanel,CultivationFormTitle} from '../.test-build/CultivationPanel.mjs';
 
 const fixture=JSON.parse(readFileSync(new URL('../.test-build/project.json',import.meta.url),'utf8')).project;
 const uuid=n=>`12345678-1234-4234-8234-${String(n).padStart(12,'0')}`;
@@ -90,4 +90,43 @@ test('Absent planning API is explained and never silently replaced with demo dat
   const markup=renderToStaticMarkup(React.createElement(CultivationPanel,{project:old,bedId,disabled:false,busy:false,onBusy:()=>{},onSaved:()=>{}}));
   assert.ok(markup.includes('Python-Server neu starten'));
   assert.ok(!markup.includes('Kultur hinzufügen'));
+});
+
+const titleProfiles=[{profile_id:'carrots-early-lwg',name:'Karotten',variety_name:null},
+  {profile_id:'spinach-spring-direct',name:'Spinat',variety_name:null},
+  {profile_id:'lettuce-butterhead-transplant',name:'Kopfsalat',variety_name:null}];
+const titleMarkup=entry=>renderToStaticMarkup(React.createElement(CultivationFormTitle,{entry,profiles:titleProfiles}));
+
+test('Editing heading names the actual carrot or spinach intention and its recorded start',()=>{
+  const carrots=entry(101,{...direct,profile_id:'carrots-early-lwg',start_date:'2026-11-04'});
+  const spinach=entry(102,{...direct,profile_id:'spinach-spring-direct',start_date:'2026-12-16'});
+  const before=JSON.stringify([carrots,spinach]);
+  assert.match(titleMarkup(carrots),/Karotten bearbeiten/);
+  assert.match(titleMarkup(carrots),/Direktsaat · <time dateTime="2026-11-04">04\.11\.2026<\/time>/);
+  assert.match(titleMarkup(spinach),/Spinat bearbeiten/);
+  assert.match(titleMarkup(spinach),/16\.12\.2026/);
+  assert.equal(JSON.stringify([carrots,spinach]),before);
+});
+
+test('Two intentions of the same culture keep their own recorded start date',()=>{
+  const first=entry(103,{...direct,profile_id:'carrots-early-lwg',start_date:'2026-11-04'});
+  const later=entry(104,{...direct,profile_id:'carrots-early-lwg',start_date:'2026-11-18'});
+  assert.notEqual(first.cultivation_id,later.cultivation_id);
+  assert.match(titleMarkup(first),/04\.11\.2026/);
+  assert.match(titleMarkup(later),/18\.11\.2026/);
+  assert.ok(!titleMarkup(later).includes('04.11.2026'));
+});
+
+test('Planting headings retain the planting method and missing catalogue profiles remain identifiable',()=>{
+  const transplant=entry(105,second);
+  assert.match(titleMarkup(transplant),/Kopfsalat bearbeiten/);
+  assert.match(titleMarkup(transplant),/Pflanzung ·/);
+  assert.match(titleMarkup(transplant),/10\.05\.2027/);
+  assert.ok(titleMarkup({...transplant,profile_id:'retired-profile'}).includes('retired-profile'));
+});
+
+test('New intention heading says Kultur hinzufügen without borrowing an existing culture or date',()=>{
+  const markup=titleMarkup(undefined);
+  assert.ok(markup.includes('Kultur hinzufügen'));
+  assert.ok(!markup.includes('bearbeiten')&&!markup.includes('<small>')&&!markup.includes('<time'));
 });

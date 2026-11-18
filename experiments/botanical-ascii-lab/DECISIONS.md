@@ -1,5 +1,21 @@
 # Lokale Entscheidungen — Botanical ASCII Lab
 
+## DP-001 — Gemeinsame vorbereitete ASCII-Bilder als begrenzter Versuch
+
+- Datum: 17.11.2026. Herkunft: ausdrücklicher Nutzerauftrag DP-001.
+- Status: isoliert implementiert und automatisch geprüft; gemeinsame Designabnahme offen.
+- Umsetzung: neuer Einstieg `dp001.html`, Canvas 2D ohne neue Pakete, maximal
+  20 Frames eines gemeinsamen aktiven Theme-Bildsatzes, 12-Sekunden-Zyklus mit
+  individuellen Phasen. 8/12/20 Frames werden verglichen. Windfeld des bestehenden
+  Modells wird beim Vorbereiten entlang einer geschlossenen Zeitkurve abgetastet.
+- Begründung: vorhandenes Lab nutzt JavaScript/Canvas. Ein kleiner Bildkopier-Versuch
+  erfordert weder Lab-Migration noch PixiJS. Produktives React/TypeScript bleibt erhalten.
+- Auswirkungen: vereinfachte pflanzenweise Zeichenreihenfolge, kein gemeinsamer
+  Geometrietiefenpuffer oder gegenseitiger Schatten. Keine Planner-Integration,
+  Agronomie oder endgültige Rendererwahl. EXP-005/006 und VIS-001 bleiben für
+  ihre bisherigen Einstiege unverändert. DEC-017/025 und OQ-019/020 bleiben erhalten.
+- Nachweis: [Spezifikation](../../docs/features/DP-001.md), [Bericht](DP-001.md).
+
 ## EXP-001 — Isolierter Rendererversuch
 
 - Datum: 16.11.2026.
@@ -104,3 +120,22 @@
 - Prüfung: 44 Paletten-/Geometrieinvarianzprüfungen; Browservergleich bei 5/6 px,
   Auswahl nach Neuladen, CSS-Filter none; fünf Kernmodule per Hash unverändert.
   [Technik und Testergebnisse](THEME-STUDY.md). Keine Planner-Dateien geändert.
+
+## VIS-001 — Etappe 1: freigegebener Maßstabstest
+
+- Datum: 17.11.2026. Herkunft: vorbereiteter Nutzerauftrag und anschließende
+  ausdrückliche Implementierungsfreigabe in diesem Chat.
+- Status: im isolierten Lab implementiert und technisch/visuell geprüft;
+  fachliche Abnahme durch den Nutzer ausstehend.
+- Umfang: 2,75 × 6,00 m, A/B/C mit 10/20/30 gleichen Tomateninstanzen, zehn
+  gleichmäßig verteilte Positionen je Reihe. Ausschließlich synthetische Parameter.
+- Umsetzung: lokale Instanzadapter und statische Beetkontur nutzen die vorhandene
+  gemeinsame Sichtbarkeits-/Licht-/Renderingpipeline. Lokaler Wind vor Translation.
+  Eine einmalige gemeinsame Kadrierung umfasst alle Varianten. Kein Auto-Fit beim
+  Wechsel; keine Änderung an Projektion, Geometrie, Raster, Licht oder Windmodell.
+- Auswirkungen: normale Startseite zeigt A, bestehende Einzelansicht über
+  `/?study=single`. EXP-005/006 bleiben bezüglich Kamera, Licht und Themes gültig.
+  Keine Planner-Integration oder neue Produktstandards; keine neue DEC-/OQ-ID.
+- Begründung: begrenzter Vergleich der räumlichen Anordnung ohne Darstellungswechsel.
+  Leistungsgrenzen wurden gemessen und nicht durch zusätzliche Optimierung bearbeitet.
+  [Abschlussbericht und Abnahmekriterien](VIS-001-ETAPPE-1.md).

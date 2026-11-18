@@ -22,21 +22,52 @@ Eine ausdrücklich dokumentierte offene manuelle Prüfung bleibt offen.
 | 3B.2 | Implementiert; Prüfungen dokumentiert | [SQLite/API](phase3b2.md); Speicher-/Revisionsvertrag konkretisiert, Schema inzwischen durch 3C.1 erweitert |
 | 3B.3a | Implementiert; Prüfungen dokumentiert | [Projektanzeige](phase3b3a.md) |
 | 3B.3b | Implementiert; Prüfungen dokumentiert | [Zeichnen und Verschieben](phase3b3b.md) |
-| 3B.3c + UI-Feinschliff | Implementiert; Prüfungen dokumentiert, physischer Shift-Drag noch offen | [Präzise Bearbeitung](phase3b3c.md); offene Geräteprüfung im OQ-Register |
-| 3B.3 insgesamt | Teilweise umgesetzt | Grundstücksgrenze, Wege/Sperrflächen, feste Bezugskanten, Entsperren und Undo/Redo sind noch nicht vollständig als UI vorhanden |
+| 3B.3c + UI-Feinschliff | Implementiert einschließlich Shift-Winkelraster beim Zeichnen (DEC-041); physischer Shift-Drag noch offen | [Präzise Bearbeitung](phase3b3c.md); offene Geräteprüfung im OQ-Register |
+| 3B.3 insgesamt | Teilweise umgesetzt | Projektanlage mit leerem Rechteck nach DEC-040 umgesetzt. Freie Grundstückserfassung, Wege/Sperrflächen, feste Bezugskanten, Entsperren und Undo/Redo bleiben offen |
 | 3C.1 + UX-Fortschreibung | Implementiert; Prüfungen dokumentiert | [Kulturplanung und Datumsanalyse](phase3c1.md), DEC-029/030 |
-| 3C.2 | Implementiert im Arbeitsstand; Prüfungen dokumentiert | [Projekt-Wochenansicht](phase3c2.md), DEC-031; kein gespeicherter Scheduler-Lauf |
+| 3C.2 | Basis in `20e6a63` gesichert; Prüfungen dokumentiert | [Projekt-Wochenansicht](phase3c2.md), DEC-031; kein gespeicherter Scheduler-Lauf |
+| 3C.2 UX-Nachtrag | DEC-032 im vorhandenen Arbeitsstand implementiert, noch nicht eingecheckt; Prüfungen dokumentiert | [Bearbeitungskontext](phase3c2.md#ux-fortschreibung--bearbeitungskontext-17112026); keine vollständige gemeinsame Abnahme nachgewiesen |
 | 3B.4 | Beschlossenes Ziel, nicht implementiert | Gewächshäuser/Umgebungszuordnung; OQ-013 |
 | 3B.5 | Beschlossenes Ziel, nicht implementiert | Bake und Vergleich; OQ-014/015 |
 | 3B.6 | Beschlossenes Ziel, nicht implementiert | Freigegebene Zonen generieren; OQ-015/016 |
-| 3B.7 | Beschlossenes Darstellungsziel; technische Umsetzung offen | OQ-019; isoliertes Botanical ASCII Lab ist keine Integration |
+| 3B.7 | Erste Ausbaustufe umgesetzt, gemeinsame Abnahme offen | Ansichtswechsel, gemeinsame Daten und ASCII-Tomaten nach DEC-034 sowie Pan und Zoom nach DEC-035 sowie Beetbeschriftungen nach DEC-036. Aufgabenverteilung nach DEC-037 und automatisches Speichern von Kulturfeldern nach DEC-038 umgesetzt. Pflanzraster und X in der Beetplanung nach DEC-042 umgesetzt. VIS-GRAIN-004, schematische Wachstumsstufen und Referenzertrag nach DEC-043 umgesetzt. Mischkultur-Raster nach DEC-044 und unabhängige ASCII-Füllung nach DEC-045 umgesetzt. Lokale Ertragskalibrierung und Verträglichkeitsregeln bleiben offen. [Phasenbericht](phase-garden-views.md), OQ-019. |
 | Historische Erträge / GIS | Beschlossene Zukunftsziele, nicht implementiert | OQ-017/018; keine neue Reihenfolge festgelegt |
+
+[Historischer Abgleich und Git-Schnappschuss vom 17.11.2026](history/HISTORISCHER_ABGLEICH_2026-11-17.md):
+Historische Commitlücken sind dort ergänzt, frühere Berichte unverändert.
+Die verbindliche Wahl ASCII/Halftone versus Pixel-Art bleibt OQ-019/020;
+DEC-017/025 werden nicht geändert. Die historische Nennung „3C.3 als Nächstes“
+legt keine neue Priorität oder Implementierungsfreigabe fest.
 
 ## Abhängigkeiten und nächste Klärungen
 
-Die bestehende räumliche Reihenfolge bleibt erhalten:
-Geometrie → Persistenz → manueller Editor → Gewächshäuser →
-Bake/Vergleich → zonenbezogene Generierung → zusätzliche Landschaftsansicht.
+**DP-001, 17.11.2026:** Getrennter Design-/Performance-Prototyp im Lab umgesetzt;
+automatische Prüfungen und Messungen im [Bericht](../experiments/botanical-ascii-lab/DP-001.md).
+Gemeinsame Designabnahme offen. Keine Planner-Integration, keine Freigabe oder
+Statusänderung von 3B.7; OQ-019/020 und DEC-017/025 bleiben bestehen.
+[Begrenzter Auftragsumfang](features/DP-001.md).
+
+**VIS-GRAIN-002, 18.11.2026:** Isolierter Grainrad-Test ausgeführt. PNG-Export
+unter den getesteten Bedingungen reproduzierbar. GIF-Export mit abweichenden
+Frames und Übergangszeiten. OQ-019/020 bleiben offen.
+[Versuchsbericht](../experiments/botanical-ascii-lab/VIS-GRAIN-002.md).
+
+**VIS-GRAIN-003, 18.11.2026:** Isolierter Atlas-Prototyp mit drei transparenten
+Tomatenhaltungen und zehn phasenversetzten Instanzen implementiert und im
+Browser geprüft. Gemeinsame Designabnahme und OQ-019/020 bleiben offen. DEC-034 integriert
+den Atlas als Bildsatz in den Planner. [Versuchsbericht](../experiments/botanical-ascii-lab/VIS-GRAIN-003.md).
+
+**VIS-GRAIN-004, 18.11.2026:** Zehn Pflanzensymbole für den vollständigen
+Katalog mit je vier Größenstufen und drei Windhaltungen im Lab.
+Unterirdische Speicherorgane erscheinen gedämpft auf der geschlossenen Beetfläche.
+Die Projekt-Isometrie nutzt Atlas und Größenstufen. Gemeinsame
+Designabnahme und lokal kalibrierte Entwicklungszeiten bleiben offen.
+[Versuchsbericht](../experiments/botanical-ascii-lab/VIS-GRAIN-004.md).
+[Integrationsstand](features/VIS-GRAIN-004-INTEGRATION.md).
+
+Die historische räumliche Reihenfolge steht unten. DEC-034 zieht die erste
+Isometrie-Ausbaustufe auf Basis des bestehenden Geometrie- und Saisonvertrags
+vor. Die übrigen räumlichen Abhängigkeiten bleiben bestehen.
 Der ergänzende Kulturplanungsstrang 3C.1/3C.2 ist bereits vorhanden; er ersetzt
 weder diese Abhängigkeiten noch die fachlichen Voraussetzungen für Prognosen.
 
@@ -52,7 +83,9 @@ Diese Nennung ist keine Entscheidung, ihn vor den räumlichen Zielen umzusetzen.
   tatsächlich vorhandene Suite zu Beginn des jeweiligen Auftrags, nicht die
   historische Zahl 32/12 aus Phase 3B.0.
 - Aktuelle Befehle: [README](../README.md). Datierte Testergebnisse stehen im
-  jeweiligen Phasenbericht; jüngster dokumentierter Stand ist [3C.2](phase3c2.md).
+  jeweiligen Phasenbericht. Siehe [3C.2](phase3c2.md),
+  [Gartenansichten](phase-garden-views.md) und den
+  [Workflow-Prüfbericht](phase-codex-workflow.md).
 - Code, dokumentierte automatische Prüfungen, offene manuelle Abnahme und
   Git-/Arbeitsstand getrennt ausweisen; keine Abnahme aus einer Testzahl ableiten.
 - Geometrie, IDs, Revisionen, Datumsgrenzen, Datenherkunft und API-Fehler direkt

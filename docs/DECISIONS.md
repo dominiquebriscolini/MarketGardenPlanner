@@ -1,7 +1,7 @@
 # Verbindliches Entscheidungsprotokoll
 
 > Dokumentationspflege **17.11.2026**: Der aktuelle Arbeitsstand reicht bis
-> Phase 3C.2 (DEC-031); die unten genannten Erstfassungsstände und die damalige
+> Phase 3C.2 einschließlich UX-Nachtrag DEC-032; die unten genannten Erstfassungsstände und die damalige
 > Konsistenzprüfung bleiben historische Nachweise. Die aktuellen Übersichten
 > stehen in [PRODUCT](PRODUCT.md), [ARCHITECTURE](ARCHITECTURE.md) und
 > [ROADMAP](ROADMAP.md). Offene Details und überholte Offen-Punkte werden in
@@ -19,6 +19,16 @@ fest; ein beschlossenes Zukunftsziel ist keine Implementierungsfreigabe.
 Fortschreibung 16.11.2026: Phase 3B.3c ergänzt DEC-027 und konkretisiert damit
 die bislang offenen präzisen Bearbeitungs- und Löschfunktionen aus DEC-010.
 Die oben genannte Datierung der Erstfassung bleibt als Historie erhalten.
+
+Dokumentationsabgleich 17.11.2026: [H-/HF-Zuordnungen und Nachweisgrenzen](history/HISTORISCHER_ABGLEICH_2026-11-17.md).
+Die 3C.2-Basis ist in `20e6a63` gesichert, DEC-032 liegt noch nicht eingecheckt
+vor. ASCII/Halftone versus Pixel-Art bleibt ausdrücklich ungeklärter
+Entscheidungsbedarf unter OQ-019/020; DEC-017 und DEC-025 bleiben unverändert.
+Dieser Hinweis ändert keinen Beschluss und erzeugt keine neue ID.
+
+Fortschreibung 18.11.2026: [DEC-033](#dec-033) beschließt zwei komplementäre
+Gartenansichten als Produktziel und konkretisiert DEC-019. Die Implementierung
+ist nicht freigegeben.
 
 ## Geltung, Quellen und Fortschreibung
 
@@ -394,6 +404,12 @@ Quellenbasis: [AGENTS.md](../AGENTS.md), [Produkt](PRODUCT.md),
 - **Quelle:** AGENTS.md, PRODUCT.md, ARCHITECTURE.md §10, ROADMAP.md Phase 3B.7;
   Protokollauftrag.
 
+- **Fortschreibung 18.11.2026:** [DEC-033](#dec-033) konkretisiert die bisherige
+  Darstellungsoption als isometrischen Informations- und Saisonmodus neben der
+  2D-SVG-Arbeitsansicht. Anlass ist die vom Nutzer bestätigte Aufgabenteilung
+  für beide Ansichten. Die gemeinsame Weltgeometrie und die tatsächlichen
+  Beetausrichtungen gelten weiter. Die konkrete Projektion bleibt offen.
+
 <a id="dec-020"></a>
 
 ### DEC-020 — Satellitenkarten-/GIS-Import als zukünftiges Produktziel
@@ -566,6 +582,15 @@ Zeichnen, Translation und bestätigte Übernahme gelten unverändert weiter.
   Bedienaktion. Vorschau, Python-Validierung und API-Bestätigung bleiben maßgeblich.
 - **Quelle:** Nutzerauftrag „Phase 3B.3c: UI-Feinschliff“; phase3b3c.md.
 
+Fortschreibung 18.11.2026: [DEC-036](#dec-036) verlegt die numerische
+Winkelanzeige aus der Karte und der Drehgeste in die Beetplanung.
+Anlass ist der Wunsch nach einer aufgeräumten Beschriftung.
+Griffrotation und Shift-Raster bleiben erhalten.
+
+Fortschreibung 18.11.2026: [DEC-041](#dec-041) übernimmt das ausdrückliche
+Shift-Raster für das Zeichnen neuer Beete. Anlass ist der Wunsch,
+Beete bereits beim Anlegen in 15°-Schritten auszurichten.
+
 ## Konsistenzprüfung und aktuelle Grenzen
 
 Die Grundsätze sind mit Produkt, Architektur und Phasenabnahmen vereinbar.
@@ -686,7 +711,373 @@ auftrag wurden keine Anwendungstests, Builds oder Funktionen geändert.
   automatische Planung oder Botanical-ASCII-Lab-Integration. Bestehende
   Demo-Tagesansicht und deren Scheduler-Ergebnisse bleiben getrennt erhalten.
 
+<a id="dec-032"></a>
+
+### DEC-032 — Eindeutiger Bearbeitungskontext eines Anbauvorgangs
+
+- **Datum:** 17.11.2026, ausdrücklicher UX-Auftrag zu Phase 3C.2.
+- **Status:** beschlossen.
+- **Entscheidung:** Die aktuell bearbeitete Kulturzeile erhält einen dezenten
+  salbeigrünen Hintergrund und eine schmale Akzentlinie. Formularüberschrift
+  und Hervorhebung beziehen sich auf dieselbe stabile Vorgangs-ID. Die Überschrift
+  benennt die gespeicherte Kultur; Anbauart und gespeichertes Startdatum stehen
+  als kleinere Zusatzinformation darunter. Neue Vorgänge heißen „Kultur hinzufügen“.
+- **Begründung:** Auch mehrere Vorgänge derselben Kultur müssen beim Bearbeiten
+  eindeutig unterscheidbar bleiben. Ein ungespeicherter Formularentwurf darf
+  nicht die Identität des ausgewählten bestehenden Vorgangs verschleiern.
+- **Auswirkungen:** Wechseln aktualisiert den Kontext unmittelbar, erfolgreiches
+  Speichern oder Abbrechen entfernt ihn. Formularwerte, Validierung, Speicher-
+  vertrag, Geometrie und Saisonregler bleiben unverändert. Keine neuen permanenten
+  Bedienelemente und keine Änderung an den fachlichen Regeln aus DEC-029 bis DEC-031.
+- **Quelle:** Nutzerauftrag „Phase 3C.2: Eindeutige Hervorhebung beim Bearbeiten
+  von Anbauvorgängen“; [UX-Fortschreibung](phase3c2.md).
+
+Fortschreibung 18.11.2026: [DEC-038](#dec-038) ersetzt den Abschluss des
+Bearbeitungskontexts bei erfolgreicher Speicherung. Automatische Speicherung
+lässt den Eintrag geöffnet. „Fertig“ beendet den Bearbeitungskontext.
+
+<a id="dec-033"></a>
+
+### DEC-033 — Zwei komplementäre Gartenansichten auf gemeinsamer Datenbasis
+
+- **Datum:** 18.11.2026.
+- **Status:** beschlossen am 18.11.2026. Implementierung nicht freigegeben.
+- **Entscheidung:**
+  - Die 2D-SVG-Draufsicht bleibt der geometrische Planungs- und Bearbeitungsmodus.
+    Sie stellt keine einzelnen Pflanzen grafisch dar.
+  - Die Isometrie ist als zweiter Gartenmodus für Information und saisonale
+    Visualisierung vorgesehen. Beete können ausgewählt und Informationen
+    angezeigt werden. Geometrische Änderungen sind der 2D-Draufsicht vorbehalten.
+  - Beide Ansichten verwenden dieselben Garten-, Beet-, Kultur- und Saisondaten
+    einschließlich gemeinsamer Beetauswahl und Saisonposition. Die metrische
+    Weltgeometrie und die Objektidentitäten gelten ansichtsübergreifend.
+  - In der Isometrie bleiben Pflanzreihen erkennbar. Pflanzensymbole werden
+    abhängig von der Reihenlänge abstrahiert dargestellt. Grafische Symbolzahl
+    und Symbolabstand sind von den tatsächlichen agronomischen Pflanzenzahlen
+    und Pflanzabständen zu unterscheiden.
+- **Begründung:** Die Draufsicht dient der präzisen Planung. Die Isometrie macht
+  die saisonale Entwicklung desselben Gartens anschaulich. Gemeinsame
+  Beetauswahl und Saisonposition erhalten beim Wechsel den Betrachtungskontext.
+- **Auswirkungen:** Agronomische Berechnungen bleiben unverändert. Der
+  Python-Scheduler bleibt gemäß [DEC-022](#dec-022) die fachliche Quelle für
+  Saison- und Belegungszustände. Technische Zustandsverwaltung, konkrete
+  Projektion, Renderer und Asset-Pipeline bleiben offen. Die Ausgestaltung
+  wird unter [OQ-019](OPEN_QUESTIONS.md#oq-019) geführt, ergänzend zu
+  [DEC-025](#dec-025).
+- **Quelle:** Ausdrückliche Nutzerbestätigung im Auftrag „DEC-033: Zwei
+  Gartenansichten dokumentieren“ vom 18.11.2026. Fortschreibung von
+  [DEC-019](#dec-019) auf Grundlage von [DEC-003](#dec-003),
+  [DEC-008](#dec-008), [DEC-017](#dec-017) und [DEC-018](#dec-018).
+
+Fortschreibung 18.11.2026: [DEC-037](#dec-037) ordnet die
+Kulturbearbeitung dem isometrischen Modus zu. Geometrische Änderungen
+bleiben der Draufsicht vorbehalten.
+
+Fortschreibung 18.11.2026: [DEC-042](#dec-042) erlaubt kleine X als
+technische Pflanzplatzmarken in der Draufsicht. Die Regel über dargestellte
+Pflanzen wird dafür um diese Planungsmarken ergänzt.
+
+<a id="dec-034"></a>
+
+### DEC-034 — Erste Planner-Isometrie mit ASCII-Tomaten und gemeinsamem Theme
+
+- **Datum:** 18.11.2026.
+- **Status:** beschlossen und für den beschriebenen Umfang ausdrücklich zur Umsetzung freigegeben.
+- **Entscheidung:** Die vorhandene Draufsicht bleibt der Arbeitsmodus ohne
+  Pflanzensymbole. Ein Zweistellungs-Schalter wechselt zur informativen
+  Isometrie desselben Gartens. Beide Modi erhalten eine gemeinsame,
+  von Grainrad inspirierte Gestaltung mit Hell-/Dunkel-Umschalter.
+  Für die erste Pflanzenvisualisierung wird die erprobte ASCII-Tomate
+  mit vorbereiteten Windposen aus VIS-GRAIN-003 verwendet.
+- **Begründung:** Die freigegebene Integration verbindet den bestehenden
+  Planungsablauf mit einer saisonalen Gartenansicht und greift auf einen
+  bereits geprüften Bildsatz zurück.
+- **Auswirkungen:** Konkretisiert [DEC-033](#dec-033) für diese Ausbaustufe.
+  Agronomie und Datenmodell folgen den bestehenden Verträgen. Die langfristige
+  Bildsprache, Renderer- und Asset-Pipeline-Entscheidung aus [DEC-025](#dec-025)
+  und übrige Fragen unter [OQ-019](OPEN_QUESTIONS.md#oq-019) bleiben offen.
+- **Quelle:** Ausdrücklicher Nutzerauftrag vom 18.11.2026 zur Integration in
+  den Planner. [Umsetzung und Prüfstand](phase-garden-views.md).
+
+<a id="dec-035"></a>
+
+### DEC-035 — Isometrischen Ausschnitt verschieben und zoomen
+
+- **Datum:** 18.11.2026.
+- **Status:** beschlossen und ausdrücklich zur Umsetzung freigegeben.
+- **Entscheidung:** Die Isometrie erhält Verschieben des Bildausschnitts und
+  Zoom bei festem Blickwinkel. Ein kurzer Klick bleibt Beetauswahl.
+- **Begründung:** Größere Gärten lassen sich erkunden und einzelne Beete
+  näher betrachten, während Auswahl und Saisonposition erhalten bleiben.
+- **Auswirkungen:** Konkretisiert [DEC-034](#dec-034) und den Bedienumfang in
+  [OQ-019](OPEN_QUESTIONS.md#oq-019). Die Navigation verändert nur die
+  isometrische Kamera. [Umsetzung und Prüfstand](phase-garden-views.md).
+- **Quelle:** Ausdrückliche Nutzerfreigabe „ja beides integrieren“ vom 18.11.2026.
+
+<a id="dec-036"></a>
+
+### DEC-036 — Editierbare Beetnamen und horizontale Iso-Beschriftung
+
+- **Datum:** 18.11.2026.
+- **Status:** beschlossen und zur Umsetzung freigegeben.
+- **Entscheidung:** Die Beetplanung zeigt den Winkel im Geometrieabschnitt
+  und bietet dort die Namensbearbeitung. Die Mausrotation bleibt erhalten.
+  Die Isometrie zeigt horizontale, kollisionsgeprüfte Beetnamen-Kästchen
+  mit feinen Verbindungslinien.
+- **Begründung:** Namen sollen den Garten eindeutig beschriften. Numerische
+  Winkelwerte gehören zur präzisen Geometriebearbeitung.
+- **Auswirkungen:** Schreibt [DEC-018](#dec-018) für Tooltip und Anzeige
+  sowie [DEC-028](#dec-028) für die numerische Anzeige während der
+  Drehgeste fort. Namensänderungen nutzen den revisionsgesicherten Beet-PATCH.
+- **Quelle:** Ausdrücklicher Nutzerauftrag vom 18.11.2026.
+  [Umsetzung und Prüfung](phase-garden-views.md).
+
+Fortschreibung 18.11.2026: Namensfeld und Speichern stehen direkt in der
+Beetplanung. Das Geometrieformular kann geschlossen bleiben. Die
+Iso-Kästchen erhalten mehr Abstand zur zugehörigen Beetkontur.
+
+<a id="dec-037"></a>
+
+### DEC-037 — Beetplanung und Kulturplanung als getrennte Arbeitsmodi
+
+- **Datum:** 18.11.2026.
+- **Status:** beschlossen und zur Umsetzung freigegeben.
+- **Entscheidung:** Die Draufsicht heißt **Beetplanung**. Dort werden
+  Beetname und Geometrie bearbeitet. Kultur und Zeitraum sind einsehbar.
+  Die Isometrie heißt **Kulturplanung**. Dort werden Anbauvorgänge im
+  rechten Beetpanel bearbeitet. Geometrieangaben entfallen in diesem Panel.
+- **Begründung:** Die Werkzeuge im Beetpanel folgen der Aufgabe der
+  jeweiligen Ansicht. Kulturen und Zeiträume bleiben beim Geometrieplanen sichtbar.
+- **Auswirkungen:** Schreibt [DEC-033](#dec-033) und die erste Umsetzung
+  [DEC-034](#dec-034) fort. Gemeinsame Beetauswahl, Saisonposition,
+  Datenmodell und Rechenregeln bleiben erhalten. Die Demo bleibt lesend.
+- **Quelle:** Ausdrücklicher Nutzerauftrag zur Aufgabenteilung vom
+  18.11.2026. [Umsetzung und Prüfung](phase-garden-views.md).
+
+<a id="dec-038"></a>
+
+### DEC-038 — Kulturfelder automatisch speichern
+
+- **Datum:** 18.11.2026.
+- **Status:** beschlossen und zur Umsetzung freigegeben.
+- **Entscheidung:** Änderungen an Kultur, Anbauart, Startdatum und geplantem
+  Erntedatum werden nach kurzer Eingabepause automatisch gespeichert.
+  Ein neuer Anbauvorgang wird angelegt, sobald seine Pflichtangaben gültig sind.
+- **Begründung:** Einzelne Feldänderungen sollen direkt übernommen werden.
+  Schnelle Änderungen werden gemeinsam übertragen.
+- **Auswirkungen:** Schreibt [DEC-032](#dec-032) und [DEC-037](#dec-037) fort.
+  „Fertig“ schließt den Bearbeitungskontext. Ungültige Eingaben bleiben
+  lokal. Endgültiges Entfernen ist weiterhin eine bestätigte Einzelaktion.
+  Der bestehende revisionsgesicherte Speichervertrag bleibt maßgeblich.
+- **Quelle:** Ausdrücklicher Nutzerauftrag zum automatischen Speichern
+  vom 18.11.2026. [Umsetzung und Prüfung](phase-garden-views.md).
+
+<a id="dec-039"></a>
+
+### DEC-039 — Wochenbelegung verständlich kennzeichnen
+
+- **Datum:** 18.11.2026.
+- **Status:** beschlossen und zur Umsetzung freigegeben.
+- **Entscheidung:** In der Wochenplanung sind nur Beete ohne Anbauvorgang
+  gestrichelt umrandet. Grundstücksaussparungen erhalten eine durchgezogene
+  Kontur. Inaktive Wochen mit vorhandener Kulturplanung werden von Beeten
+  ohne Kulturplanung unterschieden. Die Legende benennt fehlende geplante
+  Erntetermine ausdrücklich.
+- **Begründung:** Konturen und Begriffe sollen Beete ohne Planung, freie
+  Wochen und zeitlich unvollständige Planung klar auseinanderhalten.
+- **Auswirkungen:** Gilt in beiden Gartenansichten. Die fachliche
+  Wochenprojektion aus [DEC-031](#dec-031) bleibt unverändert.
+- **Quelle:** Ausdrücklicher Nutzerauftrag zur Legende vom 18.11.2026.
+  [Umsetzung und Prüfung](phase-garden-views.md).
+
+<a id="dec-040"></a>
+
+### DEC-040 — Projekt aus der Projektauswahl anlegen
+
+- **Datum:** 18.11.2026.
+- **Status:** beschlossen und zur Umsetzung freigegeben.
+- **Entscheidung:** „Neues Projekt“ legt ein gespeichertes Projekt mit
+  Namen und eingegebenen Maßen für ein leeres rechteckiges Grundstück an.
+  Nach bestätigter Anlage öffnet sich die Beetplanung.
+- **Begründung:** Ein leerer, maßhaltiger Einstieg ermöglicht die
+  anschließende Beetplanung über die vorhandenen Werkzeuge.
+- **Auswirkungen:** Konkretisiert den Einstieg für [DEC-005](#dec-005).
+  Freie Grundstückserfassung bleibt offen. Wiederholte Sendeversuche
+  derselben Anlage im Dialog werden über dieselbe Projekt-ID erkannt.
+- **Quelle:** Nutzerauftrag zur Projektanlage vom 18.11.2026.
+  [Umsetzung und Prüfung](phase-garden-views.md).
+
+<a id="dec-041"></a>
+
+### DEC-041 — 15°-Winkelraster beim Zeichnen mit Shift
+
+- **Datum:** 18.11.2026.
+- **Status:** beschlossen und zur Umsetzung freigegeben.
+- **Entscheidung:** Beim Ziehen einer neuen Beetlängsachse rastet der
+  Winkel mit gedrückter Shift-Taste in 15°-Schritten ein. Das Loslassen
+  stellt noch während der Geste den freien Winkel wieder her.
+- **Begründung:** Eine einheitliche Ausrichtung soll bereits beim Zeichnen
+  ohne nachträgliche Winkelkorrektur möglich sein.
+- **Auswirkungen:** Ergänzt [DEC-010](#dec-010) und [DEC-028](#dec-028).
+  Der erste Achspunkt, die gezogene Länge und die eingegebene Breite
+  bleiben erhalten. Validierung und Speicherung verwenden dieselbe Geometrie.
+- **Quelle:** Ausdrücklicher Nutzerauftrag vom 18.11.2026.
+  [Prüfstand](phase3b3c.md).
+
+<a id="dec-042"></a>
+
+### DEC-042 — Pflanzraster je Beet und Anbauvorgang
+
+- **Datum:** 18.11.2026.
+- **Status:** beschlossen. Rasterberechnung und X-Markierung umgesetzt.
+  Die angeforderte Visualisierung mit VIS-GRAIN-004 und fachliche
+  Ertrags-/Phasenintegration sind noch nicht umgesetzt.
+- **Entscheidung:** Beetmaße und quellenbezogene Reihen- und Pflanzabstände
+  des jeweiligen Anbauprofils bestimmen die möglichen Pflanzplätze.
+  Nachfolgende Kulturen haben ein eigenes Raster auf demselben Beet.
+  Die Beetplanung zeigt X als technische Pflanzplatzmarken. Das Ziel der
+  Kulturplanung ist die Darstellung derselben Positionen mit den Pflanzen
+  aus VIS-GRAIN-004 und sichtbarer Entwicklung.
+- **Begründung:** Pflanzkapazität soll aus der metrischen Geometrie und
+  dem jeweiligen Kulturprofil nachvollziehbar hervorgehen.
+- **Auswirkungen:** Konkretisiert [DEC-033](#dec-033). Die bestehende
+  Python-Kapazitätsregel liefert dieselben Anzahlen für Scheduler und Raster.
+  Die Fachregeln aus [DEC-022](#dec-022) und [DEC-023](#dec-023) gelten weiter.
+  Ertragsgrundlage, Phasenzuordnung und räumliche Aufteilung bei
+  gleichzeitigen Kulturen erfordern fachliche Klärung.
+- **Quelle:** Nutzerauftrag zu Pflanzabständen, Ertrag und VIS-GRAIN-004
+  vom 18.11.2026. [Umsetzung und Quellen](phase-garden-views.md).
+
+Fortschreibung 18.11.2026: [DEC-043](#dec-043) ergänzt Referenzschätzungen
+sowie die Darstellung der Pflanzraster mit VIS-GRAIN-004. Die oben
+dokumentierte erste Ausbaustufe bleibt als historischer Stand erhalten.
+
+<a id="dec-043"></a>
+
+### DEC-043 — Referenzertrag und schematisches Pflanzenwachstum
+
+- **Datum:** 18.11.2026.
+- **Status:** beschlossen und zur Umsetzung freigegeben.
+- **Entscheidung:** Passende veröffentlichte Ertragswerte erscheinen als
+  gekennzeichnete Referenzschätzung je Kulturvorgang. Die Isometrie nutzt
+  mit VIS-GRAIN-004 dieselben fachlichen Rasterpunkte wie die Draufsicht.
+  Visuelle Entwicklungsstufen orientieren sich am geplanten Zeitintervall.
+- **Begründung:** Die Kulturplanung soll die Konsequenzen der Beetgröße
+  anschaulich machen. Herkunft und Unsicherheit der Schätzung bleiben sichtbar.
+- **Auswirkungen:** Ergänzt [DEC-042](#dec-042) und konkretisiert
+  [DEC-023](#dec-023). Referenzen ersetzen keine operativen
+  Scheduler-Ertragswerte. Lokale Kalibrierung und die Aufteilung
+  gleichzeitiger Kulturen bleiben offen.
+- **Quelle:** Nutzerauftrag zu VIS-GRAIN-004 vom 18.11.2026 und
+  ausdrückliche Bestätigung der Referenzschätzungen. [Umsetzung](phase-garden-views.md).
+
+Fortschreibung 18.11.2026: [DEC-044](#dec-044) konkretisiert die
+räumliche Aufteilung bei gleichzeitigen Kulturen über Reihenzuordnungen.
+Die lokale Ertragskalibrierung bleibt offen.
+
+<a id="dec-044"></a>
+
+### DEC-044 — Kulturreihen je Anbauzeitraum zuordnen
+
+- **Datum:** 18.11.2026.
+- **Status:** beschlossen und umgesetzt. Nutzerabnahme offen.
+- **Entscheidung:** Reihennummern ordnen Anbauvorgänge für ihren jeweiligen
+  Zeitraum von links nach rechts an. Die Reihenpositionen ergeben sich
+  aus den Abständen der zugeordneten Kulturprofile. Pflanzpunkte,
+  Iso-Pflanzen und Referenzertrag folgen dieser Aufteilung.
+- **Begründung:** Kulturen mit unterschiedlichen Abständen sollen dasselbe
+  Beet gemeinsam nutzen können. Folgekulturen brauchen eine eigene Aufteilung.
+- **Auswirkungen:** Konkretisiert [DEC-042](#dec-042), [DEC-043](#dec-043)
+  und [OQ-010](OPEN_QUESTIONS.md#oq-010). Unvollständige oder geometrisch
+  widersprüchliche Reihenaufteilungen werden kenntlich gemacht.
+  Geometrie und operative Scheduler-Erträge sind davon unabhängig.
+- **Quelle:** Ausdrückliche Nutzerbestätigung vom 18.11.2026.
+  [Bedienung und Prüfstand](phase-garden-views.md).
+
+Fortschreibung 18.11.2026: [DEC-045](#dec-045) entkoppelt die
+Anzahl und Position der gezeichneten Iso-Pflanzen vom fachlichen Raster.
+Kulturzuordnung, zeitliche Gültigkeit und Referenzertrag aus DEC-044 gelten weiter.
+
+<a id="dec-045"></a>
+
+### DEC-045 — Gleichmäßige ASCII-Pflanzenfüllung in der Isometrie
+
+- **Datum:** 18.11.2026.
+- **Status:** beschlossen und umgesetzt. Nutzerabnahme offen.
+- **Entscheidung:** Gleichmäßig verteilte VIS-GRAIN-004-Pflanzensymbole
+  füllen eindeutig belegte Beetabschnitte in der Kulturplanung.
+  Die Anzahl der Symbole richtet sich nach der Darstellung und der
+  Größe der sichtbaren Kulturfläche. Die geplante Saison bestimmt
+  vier schematische Größenstufen.
+- **Begründung:** Die Isometrie soll den Bewuchs lesbar zeigen, auch bei
+  sehr dichten Pflanzabständen.
+- **Auswirkungen:** Schreibt die Darstellung aus [DEC-042](#dec-042),
+  [DEC-043](#dec-043) und [DEC-044](#dec-044) fort. Das fachliche Raster
+  bestimmt weiterhin X-Markierungen, Kapazität und Referenzertrag.
+- **Quelle:** Ausdrücklicher Nutzerauftrag zur ASCII-Füllung und
+  Wachstumsdarstellung vom 18.11.2026. [Prüfstand](phase-garden-views.md).
+
 ## Änderungsverlauf
+
+### Lokale Experimentfreigabe VIS-GRAIN-004
+
+- **ID / Datum:** VIS-GRAIN-004, 18.11.2026.
+- **Fortschreibung (18.11.2026):** Der Nutzer erweitert den ursprünglichen
+  Einzelzustand um illustrative Wachstumsphasen und wünscht eine
+  Verschattung der unterirdischen Speicherorgane auf der geschlossenen
+  Iso-Beetfläche. Umgesetzt als Studie mit vier Phasen für die sechs Lab-Kulturen.
+- **Fortschreibung (18.11.2026):** Der Nutzer erweitert die Sammlung auf
+  alle vorhandenen Katalogkulturen. Die vorherigen, eigens gezeichneten
+  Phasen werden in der Lab-Ansicht durch stetige Vergrößerung derselben
+  Pflanzenform ersetzt, um Größenwachstum klarer lesbar zu machen.
+- **Status / Herkunft:** Expliziter Nutzerauftrag VIS-GRAIN-004 für Assets
+  und vorbereitende Zuordnung. Gemeinsame Designabnahme offen.
+- **Begründung:** Der vorhandene Grainrad-Tomatensatz dient als Referenz
+  für ergänzende Darstellungen aus dem bestehenden Kulturkatalog.
+- **Auswirkungen:** Experimenteller Mehrkultur-Atlas mit einem Zustand und
+  drei Windhaltungen je Symbol, Katalogzuordnung und separater Lab-Testszene.
+  [Versuchsbericht](../experiments/botanical-ascii-lab/VIS-GRAIN-004.md).
+
+### Lokale Experimentfreigabe VIS-GRAIN-003
+
+- **ID / Datum:** VIS-GRAIN-003, 18.11.2026.
+- **Status / Herkunft:** Isolierter, ausdrücklich beauftragter Versuch mit drei
+  transparenten ASCII-Windhaltungen und zehn Pflanzeninstanzen.
+- **Begründung:** VIS-GRAIN-002 belegt die Wiederholbarkeit des Einzelbildexports.
+  Drei PNG-Posen aus einer Vorlage erlauben die Prüfung von Transparenz,
+  Fußpunktstabilität und niedriger Zeichenlast.
+- **Auswirkungen:** Ein vorbereiteter Grainrad-Atlas und eine getrennte Canvas-2D-
+  Ansicht im Lab. DEC-017/025 und OQ-019/020 gelten weiterhin für die offene
+  Renderer- und Asset-Entscheidung.
+  [Bericht](../experiments/botanical-ascii-lab/VIS-GRAIN-003.md).
+
+### Lokale Experimentfreigabe VIS-GRAIN-002
+
+- **ID / Datum:** VIS-GRAIN-002, 18.11.2026.
+- **Status / Herkunft:** Isolierter Machbarkeitstest gemäß ausdrücklichem Auftrag
+  „Automatisierter Grainrad-Test“, ausgeführt und anhand der Exporte geprüft.
+- **Begründung:** Der Test der öffentlichen Browseroberfläche mit der vorhandenen
+  Tomatenreferenz zeigt, ob sich vorbereitete ASCII-Bilder automatisieren lassen.
+- **Auswirkungen:** Versuchsergebnisse und Artefakte bleiben im Lab. Die Wahl
+  des Renderers und der Asset-Pipeline bleibt unter DEC-017/025 und OQ-019/020 offen.
+  [Bericht und Nachweise](../experiments/botanical-ascii-lab/VIS-GRAIN-002.md).
+
+### Lokale Experimentfreigabe DP-001 — keine Änderung bestehender Beschlüsse
+
+- **ID / Datum:** DP-001, 17.11.2026.
+- **Status:** ausdrücklich beauftragter, experimenteller Design-/Performance-Prototyp;
+  keine neue Produktentscheidung und keine finale Rendererarchitektur.
+- **Herkunft:** Nutzerauftrag „DP-001: Design-Prototyp mit vereinfachter Gartenvisualisierung“.
+- **Umfang:** isolierte Gesamtoberfläche, Beispieldaten, bestehendes Tomatenmodell,
+  gemeinsamer Satz von zunächst höchstens 20 ASCII-Frames, Phasenversatz,
+  10/30/100-Pflanzenvergleich. Einfachere Umsetzung ohne PixiJS ausdrücklich erlaubt.
+- **Begründung der lokalen Umsetzung:** Canvas 2D genügt als kleinster Versuch
+  gemeinsamer Rasterbilder ohne neue Abhängigkeit. JavaScript-Lab und produktive
+  React-/TypeScript-Struktur bleiben erhalten.
+- **Auswirkungen/Grenzen:** nur neuer Lab-Einstieg; keine Planner-API, Algorithmen
+  oder Datenmodelle. DEC-017/025 und OQ-019/020 bleiben erhalten; keine bestehende
+  Entscheidung wird ersetzt. [Spezifikation](features/DP-001.md),
+  [Ergebnis und Nachweise](../experiments/botanical-ascii-lab/DP-001.md).
 
 | Datum | Änderung | Grundlage |
 |---|---|---|
@@ -696,3 +1087,17 @@ auftrag wurden keine Anwendungstests, Builds oder Funktionen geändert.
 | 16.11.2026 | DEC-029 ergänzt: persistente Nutzereingaben zur Kulturplanung, Schema-2-Migration und Löschschutz zugewiesener Beete. | Phase 3C.1; vorhandener Katalog, getrennte Geometrie und keine neuen Agronomieannahmen. |
 | 17.11.2026 | DEC-030 ergänzt: kompakte Planung und informative, Python-basierte Datumsprüfung einschließlich unklarer Zeiträume. | Ausdrücklicher UX-/Überschneidungsauftrag vor Phase 3C.2; keine Speicherblockade. |
 | 17.11.2026 | DEC-031 ergänzt: ISO-Wochenprojektion gespeicherter Projekte, Unsicherheiten und Trennung von Folge-/Mischkulturen. | Phase 3C.2; kein neuer Scheduler oder SQLite-Vertrag. |
+| 17.11.2026 | DEC-032 ergänzt: ID-gebundene Zeilenhervorhebung und benannter Formularkontext. | Ausdrücklicher UX-Auftrag zu Phase 3C.2; keine fachlichen oder persistenten Änderungen. |
+| 18.11.2026 | DEC-033 ergänzt und DEC-019 mit datiertem Fortschreibungsverweis versehen. | Ausdrückliche Nutzerbestätigung der zwei Gartenansichten. Implementierung nicht freigegeben. |
+| 18.11.2026 | DEC-034 ergänzt. | Ausdrücklicher Integrationsauftrag zu Ansichtswechsel, ASCII-Tomaten und Hell/Dunkel. |
+| 18.11.2026 | DEC-035 ergänzt. | Ausdrückliche Freigabe für Verschieben und Zoomen in der Isometrie. |
+| 18.11.2026 | DEC-036 ergänzt. | Ausdrücklicher Auftrag zu Beetnamen, Winkelanzeige und Iso-Beschriftung. |
+| 18.11.2026 | DEC-037 ergänzt. | Ausdrücklicher Auftrag zur Aufgabenteilung von Beet- und Kulturplanung. |
+| 18.11.2026 | DEC-038 ergänzt. | Ausdrücklicher Auftrag zum automatischen Speichern der Kulturfelder. |
+| 18.11.2026 | DEC-039 ergänzt. | Nutzerauftrag zu Grundstücksaussparungen, Beetkonturen und Wochenlegende. |
+| 18.11.2026 | DEC-040 ergänzt. | Nutzerauftrag zur Projektanlage aus der Projektauswahl. |
+| 18.11.2026 | DEC-041 ergänzt. | Nutzerauftrag zum Shift-Winkelraster beim Beetzeichnen. |
+| 18.11.2026 | DEC-042 ergänzt. | Nutzerauftrag zu kulturabhängigen Pflanzrastern und saisonaler Pflanzenvisualisierung. |
+| 18.11.2026 | DEC-043 ergänzt. | Nutzerbestätigung zu veröffentlichten Ertragsreferenzen und Auftrag zur Visualisierung. |
+| 18.11.2026 | DEC-044 ergänzt. | Nutzerbestätigung zur kulturabhängigen Anordnung und zeitlichen Reihenzuordnung. |
+| 18.11.2026 | DEC-045 ergänzt. | Nutzerauftrag zur gleichmäßigen ASCII-Füllung mit Wachstumsstufen. |

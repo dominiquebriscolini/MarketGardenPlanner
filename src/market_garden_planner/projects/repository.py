@@ -120,16 +120,29 @@ class ProjectRepository:
                 summaries.append(item)
             return summaries
 
-    def create(self, name: str, geometry: GeometryState) -> Project:
+    def create(self, name: str, geometry: GeometryState, *, project_id=None) -> Project:
         project_name(name)
         serialized = dumps(geometry)
         now = datetime.now(timezone.utc).isoformat()
-        project_id = new_id()
+        requested_id = project_id
+        if requested_id is not None:
+            require_uuid(requested_id)
+        project_id = requested_id if requested_id is not None else new_id()
         project = Project(project_id, name, new_id(), geometry, now, now, CultivationPlan.empty(project_id))
+        request_hash = sha256(json.dumps(["create", name, serialized]).encode()).hexdigest()
         with self._connection(write=True) as db:
+            if requested_id and db.execute("SELECT 1 FROM projects WHERE project_id=?", (project_id,)).fetchone():
+                receipt = db.execute("SELECT request_hash FROM commands WHERE project_id=? AND command_id=?",
+                                     (project_id, project_id)).fetchone()
+                if receipt and receipt["request_hash"] == request_hash:
+                    return self._get(db, project_id)
+                raise ProjectError("project_id_conflict", "Project ID already exists with different input", 409)
             db.execute("INSERT INTO projects VALUES (?,?,?,?,?,?,?)",
                        (project.project_id, name, project.revision_id, serialized, geometry_token(geometry), now, now))
             db.execute("INSERT INTO cultivation_plans VALUES (?,?)", (project_id, json.dumps(project.cultivation_plan.to_dict())))
+            if requested_id:
+                db.execute("INSERT INTO commands VALUES (?,?,?,?)",
+                           (project_id, project_id, request_hash, json.dumps(project.to_dict(), allow_nan=False)))
         return project
 
     def _change(self, project_id, expected_revision, transform, request, command_id, *, allow_add=False, allow_remove=False, cultivation_transform=None):

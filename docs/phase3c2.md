@@ -236,3 +236,78 @@ keine Testeinträge oder Migration in produktiven Projekten:
   Geometrie-Engine. Alle Vorgänge bleiben über die Liste erreichbar.
 - Neue Ernteprognose, automatische Beetaufteilung, Botanical ASCII Lab und
   botanische Vegetationsdarstellung bleiben ausdrücklich außerhalb dieser Phase.
+
+## UX-Fortschreibung — Bearbeitungskontext, 17.11.2026
+
+Auf ausdrücklichen Nutzerauftrag ergänzt; Entscheidung [DEC-032](DECISIONS.md#dec-032).
+Keine Änderung an fachlicher Saisonlogik, API, SQLite-Vertrag, Geometrie oder Slider.
+
+### Bedienung und Identität
+
+- „Bearbeiten“ markiert genau die zugehörige Kulturzeile mit salbeigrünem
+  Hintergrund und schmaler Akzentlinie. Andere Zeilen behalten ihre Darstellung.
+- Das Formular heißt beispielsweise **„Karotten bearbeiten“**; darunter steht
+  **„Direktsaat · 04.11.2026“**. Kultur, Anbauart und Startdatum stammen aus dem
+  tatsächlich ausgewählten gespeicherten Vorgang, einschließlich Katalogname/Sorte.
+  Fehlende Katalogprofile bleiben wie bisher über ihre Profil-ID identifizierbar.
+- Formular und Zeilenmarkierung verwenden denselben über `cultivation_id`
+  gefundenen Eintrag des ausgewählten Beets. Zwei Vorgänge derselben Kultur
+  werden nicht über Namen oder Listenposition verwechselt.
+- Die Zusatzinformation beschreibt den gespeicherten Ausgangsvorgang. Änderungen
+  an Kultur oder Datum im Formular bleiben Entwurf und ändern diese Identität nicht.
+- Wechseln auf einen anderen Vorgang aktualisiert die Markierung sofort.
+  Erfolgreiches Speichern oder Abbrechen entfernt Formular und Markierung.
+  Der vorhandene Komponentenwechsel beim Beetwechsel verwirft den lokalen Editor.
+- Ein neues Formular heißt **„Kultur hinzufügen“**, ohne einen bestehenden
+  Vorgang zu markieren oder dessen Datum zu übernehmen. Keine neuen permanenten
+  Bedienelemente; Felder, Bestätigung, Validierung und Konfliktbehandlung bleiben erhalten.
+- Die Formularüberschrift ist auch der zugängliche Formularname; der aktive
+  Listeneintrag ist zusätzlich mit `aria-current` gekennzeichnet.
+
+### Geänderte Module
+
+- `frontend/src/CultivationPanel.tsx`: ID-gebundener aktiver Eintrag, Markierung
+  und kleine separat prüfbare Überschriftenkomponente `CultivationFormTitle`.
+- `frontend/src/style.css`: zurückhaltende aktive Zeile und lesbare zweizeilige Überschrift.
+- `frontend/tests/cultivation.test.mjs`: vier zusätzliche Überschriften-/Identitätskontextfälle.
+- Dokumentation: diese Fortschreibung und DEC-032; keine neuen Abhängigkeiten.
+
+### Prüfungen der UX-Fortschreibung
+
+| Prüfung | Ergebnis am 17.11.2026 |
+|---|---|
+| Gesamte Frontend-Suite | **88/88 bestanden** (84 bisherige + 4 neue) |
+| TypeScript `tsc --noEmit` | bestanden, Bestandteil des Buildskripts |
+| Frontend-Produktionsbuild | bestanden |
+| Browser | Headless Chromium, 1280 × 900 und 1280 × 720, bestanden |
+
+Die zusätzlichen automatisierten Fälle prüfen Karotten/Spinat mit tatsächlichem
+Startdatum, zwei Vorgänge derselben Kultur, Pflanzung und fehlendes Katalogprofil
+sowie „Kultur hinzufügen“ ohne übernommene Bestandsdaten. Die bestehende Suite
+prüft weiterhin unter anderem Speicherbestätigung, Fehler, Geometrieerhalt,
+Saisonansicht und Trennung von Demo-/Projektdaten.
+
+Browserprüfung ausschließlich gegen eine **separate synthetische SQLite-Testdatenbank**
+auf Port 8890, nicht gegen den produktiven Projektserver auf Port 8766:
+
+- Karotten 04.11.2026 → Spinat 16.12.2026: jeweils genau eine passende markierte
+  Zeile; Formular und Zeile haben dieselbe Vorgangs-ID und einen eindeutigen Namen.
+- Zweite Karotten-Kultur am 18.11.2026: richtige eigene Formularwerte und
+  Zusatzinformation. Ein Datumsentwurf und anschließendes Abbrechen verändern
+  weder gespeicherte Daten noch Revisionen; Auswahl/Abbrechen senden keine Schreibanfrage.
+- Wechsel zwischen zwei Beeten: kein alter Editor oder markierter Vorgang bleibt
+  am anderen Beet bestehen. Neue Auswahl beginnt ohne Bearbeitungsmarkierung.
+- Spinat-Ernte bewusst geändert und bestätigt: Markierung/Formular verschwinden;
+  nur der beabsichtigte Vorgang und zugehörige Revisionen ändern sich.
+- Einen Radieschen-Vorgang über „Kultur hinzufügen“ angelegt: keine Bestandszeile
+  markiert, neue ID vorhanden, vorherige Vorgänge bleiben unverändert.
+- Nach Neuladen stimmen die bestätigten Daten mit dem API-Stand überein.
+  Vollständiger Vergleich bestätigt unveränderte Geometrie und Geometrie-Token.
+- Zwei Screenshots visuell geprüft: dezente Hervorhebung, lesbarer Kontext;
+  bei geringerer Höhe bleibt der vorhandene Panel-Scrollweg nutzbar.
+- Keine JavaScript-Seitenfehler. Beim initialen Aufruf wird weiterhin nur das
+  fehlende `favicon.ico` mit HTTP 404 gemeldet; außerhalb dieser UX-Anpassung.
+
+Python-Suite nicht erneut ausgeführt: Backend und Python-Tests wurden nicht geändert.
+Die weiter oben genannten 126 Python-Tests bleiben der datierte vorherige Nachweis.
+Testbrowser und separater Testserver nach der Prüfung beendet. Kein Git-Commit.

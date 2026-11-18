@@ -9,7 +9,7 @@ try {
         Select-Object -First 1 -ExpandProperty FullName
     if (-not $esbuild) { throw 'esbuild.exe fehlt. Zuerst pnpm install ausführen.' }
     New-Item -ItemType Directory -Force dist\assets | Out-Null
-    & $esbuild src\main.tsx --bundle --minify --format=esm --outdir=dist\assets --entry-names=app
+    & $esbuild src\main.tsx --bundle --minify --format=esm --outdir=dist\assets --entry-names=app --loader:.png=dataurl
     if ($LASTEXITCODE -ne 0) { throw 'Frontend-Build fehlgeschlagen.' }
     $html = Get-Content -Raw -Encoding UTF8 index.html
     $html = $html.Replace('<script type="module" src="/src/main.tsx"></script>', '<link rel="stylesheet" href="/assets/app.css"><script type="module" src="/assets/app.js"></script>')

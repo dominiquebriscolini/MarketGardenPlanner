@@ -79,7 +79,7 @@ test('All concurrent cultures are accessible through tooltip and detail summary 
   const tooltip=renderToStaticMarkup(React.createElement(ProjectTooltip,{bed:b,hover:{id:b.object_id,x:10,y:10},viewport:{width:1280,height:720},season:frame}));
   assert.ok(tooltip.includes('Spinat')&&tooltip.includes('Radieschen')&&tooltip.includes('Mischkultur'));
   const details=renderToStaticMarkup(React.createElement(ProjectDetails,{project,selected:open.object_id,onClose:()=>{},season:frame}));
-  assert.ok(details.includes('Karotten (Ende offen)')&&details.includes('Fortdauer ist unklar'));
+  assert.ok(details.includes('Karotten (Erntedatum fehlt)')&&details.includes('bleibt unklar, wie lange die Kultur das Beet belegt'));
 });
 test('The demo ignores accidentally supplied project-season state and retains original daily crop labels',()=>{
   const base=plot({geometry:demoToMap(demo),data:demo});

@@ -337,3 +337,17 @@ Ursprüngliche Funktionsabnahme: separate synthetische Prüfdatenbank,
   Scheduler-Ergebnisse. Keine neue agronomische Annahme oder Neuberechnung.
 
 Kein Git-Commit erstellt.
+
+## Fortschreibung — Shift beim Beetzeichnen, 18.11.2026
+
+[DEC-041](DECISIONS.md#dec-041) ergänzt 15°-Schritte beim Zeichnen mit
+gedrückter Shift-Taste. Eingabe ohne Shift bleibt frei. Drücken und
+Loslassen aktualisieren die Vorschau bei stillstehendem Mauszeiger.
+Die Mausfreigabe speichert den zu diesem Zeitpunkt gezeigten Winkel.
+Startpunkt, Breite und gezogene Länge bleiben erhalten.
+
+Lokaler Arbeitsstand auf HEAD `20e6a63`. Produktionsbuild und 89
+Frontend-Tests erfolgreich. Chromium mit isoliertem synthetischem Projekt
+prüfte Einrasten bei 45°, Freigabe des Rasters ohne Mausbewegung,
+Speicherung bei gehaltener und gelöster Shift-Taste sowie Startpunkt und
+Länge. Die physische Geräteabnahme bleibt offen. Kein Git-Commit.

@@ -52,9 +52,9 @@ def remove_bed(state: GeometryState, bed_id: str) -> GeometryState:
 
 
 def patch_bed(state: GeometryState, bed_id: str, changes: dict) -> GeometryState:
-    allowed = {"center", "width_m", "length_m", "rotation_deg", "anchor"}
+    allowed = {"center", "width_m", "length_m", "rotation_deg", "name", "anchor"}
     if not isinstance(changes, dict) or not changes or set(changes) - allowed:
-        raise ProjectError("invalid_fields", "Expected center, width_m, length_m or rotation_deg")
+        raise ProjectError("invalid_fields", "Expected center, width_m, length_m, rotation_deg or name")
     bed = next((b for b in state.beds if b.object_id == bed_id), None)
     if bed is None:
         raise ProjectError("bed_not_found", "Bed not found in project", 404)
@@ -62,6 +62,11 @@ def patch_bed(state: GeometryState, bed_id: str, changes: dict) -> GeometryState
         return resize_bed_width(state, bed_id, changes["width_m"], anchor=changes.get("anchor", "center"))
     if "anchor" in changes:
         raise ProjectError("invalid_fields", "anchor is only valid for a width-only change")
+    if "name" in changes:
+        if bed.geometry_locked:
+            raise ProjectError("geometry_locked", "Bed is locked; unlock in a separate save first", object_ids=[bed_id])
+        if not isinstance(changes["name"], str) or not changes["name"].strip():
+            raise ProjectError("invalid_fields", "Bed name cannot be blank")
     values = dict(changes)
     if "center" in values:
         center = values["center"]

@@ -216,6 +216,20 @@ class APITests(unittest.TestCase):
         self.assertEqual(status, 201, data)
         return data["project"]
 
+    def test_create_with_stable_id_replays_without_duplicate_or_overwrite(self):
+        path = "/api/v1/projects"
+        request = {"project_id": new_id(), "name": "SYNTHETIC New",
+                   "geometry": json.loads(dumps(GeometryState(self.state.parcel, ())))}
+        status, first = self.request("POST", path, request)
+        self.assertEqual(status, 201, first)
+        project = first["project"]
+        self.assertEqual(project["project_id"], request["project_id"])
+        self.assertEqual(project["geometry"]["beds"], [])
+        self.assertEqual(project["cultivation_plan"]["entries"], [])
+        self.assertEqual(self.request("POST", path, request), (201, first))
+        self.assertEqual(self.request("POST", path, {**request, "name": "Different input"})[0], 409)
+        self.assertEqual(len(self.request("GET", path)[1]["projects"]), 1)
+
     def test_api_create_list_load_save_and_patch(self):
         project = self.create()
         url = "/api/v1/projects/" + project["project_id"]

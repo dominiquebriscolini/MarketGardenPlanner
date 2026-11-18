@@ -1,0 +1,246 @@
+{
+  "dark": {
+    "spriteFilter": "brightness(1.65) saturate(1.15)",
+    "spritePasses": 1
+  },
+  "light": {
+    "spriteFilter": "brightness(0.48) saturate(1.24)",
+    "spritePasses": 2
+  },
+  "underground": {
+    "minScale": 0.6,
+    "fadeRange": 0.18,
+    "soilVeilOpacity": 0.55
+  },
+  "cultures": {
+    "tomatoes": {
+      "shadow": [
+        26,
+        5,
+        9
+      ]
+    },
+    "lettuce": {
+      "shadow": [
+        23,
+        5,
+        4
+      ]
+    },
+    "radishes": {
+      "shadow": [
+        20,
+        4,
+        4
+      ],
+      "underground": {
+        "heads": [
+          [
+            133,
+            444
+          ],
+          [
+            225,
+            481
+          ],
+          [
+            308,
+            458
+          ]
+        ],
+        "proportions": [
+          0.82,
+          0.82
+        ],
+        "colors": {
+          "dark": [
+            "#a64e63",
+            "#e29aaa"
+          ],
+          "light": [
+            "#8e374e",
+            "#bc556b"
+          ]
+        },
+        "marks": [
+          "  +++  ",
+          " +##++ ",
+          "+###+++",
+          " +++++ ",
+          "  +++  ",
+          "   .   ",
+          "   .   "
+        ]
+      }
+    },
+    "spinach": {
+      "shadow": [
+        23,
+        4,
+        4
+      ]
+    },
+    "kohlrabi": {
+      "shadow": [
+        21,
+        5,
+        7
+      ]
+    },
+    "onions": {
+      "shadow": [
+        20,
+        4,
+        6
+      ],
+      "underground": {
+        "heads": [
+          [
+            137,
+            456
+          ],
+          [
+            225,
+            484
+          ],
+          [
+            299,
+            463
+          ]
+        ],
+        "proportions": [
+          1,
+          1
+        ],
+        "colors": {
+          "dark": [
+            "#ae8b56",
+            "#e3c790"
+          ],
+          "light": [
+            "#785725",
+            "#aa813e"
+          ]
+        },
+        "marks": [
+          "   .   ",
+          "  +++  ",
+          " +##++ ",
+          " ###++ ",
+          " +++++ ",
+          "  +++  ",
+          "  ...  "
+        ]
+      }
+    },
+    "carrots": {
+      "shadow": [
+        22,
+        4,
+        5
+      ],
+      "underground": {
+        "heads": [
+          [
+            133,
+            444
+          ],
+          [
+            225,
+            481
+          ],
+          [
+            308,
+            458
+          ]
+        ],
+        "proportions": [
+          1.03,
+          1.66
+        ],
+        "colors": {
+          "dark": [
+            "#ba7349",
+            "#ecae72"
+          ],
+          "light": [
+            "#a4542c",
+            "#bf7338"
+          ]
+        },
+        "marks": [
+          "  +++  ",
+          " +##++ ",
+          " +##++ ",
+          "  ##++ ",
+          "  #++  ",
+          "  #++  ",
+          "   #+  ",
+          "   ++  ",
+          "   +   ",
+          "   .   "
+        ]
+      }
+    },
+    "beetroot": {
+      "shadow": [
+        23,
+        4,
+        5
+      ],
+      "underground": {
+        "heads": [
+          [
+            133,
+            444
+          ],
+          [
+            225,
+            481
+          ],
+          [
+            308,
+            458
+          ]
+        ],
+        "proportions": [
+          1.41,
+          1.36
+        ],
+        "colors": {
+          "dark": [
+            "#a65b82",
+            "#d58aab"
+          ],
+          "light": [
+            "#7b2d57",
+            "#a24876"
+          ]
+        },
+        "marks": [
+          "  +++  ",
+          " +##++ ",
+          "++##+++",
+          "++#++++",
+          " +++++ ",
+          "  +++  ",
+          "   .   "
+        ]
+      }
+    },
+    "bush-beans": {
+      "shadow": [
+        24,
+        4,
+        7
+      ]
+    },
+    "zucchini": {
+      "shadow": [
+        27,
+        5,
+        7
+      ]
+    }
+  }
+}

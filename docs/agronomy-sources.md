@@ -92,3 +92,17 @@ In allen 15 Profilen bleiben die operativen `yield_per_plant`, `germination_rate
 `establishment_rate` und `seeds_per_gram` vorerst `null`. Reihen-/Flächenerträge
 oder unkalibrierte Spannen werden nicht als kg/Pflanze eingesetzt. Kopfgröße,
 Marktfähigkeit und Überlebensquote werden nicht gleichgesetzt.
+
+## Referenzschätzung pro Anbauvorgang
+
+[DEC-043](DECISIONS.md#dec-043) erlaubt eine separate, nicht lokal
+kalibrierte Referenzschätzung für Vollbelegung. Die Projektprojektion
+nutzt ausdrücklich passende Katalogfakten in lb/Pflanze oder lb je
+100 ft Reihe. Erstere werden mit der Anzahl der Pflanzplätze multipliziert.
+Bei Reihenwerten wird die rechnerisch genutzte Reihenlänge
+(Pflanzplätze × Pflanzabstand) skaliert. 100 ft entsprechen 30,48 m,
+1 lb entspricht 0,45359237 kg. Mehrschnittwerte werden als solche angezeigt.
+Die beiden Freiland-Tomatenreferenzen haben in der Quelle dieselbe Spanne.
+Die operative Ertragsgrundlage bleibt unverändert. Kopfsalat-Kopfgewichte
+allein werden weiterhin nicht als marktfähiger Ertrag verwendet.
+[Quellentabelle der University of Minnesota](https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/crop-and-field-planning-tools-for-vegetable-farmers).

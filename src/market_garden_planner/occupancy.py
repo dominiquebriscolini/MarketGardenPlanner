@@ -8,7 +8,7 @@ from typing import Mapping
 from .batches import BatchPlan
 from .calculator import MissingAgronomicData, _floor, calculate
 from .harvest import DAY, monday
-from .models import ProductionTarget
+from .models import CropProfile, ProductionTarget
 from .seasonal_models import Bed, DateWindow, SeasonalProfile
 
 
@@ -42,15 +42,31 @@ def find_overlaps(reservations: tuple[BedReservation, ...]) -> tuple[OccupancyCo
     return tuple(conflicts)
 
 
-def bed_capacity(profile: SeasonalProfile, bed: Bed) -> int:
-    missing = tuple(name for name in ("plant_spacing", "row_spacing") if getattr(profile.crop, name).value is None)
+@dataclass(frozen=True)
+class PlantingGrid:
+    rows: int
+    positions_per_row: int
+    row_spacing_m: float
+    plant_spacing_m: float
+
+    @property
+    def capacity(self) -> int:
+        return self.rows * self.positions_per_row
+
+
+def planting_grid(profile: CropProfile, width_m: float, length_m: float) -> PlantingGrid:
+    row_spacing, plant_spacing = profile.row_spacing.value, profile.plant_spacing.value
+    missing = tuple(name for name, value in (("plant_spacing", plant_spacing), ("row_spacing", row_spacing))
+                    if value is None)
     if missing:
-        raise MissingAgronomicData(profile.crop.id, ("bed_capacity",), missing)
-    if bed.width_m < profile.crop.row_spacing.value or bed.length_m < profile.crop.plant_spacing.value:
-        return 0
-    core = calculate(profile.crop, ProductionTarget(profile.crop.id, 1, "plants", bed.width_m, bed.length_m),
-                     required_outputs=("rows_per_bed",))
-    return core.rows_per_bed * _floor(bed.length_m / profile.crop.plant_spacing.value)
+        raise MissingAgronomicData(profile.id, ("bed_capacity",), missing)
+    rows = 0 if width_m < row_spacing else _floor(width_m / row_spacing)
+    positions = 0 if length_m < plant_spacing else _floor(length_m / plant_spacing)
+    return PlantingGrid(rows, positions, row_spacing, plant_spacing)
+
+
+def bed_capacity(profile: SeasonalProfile, bed: Bed) -> int:
+    return planting_grid(profile.crop, bed.width_m, bed.length_m).capacity
 
 
 @dataclass(frozen=True)

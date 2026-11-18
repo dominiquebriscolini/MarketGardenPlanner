@@ -13,10 +13,9 @@
 
 ## Verbindliches Entscheidungsprotokoll
 
-- Bei jeder neuen Entwicklungsphase muss Codex `docs/DECISIONS.md` lesen und berücksichtigen.
 - Neue Produkt- oder Architekturentscheidungen müssen in `docs/DECISIONS.md` mit stabiler ID, Datum, Status, Begründung und Auswirkungen dokumentiert werden.
 - Bestehende Entscheidungen dürfen nicht stillschweigend überschrieben werden. Änderungen und Statuswechsel müssen ausdrücklich begründet und mit Datum, bisheriger Entscheidung und gegebenenfalls ersetzendem Beschluss nachvollziehbar dokumentiert werden.
-- Beschlossene Zukunftsziele sind keine pauschale Implementierungsfreigabe; vorgeschlagene und offene Details dürfen nicht als bereits beschlossen behandelt werden.
+- Produkt- und Architekturentscheidungen werden nach ausdrücklicher Bestätigung durch den Nutzer als Beschluss dokumentiert. Die Implementierung erfordert eine gesonderte ausdrückliche Freigabe für den konkreten Umfang. Vorgeschlagene und offene Details bleiben unverbindlich.
 
 ## Ergänzungen zur Grundstücksarchitektur (Phase 3B.0)
 
@@ -40,11 +39,16 @@
 
 ## Verbindliche Dokumentationspflege — Docs-as-Code
 
-- Vor jeder neuen Entwicklungsphase `README.md`, `docs/PRODUCT.md`,
-  `docs/DECISIONS.md`, `docs/OPEN_QUESTIONS.md`, `docs/ARCHITECTURE.md` und
-  `docs/ROADMAP.md` sowie die betroffene Funktionsspezifikation (soweit vorhanden)
-  und den letzten relevanten Phasenbericht lesen. Diese Regeln ersetzen nicht
-  den konkreten Nutzerauftrag.
+- Vor jeder neuen Entwicklungsphase die aktuellen und für den Auftrag relevanten
+  Abschnitte in `README.md`, `docs/PRODUCT.md`, `docs/DECISIONS.md`,
+  `docs/OPEN_QUESTIONS.md`, `docs/ARCHITECTURE.md` und `docs/ROADMAP.md` lesen.
+  Die betroffene Funktionsspezifikation (soweit vorhanden) und den letzten
+  relevanten Phasenbericht einbeziehen.
+- Bei Folgeaufträgen derselben Phase die seit dem letzten Abgleich geänderten
+  und die vom Auftrag betroffenen Abschnitte anhand von Überschriften, DEC-/OQ-IDs
+  und Querverweisen prüfen. Historische Abschnitte bei Entscheidungsbezug,
+  Widersprüchen oder fehlendem aktuellem Nachweis heranziehen. Ausdrückliche
+  Lesepflichten des konkreten Nutzerauftrags gelten zusätzlich.
 - Zuständigkeiten beachten: README ist Einstieg/Start, PRODUCT beschreibt
   Produktzweck und Umfang, DECISIONS enthält Beschlüsse, OPEN_QUESTIONS den
   aktuellen offenen Entscheidungsbedarf, ARCHITECTURE den technischen Bestand
@@ -61,8 +65,9 @@
   bestehender Entscheidungen ausdrücklich fortschreiben; IDs und frühere
   Begründungen erhalten. Ein Dokumentationsabgleich begründet keine neue
   Produktentscheidung oder Implementierungsfreigabe.
-- Nutzerideen und Referenzen gemäß PRODUCT erfassen. Nutzeraussage, Interpretation,
-  Experiment und Beschluss auseinanderhalten. Keine fehlenden Anforderungen
+- Ideen und Referenzen können frei im Dialog bleiben. Wenn der Nutzer sie festhalten
+  möchte, werden sie gemäß `docs/PRODUCT.md` als unverbindlich erfasst.
+  Nutzeraussage, Interpretation, Experiment und Beschluss auseinanderhalten. Keine fehlenden Anforderungen
   erfinden; lokale EXP-Entscheidungen geben keine Planner-Integration frei.
 - Bei konkretem Bedarf kleine Funktionsspezifikationen unter `docs/features/`
   verwenden: Ziel, Umfang/Nichtumfang, Bedienregeln, Daten-/API-Auswirkungen,

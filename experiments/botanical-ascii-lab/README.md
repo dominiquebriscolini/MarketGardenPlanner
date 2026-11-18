@@ -1,6 +1,41 @@
 # Botanical ASCII Lab — Experiment 01
 
-Aktuell: **LOCAL STUDY · THEME 04**, http://127.0.0.1:8773/ .
+## VIS-GRAIN-004 — zehn Pflanzensymbole (18.11.2026)
+
+Lab [starten](#start) und [Testszene öffnen](http://127.0.0.1:8773/vis-grain-004/).
+[Kulturbestand, Bildsatz und Prüfstand](VIS-GRAIN-004.md).
+
+## VIS-GRAIN-003 — transparente ASCII-Tomaten (18.11.2026)
+
+Lab wie [unten beschrieben](#start) starten. In der
+[Testansicht](http://127.0.0.1:8773/vis-grain-003/) lassen sich die zehn
+Pflanzen pausieren und auf hellem Hintergrund betrachten. Der fertige Atlas
+liegt lokal vor. [Quellen, Messwerte und Grenzen](VIS-GRAIN-003.md).
+
+## DP-001 — separater Design-Prototyp (17.11.2026)
+
+Mit dem bestehenden Startskript unten starten und **http://127.0.0.1:8773/dp001.html**
+öffnen. Kopfzeile, Projekt-/Kulturbereich, Garten, Beetdetail und Saisonleiste mit
+ausdrücklichen Beispieldaten. 10/30/100 Pflanzen, Dark/Light, Pause, Beetauswahl und
+vorbereitete Saisonbilder. Keine freie Zoomfunktion oder Windregler.
+Canvas 2D spielt einen gemeinsamen Bildsatz ab; keine zusätzlichen Abhängigkeiten.
+Die einklappbare Versuchsdiagnose vergleicht 8/12/20 Frames und bietet Messdaten
+als JSON an. Während des Vergleichs den Tab sichtbar lassen.
+[Umsetzung, Messungen, Qualität und Grenzen](DP-001.md),
+[Spezifikation](../../docs/features/DP-001.md).
+Keine endgültige Rendererwahl oder Planner-Integration. Der folgende VIS-001-
+Einstieg sowie die bisherigen Studien bleiben erhalten.
+
+Aktuell: **LOCAL STUDY · VIS-001 — Etappe 1**, http://127.0.0.1:8773/ .
+Ein synthetisches Beispielbeet von 2,75 × 6,00 m mit A/B/C-Umschaltung:
+eine/zwei/drei Reihen mit 10/20/30 Instanzen desselben Tomatenmodells.
+Die Zahlen sind Testparameter, keine agronomischen Empfehlungen.
+Eine gemeinsame Startkadrierung umfasst alle Varianten; Umschalten erhält den
+aktuellen Zoom, Pan und sämtliche Darstellungs-/Windparameter. Hybrid/5 px bleiben
+Standard. Die bisherige Einzelpflanze bleibt unter `/?study=single` erreichbar.
+[Technik, Änderungen, 152 Prüfungen und Grenzen](VIS-001-ETAPPE-1.md).
+
+Die folgende Theme-Beschreibung bleibt gültig (vorheriger Stand THEME 04).
 Oben rechts schaltet Sonne/Mond die gesamte UI und die Renderer-Palette zwischen
 Dark (#101713, Standard) und Light (#F0EEE5) um. Die Auswahl wird lokal gespeichert.
 Geometrie, feste Kamera, Wind und Beleuchtung bleiben identisch. Hybrid/5 px bleiben
@@ -103,6 +138,12 @@ model.js → wind.js → projection.js → visibility.js → renderer.js → Can
                                     app.js / UI / Kamera / Zeit
 ```
 
+VIS-001 ergänzt `scene.js` zwischen Modell und Sichtbarkeitsaufbereitung:
+Instanzen teilen unveränderte lokale Geometrie, erhalten eindeutige Primitive-IDs
+und deterministische Weltursprünge. `worldPoint` verformt zuerst lokal und addiert
+danach den Ursprung. Die statische Beetkontur und alle Pflanzen durchlaufen einen
+gemeinsamen Tiefen- und Lichtdurchlauf. Keine zweite Renderingpipeline.
+
 **model.js** erzeugt ausschließlich deterministische 3D-Formen in nominellen Metern:
 Stängelpolylinien mit Radius, gekrümmte triangulierte Blattnetze, kugelförmige Früchte mit 3D-Mittelpunkt
 und Radius sowie sternförmige Blütenpolygone. Kein `Math.random`, keine Texturen.
@@ -147,6 +188,13 @@ neu gerendert; Hintergrundtabs halten Zeit und Rendering an. `window.labStats`
 stellt die zuletzt gemessenen Zähler für lokale Diagnose bereit.
 
 ## Prüfungen
+
+VIS-001: `node --test experiments/botanical-ascii-lab/scene.test.mjs` (13 Tests),
+`vis001-test.html` (36 UI-/Zustandsprüfungen) und `vis001-render-test.html`
+(6 gemeinsame Tiefen-/Schattenprüfungen). Browser-Vergleichsexporte bei identischen
+1280 × 900 CSS-Pixeln und 5-px-Zeichenraster: [.qa/vis001/](.qa/vis001/).
+Keine Raster-/Kontraststudie der Etappe 2. Die Messungen zeigen deutlich reduzierte
+Animationsleistung bei 30 Pflanzen; siehe aktuellen Bericht.
 
 http://127.0.0.1:8773/test.html führt die reproduzierbaren Browserprüfungen mit
 echten Canvas-Kontexten aus. Sie prüfen deterministische Geometrie, endliche

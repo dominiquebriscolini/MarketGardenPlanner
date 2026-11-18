@@ -3,7 +3,7 @@ from datetime import date, timedelta
 from itertools import combinations
 
 from ..seasonal_models import DateWindow
-from .cultivation import CultivationIntent, calendar_date
+from .cultivation import CultivationIntent, calendar_date, decode_cultivation_entry
 from .errors import ProjectError
 
 
@@ -47,7 +47,8 @@ def analyze_cultivations(entries):
 def analyze_input(raw):
     if not isinstance(raw, list) or len(raw) > 500:
         raise ProjectError("invalid_cultivation", "Maximal 500 Vorgänge je Datumsprüfung.")
-    required = set(CultivationIntent.__dataclass_fields__)
-    if any(not isinstance(entry, dict) or set(entry) != required for entry in raw):
-        raise ProjectError("invalid_fields", "Vollständige Anbauvorgänge für die Datumsprüfung erforderlich.")
-    return analyze_cultivations(tuple(CultivationIntent(**entry) for entry in raw))
+    try:
+        entries = tuple(decode_cultivation_entry(entry) for entry in raw)
+    except ValueError as error:
+        raise ProjectError("invalid_fields", "Vollständige Anbauvorgänge für die Datumsprüfung erforderlich.") from error
+    return analyze_cultivations(entries)

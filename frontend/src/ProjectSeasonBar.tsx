@@ -14,7 +14,7 @@ export function ProjectSeasonBar({controller:c}:{controller:ReturnType<typeof us
           <button aria-label="Nächste Kalenderwoche" disabled={f.week.iso_year===9998&&f.week.iso_week===f.season.weeks.length} onClick={()=>c.step(1)}>+ Woche</button></div>
       </div>
       <SeasonSlider min={1} max={f.season.weeks.length} value={f.week.iso_week} label="Saisonwoche" valueText={`KW ${f.week.iso_week} / ${f.week.iso_year}`} onChange={value=>c.choose(f.season.iso_year,value)}/>
-      <div className="week-axis"><span>KW 1</span><small>Geplante Ernte ≠ bestätigte Ernte oder Räumung · Ende offen bleibt unklar</small><span>KW {f.season.weeks.length}</span></div>
+      <div className="week-axis"><span>KW 1</span><small>Ohne Erntedatum bleibt die Belegungsdauer unklar. Geplante Ernte bestätigt keine Räumung.</small><span>KW {f.season.weeks.length}</span></div>
     </>}
   </section>;
 }

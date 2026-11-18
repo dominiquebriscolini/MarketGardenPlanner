@@ -1,0 +1,606 @@
+{
+  "schemaVersion": 1,
+  "image": "atlas.png",
+  "width": 1392,
+  "height": 5800,
+  "sequence": [
+    "center",
+    "left",
+    "center",
+    "right"
+  ],
+  "poseMs": 1200,
+  "bySpecies": {
+    "carrots": "carrots",
+    "lettuce": "lettuce",
+    "radishes": "radishes",
+    "kohlrabi": "kohlrabi",
+    "beetroot": "beetroot",
+    "spinach": "spinach",
+    "bush-beans": "bush-beans",
+    "zucchini": "zucchini",
+    "tomatoes": "tomatoes",
+    "onions": "onions"
+  },
+  "byProfile": {
+    "carrots-early-lwg": "carrots",
+    "carrots-standard-bzl": "carrots",
+    "lettuce-butterhead-transplant": "lettuce",
+    "radishes-spring": "radishes",
+    "radishes-autumn": "radishes",
+    "kohlrabi-standard-transplant": "kohlrabi",
+    "kohlrabi-superschmelz-transplant": "kohlrabi",
+    "beetroot-root-direct": "beetroot",
+    "spinach-spring-direct": "spinach",
+    "spinach-autumn-direct": "spinach",
+    "bush-beans-direct": "bush-beans",
+    "zucchini-transplant-lwg": "zucchini",
+    "tomatoes-field-transplant": "tomatoes",
+    "onions-seed-direct": "onions",
+    "onions-seed-transplant": "onions"
+  },
+  "assets": {
+    "tomatoes": {
+      "label": "Tomaten",
+      "foot": [
+        225,
+        491
+      ],
+      "previewScale": 1,
+      "frames": [
+        {
+          "name": "left",
+          "x": 2,
+          "y": 2,
+          "w": 460,
+          "h": 576
+        },
+        {
+          "name": "center",
+          "x": 466,
+          "y": 2,
+          "w": 460,
+          "h": 576
+        },
+        {
+          "name": "right",
+          "x": 930,
+          "y": 2,
+          "w": 460,
+          "h": 576
+        }
+      ]
+    },
+    "lettuce": {
+      "label": "Kopfsalat",
+      "foot": [
+        225,
+        491
+      ],
+      "previewScale": 0.9,
+      "frames": [
+        {
+          "name": "left",
+          "x": 2,
+          "y": 582,
+          "w": 460,
+          "h": 576
+        },
+        {
+          "name": "center",
+          "x": 466,
+          "y": 582,
+          "w": 460,
+          "h": 576
+        },
+        {
+          "name": "right",
+          "x": 930,
+          "y": 582,
+          "w": 460,
+          "h": 576
+        }
+      ]
+    },
+    "radishes": {
+      "label": "Radieschen",
+      "foot": [
+        225,
+        491
+      ],
+      "previewScale": 0.75,
+      "frames": [
+        {
+          "name": "left",
+          "x": 2,
+          "y": 1162,
+          "w": 460,
+          "h": 576
+        },
+        {
+          "name": "center",
+          "x": 466,
+          "y": 1162,
+          "w": 460,
+          "h": 576
+        },
+        {
+          "name": "right",
+          "x": 930,
+          "y": 1162,
+          "w": 460,
+          "h": 576
+        }
+      ]
+    },
+    "spinach": {
+      "label": "Spinat",
+      "foot": [
+        225,
+        491
+      ],
+      "previewScale": 0.85,
+      "frames": [
+        {
+          "name": "left",
+          "x": 2,
+          "y": 1742,
+          "w": 460,
+          "h": 576
+        },
+        {
+          "name": "center",
+          "x": 466,
+          "y": 1742,
+          "w": 460,
+          "h": 576
+        },
+        {
+          "name": "right",
+          "x": 930,
+          "y": 1742,
+          "w": 460,
+          "h": 576
+        }
+      ]
+    },
+    "kohlrabi": {
+      "label": "Kohlrabi",
+      "foot": [
+        225,
+        491
+      ],
+      "previewScale": 0.9,
+      "frames": [
+        {
+          "name": "left",
+          "x": 2,
+          "y": 2322,
+          "w": 460,
+          "h": 576
+        },
+        {
+          "name": "center",
+          "x": 466,
+          "y": 2322,
+          "w": 460,
+          "h": 576
+        },
+        {
+          "name": "right",
+          "x": 930,
+          "y": 2322,
+          "w": 460,
+          "h": 576
+        }
+      ]
+    },
+    "onions": {
+      "label": "Zwiebeln",
+      "foot": [
+        225,
+        491
+      ],
+      "previewScale": 0.9,
+      "frames": [
+        {
+          "name": "left",
+          "x": 2,
+          "y": 2902,
+          "w": 460,
+          "h": 576
+        },
+        {
+          "name": "center",
+          "x": 466,
+          "y": 2902,
+          "w": 460,
+          "h": 576
+        },
+        {
+          "name": "right",
+          "x": 930,
+          "y": 2902,
+          "w": 460,
+          "h": 576
+        }
+      ]
+    },
+    "carrots": {
+      "label": "Karotten",
+      "foot": [
+        225,
+        491
+      ],
+      "previewScale": 0.86,
+      "frames": [
+        {
+          "name": "left",
+          "x": 2,
+          "y": 3482,
+          "w": 460,
+          "h": 576
+        },
+        {
+          "name": "center",
+          "x": 466,
+          "y": 3482,
+          "w": 460,
+          "h": 576
+        },
+        {
+          "name": "right",
+          "x": 930,
+          "y": 3482,
+          "w": 460,
+          "h": 576
+        }
+      ]
+    },
+    "beetroot": {
+      "label": "Rote Bete",
+      "foot": [
+        225,
+        491
+      ],
+      "previewScale": 0.88,
+      "frames": [
+        {
+          "name": "left",
+          "x": 2,
+          "y": 4062,
+          "w": 460,
+          "h": 576
+        },
+        {
+          "name": "center",
+          "x": 466,
+          "y": 4062,
+          "w": 460,
+          "h": 576
+        },
+        {
+          "name": "right",
+          "x": 930,
+          "y": 4062,
+          "w": 460,
+          "h": 576
+        }
+      ]
+    },
+    "bush-beans": {
+      "label": "Buschbohnen",
+      "foot": [
+        225,
+        491
+      ],
+      "previewScale": 0.94,
+      "frames": [
+        {
+          "name": "left",
+          "x": 2,
+          "y": 4642,
+          "w": 460,
+          "h": 576
+        },
+        {
+          "name": "center",
+          "x": 466,
+          "y": 4642,
+          "w": 460,
+          "h": 576
+        },
+        {
+          "name": "right",
+          "x": 930,
+          "y": 4642,
+          "w": 460,
+          "h": 576
+        }
+      ]
+    },
+    "zucchini": {
+      "label": "Zucchini",
+      "foot": [
+        225,
+        491
+      ],
+      "previewScale": 1.08,
+      "frames": [
+        {
+          "name": "left",
+          "x": 2,
+          "y": 5222,
+          "w": 460,
+          "h": 576
+        },
+        {
+          "name": "center",
+          "x": 466,
+          "y": 5222,
+          "w": 460,
+          "h": 576
+        },
+        {
+          "name": "right",
+          "x": 930,
+          "y": 5222,
+          "w": 460,
+          "h": 576
+        }
+      ]
+    }
+  },
+  "growthScale": {
+    "sprout": 0.34,
+    "juvenile": 0.55,
+    "developing": 0.78,
+    "mature": 1
+  },
+  "presentation": {
+    "dark": {
+      "spriteFilter": "brightness(1.65) saturate(1.15)",
+      "spritePasses": 1
+    },
+    "light": {
+      "spriteFilter": "brightness(0.48) saturate(1.24)",
+      "spritePasses": 2
+    },
+    "underground": {
+      "minScale": 0.6,
+      "fadeRange": 0.18,
+      "soilVeilOpacity": 0.55
+    },
+    "cultures": {
+      "tomatoes": {
+        "shadow": [
+          26,
+          5,
+          9
+        ]
+      },
+      "lettuce": {
+        "shadow": [
+          23,
+          5,
+          4
+        ]
+      },
+      "radishes": {
+        "shadow": [
+          20,
+          4,
+          4
+        ],
+        "underground": {
+          "heads": [
+            [
+              133,
+              444
+            ],
+            [
+              225,
+              481
+            ],
+            [
+              308,
+              458
+            ]
+          ],
+          "proportions": [
+            0.82,
+            0.82
+          ],
+          "colors": {
+            "dark": [
+              "#a64e63",
+              "#e29aaa"
+            ],
+            "light": [
+              "#8e374e",
+              "#bc556b"
+            ]
+          },
+          "marks": [
+            "  +++  ",
+            " +##++ ",
+            "+###+++",
+            " +++++ ",
+            "  +++  ",
+            "   .   ",
+            "   .   "
+          ]
+        }
+      },
+      "spinach": {
+        "shadow": [
+          23,
+          4,
+          4
+        ]
+      },
+      "kohlrabi": {
+        "shadow": [
+          21,
+          5,
+          7
+        ]
+      },
+      "onions": {
+        "shadow": [
+          20,
+          4,
+          6
+        ],
+        "underground": {
+          "heads": [
+            [
+              137,
+              456
+            ],
+            [
+              225,
+              484
+            ],
+            [
+              299,
+              463
+            ]
+          ],
+          "proportions": [
+            1,
+            1
+          ],
+          "colors": {
+            "dark": [
+              "#ae8b56",
+              "#e3c790"
+            ],
+            "light": [
+              "#785725",
+              "#aa813e"
+            ]
+          },
+          "marks": [
+            "   .   ",
+            "  +++  ",
+            " +##++ ",
+            " ###++ ",
+            " +++++ ",
+            "  +++  ",
+            "  ...  "
+          ]
+        }
+      },
+      "carrots": {
+        "shadow": [
+          22,
+          4,
+          5
+        ],
+        "underground": {
+          "heads": [
+            [
+              133,
+              444
+            ],
+            [
+              225,
+              481
+            ],
+            [
+              308,
+              458
+            ]
+          ],
+          "proportions": [
+            1.03,
+            1.66
+          ],
+          "colors": {
+            "dark": [
+              "#ba7349",
+              "#ecae72"
+            ],
+            "light": [
+              "#a4542c",
+              "#bf7338"
+            ]
+          },
+          "marks": [
+            "  +++  ",
+            " +##++ ",
+            " +##++ ",
+            "  ##++ ",
+            "  #++  ",
+            "  #++  ",
+            "   #+  ",
+            "   ++  ",
+            "   +   ",
+            "   .   "
+          ]
+        }
+      },
+      "beetroot": {
+        "shadow": [
+          23,
+          4,
+          5
+        ],
+        "underground": {
+          "heads": [
+            [
+              133,
+              444
+            ],
+            [
+              225,
+              481
+            ],
+            [
+              308,
+              458
+            ]
+          ],
+          "proportions": [
+            1.41,
+            1.36
+          ],
+          "colors": {
+            "dark": [
+              "#a65b82",
+              "#d58aab"
+            ],
+            "light": [
+              "#7b2d57",
+              "#a24876"
+            ]
+          },
+          "marks": [
+            "  +++  ",
+            " +##++ ",
+            "++##+++",
+            "++#++++",
+            " +++++ ",
+            "  +++  ",
+            "   .   "
+          ]
+        }
+      },
+      "bush-beans": {
+        "shadow": [
+          24,
+          4,
+          7
+        ]
+      },
+      "zucchini": {
+        "shadow": [
+          27,
+          5,
+          7
+        ]
+      }
+    }
+  }
+}

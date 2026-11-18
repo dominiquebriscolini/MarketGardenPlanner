@@ -67,10 +67,14 @@ export function decodeProject(value:unknown, expectedId:string):SavedProject {
 
 /** Reflection of world north-up to SVG down-up, with no rounding or unit scaling. */
 export function worldToSvg(p:WorldPoint):number[] {return [p.x,-p.y];}
+/** Older test projects stored their angle as a suffix in the display name. */
+export function bedDisplayName(name:string):string {
+  return name.replace(/\s+\/\s*[+-]?\d+(?:[.,]\d+)?\s*°\s*$/u,'').trim();
+}
 export function projectToMap(project:SavedProject):MapGeometry {
   const g=project.geometry;
   return {boundary:g.parcel.outer.map(worldToSvg),holes:g.parcel.holes.map(r=>r.map(worldToSvg)),
-    beds:g.beds.map((b,index)=>({id:b.object_id,label:b.name||`Beet ${index+1}`,x:b.center.x,y:-b.center.y,
+    beds:g.beds.map((b,index)=>({id:b.object_id,label:bedDisplayName(b.name)||`Beet ${index+1}`,x:b.center.x,y:-b.center.y,
       width:b.width_m,length:b.length_m,angle:-b.rotation_deg,centered:true,source:b}))};
 }
 export function demoToMap(demo:Demo):MapGeometry {

@@ -56,6 +56,23 @@ test('Two length-axis points retain exact width, endpoints and unsnapped directi
   assert.equal(drawnBed(start,end,NaN,seed),null);
 });
 
+test('Shift drawing snaps from the original anchor and preserves length, including at the zero boundary',()=>{
+  const start={x:4.12,y:3.65},width=.713,length=7.324;
+  for(const [freeAngle,snappedAngle] of [[14,15],[44,45],[89,90],[359,0]]) {
+    const theta=(freeAngle+90)*Math.PI/180;
+    const end={x:start.x+Math.cos(theta)*length,y:start.y+Math.sin(theta)*length};
+    const free=drawnBed(start,end,width,seed);
+    const snapped=drawnBed(start,end,width,seed,true);
+    assert.equal(snapped.rotation_deg,snappedAngle);
+    assert.equal(snapped.length_m,free.length_m);
+    assert.equal(snapped.width_m,width);
+    const axis=(snappedAngle+90)*Math.PI/180;
+    assert.ok(Math.abs(snapped.center.x-Math.cos(axis)*length/2-start.x)<1e-12);
+    assert.ok(Math.abs(snapped.center.y-Math.sin(axis)*length/2-start.y)<1e-12);
+    assert.deepEqual(drawnBed(start,end,width,seed,false),free);
+  }
+});
+
 test('Move is a pure translation of a 17-degree bed and cannot change neighbors or dimensions',()=>{
   const before=JSON.stringify(project),geometry=candidateGeometry(project,move);
   const old=project.geometry.beds[0],after=geometry.beds[0];

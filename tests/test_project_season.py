@@ -32,6 +32,66 @@ class ProjectSeasonTests(unittest.TestCase):
     def state(self,data,week=20):
         return data["weeks"][week-1]["beds"][self.bed.object_id]
 
+    def test_planting_grid_is_per_cultivation_and_has_provenance(self):
+        radish = self.entry("2026-05-01", "2026-06-01")
+        spinach = self.entry("2026-09-01", "2026-10-01", "spinach-autumn-direct")
+        layouts = self.view(radish, spinach)["planting_layouts"]
+        first, second = layouts[radish.cultivation_id], layouts[spinach.cultivation_id]
+        self.assertGreater(first["capacity"], second["capacity"])
+        self.assertEqual(first["capacity"], first["rows"] * first["positions_per_row"])
+        self.assertEqual(first["row_spacing_m"], .15)
+        self.assertEqual(second["plant_spacing_m"], .10)
+        self.assertTrue(first["row_spacing_source"])
+        self.assertEqual(second["plant_spacing_status"], "source_value")
+
+    def test_reference_yield_preserves_source_unit_and_missing_values(self):
+        beans = self.entry("2026-05-01", "2026-07-01", "bush-beans-direct")
+        tomato = replace(self.entry("2026-05-01", "2026-09-01", "tomatoes-field-transplant"),
+                         establishment="transplant")
+        lettuce = replace(self.entry("2026-03-01", "2026-04-01", "lettuce-butterhead-transplant"),
+                          establishment="transplant")
+        layouts = self.view(beans, tomato, lettuce)["planting_layouts"]
+        bean_layout = layouts[beans.cultivation_id]
+        bean_yield = bean_layout["reference_yield"]
+        self.assertEqual(bean_yield["basis"], "occupied_row_length")
+        self.assertAlmostEqual(bean_yield["min_kg"], 80 * bean_layout["capacity"] * .06 / 30.48 * .45359237)
+        tomato_layout = layouts[tomato.cultivation_id]
+        tomato_yield = tomato_layout["reference_yield"]
+        self.assertEqual(tomato_yield["basis"], "plant_positions")
+        self.assertAlmostEqual(tomato_yield["max_kg"], 6 * tomato_layout["capacity"] * .45359237)
+        self.assertIn("umn.edu", tomato_yield["source"])
+        self.assertIsNone(layouts[lettuce.cultivation_id]["reference_yield"])
+
+    def test_mixed_rows_use_profile_width_order_and_scale_reference_yield(self):
+        self.bed = replace(self.bed, width_m=1.2, length_m=6)
+        self.project = replace(self.project, geometry=replace(self.project.geometry, beds=(self.bed, self.other)))
+        tomato = replace(self.entry("2026-05-01", "2026-06-01", "tomatoes-field-transplant"),
+                         establishment="transplant", row_numbers=[1])
+        radish = replace(self.entry("2026-05-01", "2026-06-01"), row_numbers=[5, 3, 2, 4])
+        later = replace(self.entry("2026-06-02", "2026-07-01"), row_numbers=[1, 2])
+        data = self.view(tomato, radish, later)
+        state = self.state(data)
+        self.assertAlmostEqual(state["row_positions_m"][tomato.cultivation_id][0], .3)
+        self.assertEqual([round(x, 3) for x in state["row_positions_m"][radish.cultivation_id]],
+                         [.675, .825, .975, 1.125])
+        self.assertEqual(data["planting_layouts"][tomato.cultivation_id]["capacity"], 12)
+        self.assertEqual(data["planting_layouts"][radish.cultivation_id]["capacity"], 600)
+        estimate = data["planting_layouts"][tomato.cultivation_id]["reference_yield"]
+        self.assertAlmostEqual(estimate["min_kg"], 12 * 2 * .45359237)
+        following = self.state(data, week=23)
+        self.assertEqual(set(following["row_positions_m"]), {later.cultivation_id})
+        self.assertEqual(following["row_layout_day"], "2026-06-07")
+
+    def test_incomplete_duplicate_and_too_wide_rows_are_not_projected(self):
+        self.bed = replace(self.bed, width_m=1.2)
+        self.project = replace(self.project, geometry=replace(self.project.geometry, beds=(self.bed, self.other)))
+        a = replace(self.entry("2026-05-01", "2026-06-01", "tomatoes-field-transplant"), establishment="transplant", row_numbers=[1, 2])
+        b = self.entry("2026-05-01", "2026-06-01")
+        for rows, expected in [(None, "unassigned"), ([2], "duplicate"), ([3], "width")]:
+            state = self.state(self.view(a, replace(b, row_numbers=rows)))
+            self.assertEqual(state["row_layout_issue"], expected)
+            self.assertNotIn("row_positions_m", state)
+
     def test_empty_future_current_completed_and_gap(self):
         self.assertEqual(self.state(self.view())["stage"],"unplanned")
         a=self.entry("2026-06-01","2026-07-01")

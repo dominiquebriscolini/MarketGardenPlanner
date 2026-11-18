@@ -29,6 +29,8 @@ export async function commitCultivation(project:SavedProject,bedId:string,operat
   const untouched=before.filter(e=>e.cultivation_id!==cultivationId);
   if(untouched.some(e=>JSON.stringify(after.find(a=>a.cultivation_id===e.cultivation_id))!==JSON.stringify(e)))throw Error('API hat andere Anbauvorgänge verändert. Bitte neu laden.');
   const affected=operation==='add'?after.filter(e=>!before.some(b=>b.cultivation_id===e.cultivation_id)):after.filter(e=>e.cultivation_id===cultivationId);
-  if(after.length!==before.length+(operation==='add'?1:operation==='delete'?-1:0)||affected.length!==(operation==='delete'?0:1)||affected.some(e=>e.bed_id!==bedId||!values||Object.entries(values).some(([key,value])=>e[key as keyof Cultivation]!==value)))throw Error('API hat die Kulturänderung nicht vollständig bestätigt. Bitte neu laden.');
+  if(after.length!==before.length+(operation==='add'?1:operation==='delete'?-1:0)||affected.length!==(operation==='delete'?0:1)||affected.some(e=>e.bed_id!==bedId||!values||Object.entries(values).some(([key,value])=>key==='row_numbers'
+    ?JSON.stringify(e.row_numbers??null)!==JSON.stringify(value??null)
+    :e[key as keyof Cultivation]!==value)))throw Error('API hat die Kulturänderung nicht vollständig bestätigt. Bitte neu laden.');
   return saved;
 }

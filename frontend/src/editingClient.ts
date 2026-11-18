@@ -32,7 +32,7 @@ export async function commitDraft(project:SavedProject,draft:BedDraft,commandId:
   }
   const bed=saved.geometry.beds.find(b=>b.object_id===draft.bed.object_id);
   const expected=expectedGeometry.beds.find(b=>b.object_id===draft.bed.object_id)!;
-  if(!bed||bed.center.x!==expected.center.x||bed.center.y!==expected.center.y||bed.width_m!==expected.width_m||
+  if(!bed||bed.name!==expected.name||bed.center.x!==expected.center.x||bed.center.y!==expected.center.y||bed.width_m!==expected.width_m||
     bed.length_m!==expected.length_m||bed.rotation_deg!==expected.rotation_deg)throw Error('Die API hat die Änderung nicht vollständig bestätigt. Bitte neu laden.');
   return saved;
 }

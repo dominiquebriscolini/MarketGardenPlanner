@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ASCII-Tomate im Wind · Botanical ASCII Lab</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root { color-scheme: dark; font: 16px/1.5 system-ui, sans-serif; background: #111513; color: #edf0e9; }
+    body { margin: auto; max-width: 1060px; padding: clamp(14px, 4vw, 44px); }
+    header { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+    h1 { font-size: clamp(1.6rem, 4vw, 2.5rem); letter-spacing: -.035em; margin: 0; font-weight: 570; }
+    p { margin: 0; color: #aeb9ad; }
+    nav { display: flex; gap: 8px; flex-wrap: wrap; }
+    button { font: inherit; color: inherit; background: #202822; border: 1px solid #49564a; border-radius: 4px; padding: .4rem .75rem; cursor: pointer; }
+    button:disabled { opacity: .55; cursor: default; }
+    button:focus-visible { outline: 2px solid #bacc91; outline-offset: 3px; }
+    figure { margin: 0; }
+    canvas { display: block; width: 100%; aspect-ratio: 2.05; border-radius: 6px; background: #1b211c; outline: 1px solid #404b40; }
+    canvas[data-light] { background: #e8e9e0; }
+    figcaption { margin-top: 12px; color: #aeb9ad; font-size: .9rem; }
+  </style>
+  <script type="module" src="./demo.js"></script>
+</head>
+<body>
+  <header>
+    <div>
+      <p>Botanical ASCII Lab · VIS-GRAIN-003</p>
+      <h1>ASCII-Tomate im Wind</h1>
+    </div>
+    <nav aria-label="Ansicht">
+      <button id="pause" disabled>Pausieren</button>
+      <button id="background" type="button" aria-pressed="false">Heller Grund</button>
+    </nav>
+  </header>
+  <figure>
+    <canvas aria-label="Zehn ASCII-Tomaten in zwei versetzten Reihen">Zehn ASCII-Tomaten</canvas>
+    <figcaption role="status">Atlas wird geladen …</figcaption>
+  </figure>
+</body>
+</html>

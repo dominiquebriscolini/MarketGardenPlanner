@@ -1,7 +1,10 @@
 import {decodeProject,decodeProjectList} from './projectView';
+import type {SavedProject} from './projectView';
 
 export type ValidationIssue={code:string;object_ids:string[];message:string};
 const messages:Record<string,string>={
+  invalid_name:'Bitte einen Projektnamen mit 1 bis 200 Zeichen angeben.',
+  project_id_conflict:'Diese Anlage wurde bereits mit anderen Angaben gespeichert. Bitte schließen und die Projektliste neu laden.',
   revision_conflict:'Das Projekt wurde inzwischen geändert. Bitte neu laden, bevor Sie weiter bearbeiten.',
   bed_has_cultivations:'Dieses Beet hat Anbauvorgänge. Entfernen Sie diese zuerst ausdrücklich in der Kulturplanung.',
   unknown_profile:'Kulturprofil nicht im Python-Katalog gefunden.',
@@ -45,6 +48,13 @@ export async function getJSON(path:string, signal?:AbortSignal, transport:typeof
 }
 export async function listProjects(signal?:AbortSignal,transport:typeof fetch=fetch) {
   return decodeProjectList(await getJSON('/api/v1/projects',signal,transport));
+}
+export async function createProject(projectId:string,name:string,geometry:SavedProject['geometry'],transport:typeof fetch=fetch) {
+  const raw=await getJSON('/api/v1/projects',undefined,transport,8000,{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({project_id:projectId,name,geometry}),
+  });
+  return decodeProject(raw,projectId);
 }
 export async function loadProject(id:string,signal?:AbortSignal,transport:typeof fetch=fetch) {
   return decodeProject(await getJSON(`/api/v1/projects/${encodeURIComponent(id)}`,signal,transport),id);

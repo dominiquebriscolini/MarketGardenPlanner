@@ -1,4 +1,5 @@
 import {useEffect,useRef} from 'react';
+import {bedDisplayName} from './projectView';
 import type {BedEditor} from './useBedEditor';
 
 export function DeleteBedDialog({editor:e}:{editor:BedEditor}) {
@@ -8,7 +9,7 @@ export function DeleteBedDialog({editor:e}:{editor:BedEditor}) {
     onCancel={event=>{event.preventDefault();e.dismissDelete();}}
     onKeyDown={event=>{if(event.key==='Escape'){event.preventDefault();event.stopPropagation();e.dismissDelete();}}}>
     <span className="eyebrow">BEET ENTFERNEN</span><h2 id="delete-bed-title">Beet wirklich löschen?</h2>
-    <p>„{e.deleteTarget?.name||'Beet'}“ wird aus diesem Projekt entfernt. Diese Aktion hat noch keine Rückgängig-Funktion.</p>
+    <p>„{bedDisplayName(e.deleteTarget?.name??'')||'Beet'}“ wird aus diesem Projekt entfernt. Diese Aktion hat noch keine Rückgängig-Funktion.</p>
     <p className="dialog-id">{e.deleteTarget?.object_id}</p>
     {(e.phase==='error'||e.phase==='invalid')&&<p className="form-error" role="alert">{e.message}</p>}
     {e.busy&&<p role="status">Löschung wird geprüft und bestätigt …</p>}

@@ -1,0 +1,26 @@
+<!doctype html><html lang="de"><meta charset="utf-8"><title>VIS-001 shared pipeline checks</title><style>body{background:#101713;color:#c5d2b2;font:13px monospace;margin:25px}pre{white-space:pre-wrap}</style><h1>VIS-001 · shared depth and shadow pipeline</h1><pre id="results">Running…</pre><script type="module">
+import {PlantRenderer} from './renderer.js?v=vis001';
+import {createTomato} from './model.js?v=light03';
+import {createScene,initialStudyView} from './scene.js?v=vis001';
+const lines=[],assert=(name,pass)=>{lines.push(`${pass?'PASS':'FAIL'} ${name}`);if(!pass)throw Error(name);},same=(a,b)=>a.length===b.length&&a.every((v,i)=>v===b[i]);
+try{
+ const template=createTomato(),scene=createScene(template,'C'),view=initialStudyView(template,922,768);
+ const r=new PlantRenderer(document.createElement('canvas')),options={width:922,height:768,zoom:view.zoom,pan:view.pan,size:5,mode:'hybrid',theme:'dark',wind:0,time:0,grid:false};
+ const stats=r.render(scene.forms,options),owners=r.visibility.owner.slice(),pixels=r.ctx.getImageData(0,0,922,768).data.slice();
+ const stride=template.length,seen=new Set([...owners].filter(id=>id>0).map(id=>Math.floor((id-1)/stride)));
+ assert('Multiple plant instances participate in one depth buffer',seen.size>1&&seen.size<=30);
+ assert('Static bed outline participates in the same depth buffer',owners.some(id=>id===0));
+ assert('Existing shared sun map produces scene ground shadows',stats.shadowCells>0);
+ r.render([...scene.forms].reverse(),options);
+ assert('Whole multi-plant depth buffer independent of primitive order',same(owners,r.visibility.owner));
+ assert('Whole multi-plant image independent of primitive order',same(pixels,r.ctx.getImageData(0,0,922,768).data));
+ // The front translated instance must hide the rear instance, not repaint it.
+ const rear={id:1,type:'fruit',color:'fruit',r:.05,points:[[0,0,.8]],instanceOrigin:[0,0,0]};
+ const front={...rear,id:2,instanceOrigin:[.2,.2,.2]};
+ r.render([rear,front],{...options,zoom:1,pan:[0,0]});
+ assert('Front instance occludes a rear instance along the same camera ray',r.visibility.owner.some(id=>id===2)&&!r.visibility.owner.some(id=>id===1));
+ lines.push(`INFO C: ${scene.forms.length} primitives, ${seen.size} instances visible, ${stats.ms.toFixed(1)}ms render`);
+ lines.push(`COMPLETE ${lines.filter(s=>s.startsWith('PASS')).length} checks`);
+}catch(e){lines.push('ERROR '+e.stack);}
+document.getElementById('results').textContent=lines.join('\n');
+</script></html>

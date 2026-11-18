@@ -47,12 +47,14 @@ erzeugt keine neuen Anforderungen und gibt keine Implementierung frei.
 <a id="oq-002"></a>
 ### OQ-002 — Erweiterung des räumlichen Vertrags und Grundstückserfassung
 
-- **Offen:** UI-Vertrag zur Grundstücksgrenze, eigenständige Wege/Hindernisse/
+- **Offen:** freie Erfassung und nachträgliche Bearbeitung der Grundstücksgrenze,
+  eigenständige Wege/Hindernisse/
   Sperr- und Generierungsflächen sowie deren Referenzen und Migration.
   Mehrere Grundstücke, Kurven und nichtrechteckige Beete sind ausdrücklich
   spätere Erweiterungsoptionen, noch kein freigegebener konkreter Umfang.
 - **Bereits geklärt:** ein Polygon einschließlich Löchern und frei rotierte
-  parametrische Rechteckbeete je heutigem Geometriezustand.
+  parametrische Rechteckbeete je heutigem Geometriezustand. Neue Projekte
+  können mit einem leeren Rechteck angelegt werden. [DEC-040](DECISIONS.md#dec-040).
 - **Vor:** Erweiterung des Geometrieschemas oder des Grundstückseditors.
 - **Bezug/Quellen:** [DEC-004](DECISIONS.md#dec-004),
   [DEC-005](DECISIONS.md#dec-005), [Architektur](ARCHITECTURE.md),
@@ -154,12 +156,13 @@ erzeugt keine neuen Anforderungen und gibt keine Implementierung frei.
 <a id="oq-010"></a>
 ### OQ-010 — Mischkultur, Teilbeete und beetgenaue Prognosen
 
-- **Offen:** fachliche Mischkulturverträglichkeit, räumliche Teilbelegung,
-  Kapazitäts-/Konfliktregeln sowie eine begründete Verteilung satzbezogener
-  Erträge auf mehrere Beete. Gleichverteilung ist nicht bereits beschlossen.
+- **Teilweise geklärt am 18.11.2026:** Reihenzuordnung, Breitenprüfung und
+  Referenzertrag für geplante Reihen nach [DEC-044](DECISIONS.md#dec-044).
+- **Offen:** fachliche Mischkulturverträglichkeit, weitere räumliche
+  Teilflächenmodelle und Verteilung satzbezogener Erträge auf mehrere Beete.
 - **Bereits geklärt:** informative Überschneidungshinweise verbieten keine
   Mischkultur; Folgekulturen derselben Woche sind nicht automatisch gleichzeitig.
-- **Vor:** Teilbeetplanung, Kompatibilitätsaussagen oder beetgenauen Mengen.
+- **Vor:** weitergehender Teilbeetplanung, Kompatibilitätsaussagen oder operativen beetgenauen Prognosen.
 - **Bezug/Quellen:** [DEC-008](DECISIONS.md#dec-008),
   [DEC-022](DECISIONS.md#dec-022), [DEC-030](DECISIONS.md#dec-030),
   [Architektur §5](ARCHITECTURE.md), [Phase 2](phase2.md), [3C.1](phase3c1.md).
@@ -213,6 +216,13 @@ erzeugt keine neuen Anforderungen und gibt keine Implementierung frei.
 - **Bereits geklärt:** unveränderliche Bake-Eingaben, fortgeführte logische IDs,
   neue Identität realer Duplikate; fehlende/veraltete Prognose ist kein Nullertrag.
   Architektur-Skizzen sind keine bereits beschlossene Datenbankmigration.
+- **Vorhandener Herkunftsvertrag:** `Parcel` und `BedGeometry` besitzen bereits
+  `origin` (`existing`, `manual`, `generated`) und optional `source_reference`.
+  Das unterscheidet Herkunft, definiert aber noch keine strukturierte Bindung
+  an Generatorlauf, erzeugende Variante oder Parameterschnappschuss. Diese
+  Zuordnung und ihr Verhalten nach manueller Bearbeitung bleiben offen.
+  Quelle: [räumliche Modelle](../src/market_garden_planner/spatial/models.py),
+  [3B.1](phase3b1.md); historischer Prüfpunkt HF-14.
 - **Vor:** Phase 3B.5; Wegenetz/-kennzahlen zusätzlich OQ-015.
 - **Bezug/Quellen:** [DEC-008](DECISIONS.md#dec-008),
   [DEC-014](DECISIONS.md#dec-014), [Architektur §8](ARCHITECTURE.md),
@@ -224,6 +234,8 @@ erzeugt keine neuen Anforderungen und gibt keine Implementierung frei.
 - **Offen:** Netzmodell, Mittellinien-/Kreuzungsregeln, Beet-Zugangspunkte,
   Stationstypen, Eingänge, Gewächshauszugänge, Arbeitsabläufe und Geh-/Fahrkosten;
   Behandlung unverbundener Flächen und praktische Zugänglichkeit.
+  Haupt-/Nebenwege und Übergänge verschiedener Breiten sind ein historisch
+  abgeleiteter Prüfpunkt (HF-11), keine bereits beschlossene Wegtypklassifikation.
 - **Bereits geklärt:** reale Wege über ein nutzbares Netz bewerten;
   Direktabstand allein und aus Fläche erfundene Wegelängen reichen nicht.
 - **Vor:** belastbarem Wege-/Variantenvergleich und Generatorbewertung.
@@ -239,6 +251,18 @@ erzeugt keine neuen Anforderungen und gibt keine Implementierung frei.
   Beetflächenanteils; harte Bedingungen, messbare Ziele, Normalisierung,
   Prioritätenmodell/-standards, Algorithmus, Variantenanzahl, Seed,
   Reproduzierbarkeit, Abbruchbedingungen und Rechenzeitbudget.
+- **Winkelsuche:** Welche Orientierungen werden untersucht, wie wird der
+  Winkelsuchraum begrenzt, und sollen Grundstückskanten oder unterschiedliche
+  Ausrichtungen je freigegebener Zone berücksichtigt werden? Parallele,
+  gedrehte und zonenweise Konzepte sind keine ausgewählten Verfahren (HF-04).
+- **Zielflächendichte:** Ist der gewünschte Beetflächenanteil harte
+  Mindestanforderung, weiches Optimierungsziel oder bevorzugte Zielgröße?
+  Nenner und Verhalten bei geometrisch unerreichbarem Ziel bleiben offen;
+  Zielwert und tatsächlich erreichter Anteil sind zu unterscheiden (HF-03).
+- **Herkunftsbezug:** Vorhandene `origin`-/`source_reference`-Felder aus OQ-014
+  sind keine Generatorlaufverwaltung. Wie erzeugte Beete mit Variante,
+  Parametern und späterer manueller Bearbeitung verknüpft werden, bleibt offen
+  (HF-14); kein neues Feld oder Schema wird hier festgelegt.
 - **Bereits geklärt:** Fläche, Arbeitswege und Zugang sind gleichwertige Ziele
   mit veränderbaren Nutzerprioritäten; nur freigegebene Flächen belegen und
   geschützten Bestand respektieren. Keine numerischen Gewichte beschlossen.
@@ -247,7 +271,7 @@ erzeugt keine neuen Anforderungen und gibt keine Implementierung frei.
 - **Bezug/Quellen:** [DEC-011](DECISIONS.md#dec-011),
   [DEC-012](DECISIONS.md#dec-012), [DEC-013](DECISIONS.md#dec-013),
   [DEC-014](DECISIONS.md#dec-014), [DEC-015](DECISIONS.md#dec-015),
-  [Roadmap](ROADMAP.md).
+  [Roadmap](ROADMAP.md), [historischer Abgleich HF-03/04/14](history/HISTORISCHER_ABGLEICH_2026-11-17.md#hf-zuordnung).
 
 ## Historische Daten, Import und Darstellung
 
@@ -278,20 +302,69 @@ erzeugt keine neuen Anforderungen und gibt keine Implementierung frei.
   [Roadmap](ROADMAP.md).
 
 <a id="oq-019"></a>
-### OQ-019 — Landschaftsansicht, Projektion, Renderer und Vegetationsassets
+### OQ-019 — Bedienung und technische Ausgestaltung der Isometrie
 
-- **Offen:** Projektion/Renderer, schematische saisonale Pflanzenzeichen,
-  Höhen, Asset-Pipeline, Verdeckung, Lesbarkeit, Export, Leistung und konkrete
-  Verbindung von Pixel-Art, Tilt-Shift und Architekturmodell-Anmutung.
-- **Bereits geklärt:** technische 2D-Ansicht bleibt; zweite Ansicht verwendet
-  dieselben IDs/Weltkoordinaten, keine Kachelbindung der Fachgeometrie.
+- **Status:** teilweise konkretisiert am 18.11.2026 durch
+  [DEC-034](DECISIONS.md#dec-034) und [DEC-035](DECISIONS.md#dec-035),
+  auf Grundlage von DEC-033.
+- **Umgesetzt in der ersten Ausbaustufe:** Umschalten im Projektkopf,
+  gemeinsame Beetauswahl per Klick und Tastatur, visuelle Auswahlkontur,
+  Informationspanel und vorhandener Saisonregler in beiden Modi.
+- **Navigation umgesetzt:** Ausschnitt per Maus oder Touch verschieben,
+  am Mauszeiger zoomen oder die Kartenwerkzeuge nutzen. Der Blickwinkel
+  bleibt fest. Die Schaltfläche zum Einpassen stellt den Ausgangsausschnitt wieder her.
+- **Beschriftung umgesetzt:** horizontale Beetnamen mit Verbindungslinien
+  und Kollisionsprüfung. Leistungsgrenzen großer Gärten bleiben offen.
+  [DEC-036](DECISIONS.md#dec-036).
+- **Pflanzenvisualisierung umgesetzt:** VIS-GRAIN-004 füllt eindeutig
+  belegte Kulturflächen in regelmäßigem Darstellungsabstand.
+  [DEC-045](DECISIONS.md#dec-045). Vier schematische Stufen folgen den
+  geplanten Terminen. Nummerierte Reihen können mehrere Kulturen
+  räumlich zuordnen. Lokal kalibrierte Wachstumsphasen bleiben offen.
+  [DEC-043](DECISIONS.md#dec-043), [DEC-044](DECISIONS.md#dec-044).
+- **Aufgabenteilung umgesetzt:** Die Beetplanung zeigt Kulturvorgänge
+  lesend und bietet Geometriebearbeitung. Die Kulturplanung bietet
+  Kulturbearbeitung im rechten Beetpanel und lässt Geometrieangaben dort
+  weg. [DEC-037](DECISIONS.md#dec-037).
+- **Offen zur Darstellung und Technik:** grafische Symbolverteilung je
+  Reihenlänge, schematische saisonale Pflanzenzeichen, Höhen, konkrete
+  Projektion, technische Zustandsverwaltung, Renderer, Asset-Pipeline,
+  Verdeckung, Lesbarkeit, Export und Leistung. Die konkrete Verbindung von
+  Pixel-Art, Tilt-Shift und Architekturmodell-Anmutung bleibt offen.
+- **Bereits geklärt am 18.11.2026:** Die 2D-SVG-Draufsicht ist der geometrische
+  Planungs- und Bearbeitungsmodus. Kleine X zeigen geplante Pflanzplätze
+  bei eindeutiger Zuordnung. [DEC-042](DECISIONS.md#dec-042). Die
+  Isometrie erlaubt Beetauswahl und Informationsanzeige ohne geometrische
+  Bearbeitung. Beide Ansichten nutzen dieselben Garten-, Beet-, Kultur-
+  und Saisondaten, dieselben IDs und dieselbe metrische Weltgeometrie ohne
+  Kachelbindung. Beetauswahl und Saisonposition werden gemeinsam geführt.
+  Isometrische Pflanzreihen sind erkennbar, die Symbole werden nach
+  Reihenlänge abstrahiert. Agronomische Pflanzenzahlen, Pflanzabstände und
+  Berechnungen folgen weiterhin den fachlichen Regeln.
+- **Verwandte Fragen:** OQ-020 führt die allgemeine Auslegung von
+  Gestaltungsreferenzen. OQ-007 betrifft fachliche Scheduler-Läufe und
+  OQ-024 die übergreifende Skalierung. Die Bedienung der Saisonposition
+  sowie Lesbarkeit und Leistung der Isometrie werden hier geführt.
+- **Offener Entscheidungsbedarf zur Gestaltung:** ASCII/Halftone versus
+  Pixel-Art ist noch nicht abschließend verbindlich geklärt. H-25 der
+  historischen Übergabe ist kein ausreichender Nachweis einer Ablösung der
+  bisherigen Vorgaben. Nutzerklarstellung vom 17.11.2026: offen halten;
+  DEC-017 und DEC-025 unverändert lassen. Bezug auch OQ-020.
 - **Experimentgrenze:** Botanical ASCII Lab und EXP-001 bis EXP-006 sind lokale
   Studien, keine Produktionswahl. Deren Raster-/Licht-/Leistungsgrenzen und
   synthetisches Modell begründen keine automatische Integration oder Agronomie.
+- **Experimentnachtrag 17.11.2026:** [DP-001](features/DP-001.md) untersucht
+  gemeinsame vorbereitete ASCII-Bilder und 10/30/100 Instanzen. Die begrenzte
+  Umsetzung lässt die endgültige Rendererwahl und die Verdeckung dichter
+  Bestände offen. DP-001, [VIS-GRAIN-003](../experiments/botanical-ascii-lab/VIS-GRAIN-003.md)
+  und das Botanical ASCII Lab bleiben eigenständige Experimente ohne
+  Nutzerabnahme. DEC-034 erlaubt für die erste Planner-Isometrie die
+  Verwendung des VIS-GRAIN-003-Atlas.
 - **Vor:** Phase 3B.7 bzw. jeder gesondert beauftragten Rendererintegration.
 - **Bezug/Quellen:** [DEC-017](DECISIONS.md#dec-017),
   [DEC-018](DECISIONS.md#dec-018), [DEC-019](DECISIONS.md#dec-019),
-  [DEC-025](DECISIONS.md#dec-025), [Architektur](ARCHITECTURE.md),
+  [DEC-025](DECISIONS.md#dec-025), [DEC-033](DECISIONS.md#dec-033),
+  [Architektur](ARCHITECTURE.md),
   [Lab-Entscheidungen](../experiments/botanical-ascii-lab/DECISIONS.md),
   [Lab-Grenzen](../experiments/botanical-ascii-lab/README.md),
   [Tiefenstudie](../experiments/botanical-ascii-lab/DEPTH-STUDY.md),
@@ -374,7 +447,7 @@ erzeugt keine neuen Anforderungen und gibt keine Implementierung frei.
 
 | ID | Dokumentierter offener Nachweis | Quelle |
 |---|---|---|
-| QA-001 | Physischer Shift-Drag einschließlich Loslassen und eingeblendeter Winkelanzeige; Logik automatisiert geprüft, damalige Browsersteuerung konnte die Kombination nicht zuverlässig bedienen | [3B.3c — UI-Feinschliff](phase3b3c.md), DEC-028 |
+| QA-001 | Physischer Shift-Drag einschließlich Loslassen (Winkelanzeige durch DEC-036 abgelöst); Logik automatisiert geprüft, damalige Browsersteuerung konnte die Kombination nicht zuverlässig bedienen | [3B.3c — UI-Feinschliff](phase3b3c.md), DEC-028 |
 | QA-002 | Gesonderte Bedienprüfung mit physischen Touch-/Stiftgeräten | [3B.3b](phase3b3b.md), [3B.3c](phase3b3c.md) |
 
 Hier werden keine Nachweise als erledigt erklärt, die im vorhandenen Bericht
@@ -395,8 +468,23 @@ Diese Punkte werden nicht erneut als offene Entscheidung aufgenommen:
 | Persistente Kulturabsichten und informative Überschneidungen | [3C.1](phase3c1.md), DEC-029/030 |
 | Wochenansicht gespeicherter Projekte und ISO-Wochenregeln | [3C.2](phase3c2.md), DEC-031; echte Scheduler-Ergebnisse weiterhin OQ-007 |
 
+## Historische Zuordnung
+
+[Abgleich vom 17.11.2026](history/HISTORISCHER_ABGLEICH_2026-11-17.md#hf-zuordnung):
+alle HF-01 bis HF-28 sind bestehenden OQ-IDs zugeordnet. Thematische und
+teilweise Entsprechungen sind gekennzeichnet; keine neue ID oder Entscheidung.
+
 ## Fortschreibung
 
 17.11.2026: Erstkonsolidierung vorhandener offener Details und Datenlücken.
 Alle DEC-IDs, Begründungen, Phasenberichte und lokalen EXP-Entscheidungen bleiben
 erhalten. Keine Frage wird allein durch Aufnahme in dieses Register beschlossen.
+
+17.11.2026: Historischer Abgleich präzisiert OQ-014/015/016/019; Herkunftsfelder,
+Winkelsuche, Zielflächendichte und ungeklärte Gestaltungsverbindlichkeit benannt.
+Keine Statusänderung und keine neuen DEC-/OQ-IDs.
+
+18.11.2026: DEC-033 klärt das Produktziel und die Aufgaben beider Ansichten.
+OQ-019 führt die offenen Bedienungs-, Darstellungs- und Technikfragen fort.
+DEC-034 konkretisiert die erste Ausbaustufe einschließlich Ansichtswechsel und
+Tomatenatlas. Die vorhandenen OQ-IDs bleiben bestehen.

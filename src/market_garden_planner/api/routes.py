@@ -58,8 +58,9 @@ class ProjectAPI:
             if method == "GET":
                 return 200, {"projects": self.repository.list()}
             if method == "POST":
-                fields(body, ("name", "geometry"))
-                return 201, {"project": self.repository.create(body["name"], spatial_input(body)).to_dict()}
+                fields(body, ("name", "geometry"), ("project_id",))
+                project = self.repository.create(body["name"], spatial_input(body), project_id=body.get("project_id"))
+                return 201, {"project": project.to_dict()}
             raise ProjectError("method_not_allowed", "Use GET or POST", 405)
         if path == "/api/v1/geometry/validate":
             if method != "POST":

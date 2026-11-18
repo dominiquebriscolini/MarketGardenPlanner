@@ -30,16 +30,56 @@ Lesender spatial.scheduler_adapter → bisherige Scheduler-Bed-Eingaben
 | Kulturabsichten | Stabile Vorgangs-ID, Beet-/Profil-ID, Anbauart, Start, optionale geplante Ernte; Nutzereingaben, keine Scheduler-Reservierungen | [3C.1](phase3c1.md), DEC-029 |
 | Datumsanalyse | Rein lesender Vergleich bekannter Planungsabschnitte, inklusive Start/Erntetag; fehlendes Ende bleibt unklar | [3C.1-Fortschreibung](phase3c1.md), DEC-030 |
 | Wochenprojektion | `projects/season_view.py` verwendet vorhandene Kalender-/Intervallhilfen; Jahresantwort an Projekt-/Kulturplanrevision und Geometrie-Token gebunden | [3C.2](phase3c2.md), DEC-031 |
-| Frontend | Projektwahl, inverse metrische Transformation, Beeteditor, kompakte Kulturplanung und gemeinsamer Slider; Demo-/Projektzustände getrennt | [3B.3c](phase3b3c.md), [3C.1](phase3c1.md), [3C.2](phase3c2.md) |
+| Frontend | Projektanlage, Projektwahl, inverse metrische Transformation, Beeteditor, kompakte Kulturplanung und gemeinsamer Slider; Demo-/Projektzustände getrennt | [3B.3c](phase3b3c.md), [3C.1](phase3c1.md), [3C.2](phase3c2.md) |
 
 Geometrieänderungen verändern keine Nachbarbeete. Kulturänderungen erhalten
 Geometrie und Token. Ein Beet mit Kulturvorgängen darf erst nach deren
 ausdrücklicher Entfernung gelöscht werden. Erfolgreiche API-Bestätigung ist
 maßgeblich; Konflikte werden nicht durch Überschreiben aufgelöst.
 
+Der Herkunftsvertrag enthält bereits `origin` (`existing`, `manual`, `generated`)
+und optional `source_reference` an Grundstück und Beet
+([Modelle](../src/market_garden_planner/spatial/models.py)). Ein strukturierter
+Generatorlauf-/Varianten-/Parameterbezug ist damit noch nicht implementiert
+(OQ-014/016). Geometrie-Token ermöglichen spätere Ergebnisvergleiche; sie sind
+keine vollständige PlanRun-/Stale-Anzeige.
+
+Phase 3C.2 ist in `20e6a63` gesichert. Der vorhandene, noch nicht eingecheckte
+UX-Nachtrag DEC-032 ergänzt im Frontend den ID-gebundenen Bearbeitungskontext,
+ohne API, SQLite oder Saisonlogik zu ändern. Der
+[historische Abgleich](history/HISTORISCHER_ABGLEICH_2026-11-17.md) trennt
+Codebestand, frühere Prüfberichte und offene Abnahme.
+
+### Gemeinsame Gartenansichten
+
+`App` hält Beetauswahl und saisonalen Betrachtungszeitpunkt. Die Isometrie
+projiziert die vorhandene Kartengeometrie einschließlich Beetrotationen
+und Grundstücksaussparungen in einen SVG-Ausschnitt. Die Draufsicht behält
+ihren Kamerazustand beim Umschalten. Pan und Zoom der Isometrie verändern
+ausschließlich ihre SVG-ViewBox. Die Iso-Namen liegen in einer horizontalen,
+kollisionsgeprüften Beschriftungsebene. Beetänderungen laufen über den
+bestehenden Editor in der Beetplanung. Anbauvorgänge werden in der
+isometrischen Kulturplanung über die vorhandene Kultur-API gespeichert.
+Der Client bündelt gültige Änderungen kurz und sendet pro Panel nur einen
+Schreibvorgang gleichzeitig. Erst die bestätigte Projektrevision ersetzt
+den gespeicherten Stand in der Oberfläche. Beide Karten verwenden dieselben
+Muster für Wochenbelegung und fehlende Erntetermine.
+[DEC-039](DECISIONS.md#dec-039).
+[DEC-037](DECISIONS.md#dec-037), [DEC-038](DECISIONS.md#dec-038). Die Perspektive, schematische Symbolpositionen und der lokal
+eingebundene VIS-GRAIN-004-Atlas sind reine Darstellungsdaten.
+Ein separates Canvas verwendet einen geometrisch gleichmäßigen
+Darstellungsabstand. Die SVG-Karte führt die Interaktion.
+[DEC-045](DECISIONS.md#dec-045).
+[DEC-034](DECISIONS.md#dec-034), [Umsetzung](phase-garden-views.md).
+
 ## Vorhandene API — Übersicht
 
 Quelle des aktuellen Routings: `src/market_garden_planner/api/routes.py`.
+Die Projektanlage nutzt `POST /api/v1/projects` mit räumlichem JSON v1.
+Eine optionale clientseitige `project_id` ermöglicht die Wiederholung
+derselben Anfrage ohne Duplikat. Der transaktional gespeicherte Beleg
+ordnet die ID den ursprünglichen Eingaben zu. Abweichende Eingaben mit
+derselben ID führen zu HTTP 409. [DEC-040](DECISIONS.md#dec-040).
 Beispiele und Detailverträge bleiben in den verlinkten Phasenberichten.
 
 | Methode / Pfad | Zweck |
@@ -54,7 +94,7 @@ Beispiele und Detailverträge bleiben in den verlinkten Phasenberichten.
 | GET / POST `/api/v1/projects/{id}/beds/{bed_id}/cultivations` | Vorgänge lesen / hinzufügen |
 | PUT / DELETE `/api/v1/projects/{id}/beds/{bed_id}/cultivations/{cultivation_id}` | Vorgang bearbeiten / entfernen |
 | POST `/api/v1/cultivations/analyze` | Informative Datumsanalyse ohne Speicherung |
-| GET `/api/v1/projects/{id}/season` und `/season/{iso_year}` | Revisionsgebundene ISO-Jahresprojektion |
+| GET `/api/v1/projects/{id}/season` und `/season/{iso_year}` | Revisionsgebundene ISO-Jahresprojektion mit Pflanzrastern, optionaler Ertragsreferenz und Reihenpositionen nach [DEC-044](DECISIONS.md#dec-044) |
 | GET `/api/demo` | Separate synthetische Demo mit Scheduler-Ergebnissen |
 
 API-v1-Umschlag, Geometrie-, Kulturplan- und SQLite-Schemaversionen sind
@@ -82,6 +122,22 @@ oder Sperrprüfung; endgültige Änderungen validiert der Server transaktional.
   Änderungen sind nicht vollständig geklärt; siehe [offene Fragen](OPEN_QUESTIONS.md).
 
 ## Unverbindliche technische Entwürfe
+
+**Isoliertes Experiment DP-001, 17.11.2026:**
+`experiments/botanical-ascii-lab/dp001.html` verwendet Canvas 2D und einen gemeinsam
+vorbereiteten transparenten ASCII-Bildsatz des bestehenden Tomatenmodells.
+Im Gartenbetrieb nur Bildauswahl und `drawImage`, keine Geometrieberechnung je
+Instanz. Keine neuen Pakete, keine Migration des Labs oder des React-/TypeScript-
+Planners, keine API-Verbindung. Weltkoordinaten/Projektion und Bildpositionen
+bleiben getrennt. Pflanzenweise Zeichnungsreihenfolge ersetzt keinen gemeinsamen
+Tiefenpuffer; die endgültige Architektur bleibt OQ-019/DEC-025.
+[Spezifikation](features/DP-001.md), [Messbericht](../experiments/botanical-ascii-lab/DP-001.md).
+
+**Isoliertes Experiment VIS-GRAIN-003, 18.11.2026:** Playwright exportiert
+festgelegte Posen über Grainrad. Eine lokale Offline-Aufbereitung rekonstruiert
+Alpha und packt drei PNG-Kacheln. Die getrennte Canvas-Ansicht lädt einen Atlas
+und zeichnet zehn Instanzen an festen Fußpunkten etwa viermal pro Sekunde.
+[Asset-Vertrag und Messbericht](../experiments/botanical-ascii-lab/VIS-GRAIN-003.md).
 
 Die nachfolgend erhaltenen Snapshot-/PlanRun-Tabellen, generischen
 Command-Endpunkte, FastAPI/Pydantic-Empfehlungen, Import-/Rendereroptionen

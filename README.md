@@ -27,6 +27,11 @@ Landschaftsansicht sind Zukunftsziele, keine vorhandenen Funktionen.
 Details: [Produkt](docs/PRODUCT.md), [Architektur](docs/ARCHITECTURE.md),
 [Roadmap](docs/ROADMAP.md) und [offene Fragen](docs/OPEN_QUESTIONS.md).
 
+Die 3C.2-Basis ist in `20e6a63` gesichert; der UX-Nachtrag DEC-032 mit
+ID-gebundener Hervorhebung und benannter Kulturüberschrift liegt bereits
+implementiert, aber noch nicht eingecheckt vor. Git-/Nachweisdetails und
+H-/HF-Zuordnungen: [historischer Abgleich](docs/history/HISTORISCHER_ABGLEICH_2026-11-17.md).
+
 ## Lokal starten
 
 In einer bereits eingerichteten Python-3.11-Umgebung im Repository:
@@ -36,7 +41,8 @@ In einer bereits eingerichteten Python-3.11-Umgebung im Repository:
 ```
 
 [Anwendung öffnen](http://127.0.0.1:8766), oben links ein gespeichertes Projekt
-oder die gekennzeichnete Demo wählen. Standarddatenbank:
+oder die gekennzeichnete Demo wählen. **Neues Projekt** legt mit Name, Breite
+und Länge ein leeres Grundstück an. Standarddatenbank:
 `.local/projects.sqlite3`. Strg+C beendet den Server.
 Installation und API-Beispiele: [Phase 3B.2](docs/phase3b2.md);
 aktuelle Saisonbedienung: [Phase 3C.2](docs/phase3c2.md).
@@ -67,6 +73,25 @@ werden vorausgesetzt. [Bauhinweise](docs/phase3a1.md) und
 Testzahlen bleiben im jeweiligen datierten Phasenbericht; sie sind kein
 Nachweis eines neuen Testlaufs. `docs/test-results.txt` gehört historisch zu Phase 2.
 
+Für schnelle Wiederholungen lassen sich einzelne Testdateien auswählen
+(aus dem Repository-Stamm in PowerShell):
+
+```powershell
+.\.venv\Scripts\python.exe -B -m unittest discover -s tests -p 'test_project_season.py' -q
+.\frontend\test.ps1 -TestFile cultivation.test.mjs, project-season.test.mjs -Verbose
+```
+
+`-TestFile` erwartet Dateinamen aus `frontend/tests`. Der Runner erzeugt
+die benötigten Test-Bundles und Python-Fixtures frisch. `-Verbose` zeigt die
+Zeiten für Bundling, Fixture-Erzeugung und Node-Tests. Python- und Frontend-
+Tests können parallel laufen. Pro Checkout schreibt jeweils ein Frontend-
+Testlauf nach `frontend/.test-build`.
+
+Für gezielte UI-Abnahmen steht der Repository-Skill
+[planner-browser-acceptance](.agents/skills/planner-browser-acceptance/SKILL.md)
+zur Verfügung. Die Regression richtet sich weiterhin nach dem betroffenen
+Umfang und den Abnahmekriterien.
+
 ## Dokumentation und Zuständigkeiten
 
 | Einstieg | Zuständigkeit |
@@ -83,12 +108,23 @@ Nachweis eines neuen Testlaufs. `docs/test-results.txt` gehört historisch zu Ph
 Die `docs/phase*.md` bleiben historische Umsetzungs-, Bedienungs- und Prüfberichte.
 Aktuelle Editorbeschreibung: [3B.3c](docs/phase3b3c.md);
 Kulturplanung: [3C.1](docs/phase3c1.md); Wochenansicht: [3C.2](docs/phase3c2.md).
+Ansichtswechsel und Hell/Dunkel: [Gartenansichten](docs/phase-garden-views.md).
 Funktionsspezifikationen werden bei Bedarf in `docs/features/` ergänzt;
-derzeit besteht kein eigenes Spezifikationsverzeichnis.
+erster isolierter Versuch: [DP-001](docs/features/DP-001.md).
 
 Das [Botanical ASCII Lab](experiments/botanical-ascii-lab/README.md) bleibt ein
 isoliertes Experiment mit eigenem Entscheidungsprotokoll. Es ist kein
 Produktionsrenderer und wird nicht durch seine Dokumentation zur Integration freigegeben.
+
+**DP-001 (17.11.2026):** Getrennter Design-Prototyp mit gemeinsam vorbereiteten
+ASCII-Pflanzenbildern: Lab starten und
+[DP-001 öffnen](http://127.0.0.1:8773/dp001.html).
+[Umfang](docs/features/DP-001.md), [Messungen und Grenzen](experiments/botanical-ascii-lab/DP-001.md).
+
+**VIS-GRAIN-003 (18.11.2026):** Zehn animierte ASCII-Tomaten aus einem
+transparenten Atlas. [Lab-Startanleitung](experiments/botanical-ascii-lab/README.md),
+[Testansicht öffnen](http://127.0.0.1:8773/vis-grain-003/),
+[Versuchsbericht](experiments/botanical-ascii-lab/VIS-GRAIN-003.md).
 
 ## Historischer Einstieg
 

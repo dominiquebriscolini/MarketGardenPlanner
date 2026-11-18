@@ -1,0 +1,14 @@
+<!doctype html><html lang="de"><meta charset="utf-8"><title>DP-001 · Bildsatzprüfung</title><style>body{background:#101713;color:#dce1d5;font:12px Consolas,monospace;margin:24px}section{display:inline-block;padding:16px;margin:6px;vertical-align:top}canvas{width:144px;height:180px}pre{white-space:pre-wrap}</style><h1>DP-001 / Native ASCII-Frames</h1><p>Prüfansicht, synthetische Daten. Je Satz: Frame 0 / Viertel / Hälfte. Keine Garten-Zoomfunktion.</p><pre id="results">RUNNING</pre><div id="images"></div><script type="module">
+import {bakeSprites} from './dp001-sprites.js';
+const results=[],checks=[];
+const assert=(name,ok)=>{checks.push({name,ok});if(!ok)throw new Error(name);};
+try{for(const theme of ['dark','light'])for(const count of [8,12,20]){
+ const atlas=await bakeSprites(count,theme),pixels=atlas.frames.map(c=>c.getContext('2d').getImageData(0,0,144,180).data);let changed=0,ink=0,maxBorderAlpha=0,difference=0;
+ pixels.forEach((data,f)=>{let frameInk=0;for(let y=0;y<180;y++)for(let x=0;x<144;x++){const i=(y*144+x)*4+3,a=data[i];if(a){ink++;frameInk++;}if(x===0||x===143||y===0||y===179)maxBorderAlpha=Math.max(maxBorderAlpha,a);const next=pixels[(f+1)%count][i];if(a!==next)changed++;difference+=Math.abs(a-next);}assert(`${theme}/${count}/frame${f}: nonempty`,frameInk>200);});
+ assert(`${theme}/${count}: transparent outer margin`,maxBorderAlpha===0);assert(`${theme}/${count}: animated pixels vary`,changed>0);assert(`${theme}/${count}: exact RGBA estimate`,atlas.rgbaBytes===count*144*180*4);
+ results.push({theme,count,buildMs:atlas.buildMs,rgbaBytes:atlas.rgbaBytes,averageInkPixels:ink/count,adjacentAlphaDifference:difference/(count*144*180*255),changedPixelRatio:changed/(count*144*180)});
+ const section=document.createElement('section');section.style.background=theme==='dark'?'#101713':'#f0eee5';section.style.color=theme==='dark'?'#dce1d5':'#29382d';const title=document.createElement('p');title.textContent=`${theme} / ${count} Frames`;section.append(title);for(const i of [0,Math.floor(count/4),Math.floor(count/2)])section.append(atlas.frames[i]);document.getElementById('images').append(section);
+}
+window.quality={checks,results};document.getElementById('results').textContent=`COMPLETE ${checks.length} checks\n`+JSON.stringify(results,null,2);
+}catch(error){document.getElementById('results').textContent='ERROR '+error.stack;window.quality={checks,error:error.message};}
+</script></html>

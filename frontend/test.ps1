@@ -1,30 +1,108 @@
-param([string]$NodeExecutable = 'node')
+[CmdletBinding()]
+param(
+    [string]$NodeExecutable = 'node',
+    [string[]]$TestFile
+)
+
 $ErrorActionPreference = 'Stop'
 $previousPythonPath = $env:PYTHONPATH
+$buildLock = $null
 Push-Location $PSScriptRoot
 try {
-    $esbuild = Get-ChildItem -LiteralPath node_modules -Recurse -Filter esbuild.exe -Force | Select-Object -First 1 -ExpandProperty FullName
-    if (-not $esbuild) { throw 'esbuild.exe fehlt. Zuerst pnpm install ausführen.' }
-    & $esbuild src\interactions.ts --bundle --platform=node --format=esm --outfile=.test-build\interactions.mjs
-    if ($LASTEXITCODE -ne 0) { throw 'Test-Build fehlgeschlagen.' }
-    & $esbuild src\forecastModel.ts --bundle --platform=node --format=esm --outfile=.test-build\forecastModel.mjs
-    if ($LASTEXITCODE -ne 0) { throw 'Prognose-Test-Build fehlgeschlagen.' }
-    foreach ($module in @('projectView','projectClient','editingGeometry','editingClient','geometryForm','geometryDisplay','cultivationModel','cultivationClient','cultivationChecks','projectSeason')) {
-        & $esbuild "src\$module.ts" --bundle --platform=node --format=esm --outfile=".test-build\$module.mjs"
-        if ($LASTEXITCODE -ne 0) { throw 'Projekt-Test-Build fehlgeschlagen.' }
+    if (-not $PSBoundParameters.ContainsKey('TestFile')) {
+        $TestFile = @(
+            'interactions.test.mjs', 'forecast.test.mjs', 'projects.test.mjs',
+            'labels.test.mjs', 'editing.test.mjs', 'precision.test.mjs',
+            'polish.test.mjs', 'cultivation.test.mjs', 'cultivation-checks.test.mjs',
+            'project-season.test.mjs'
+        )
     }
-    foreach ($component in @('Plot','ProjectTooltip','EditorControls','BedGeometryForm','DeleteBedDialog','RotationReadout','CultivationPanel','CultivationReview','ProjectDetails','SeasonSlider','ProjectSeasonBar','ProjectWeekSummary')) {
-        & $esbuild "src\$component.tsx" --bundle --packages=external --platform=node --format=esm --outfile=".test-build\$component.mjs"
-        if ($LASTEXITCODE -ne 0) { throw 'Beschriftungs-Test-Build fehlgeschlagen.' }
+    if (-not $TestFile) { throw 'Mindestens eine Testdatei angeben.' }
+    $tests = foreach ($name in $TestFile) {
+        if ($name -notmatch '\A[\w.-]+\.test\.mjs\z' -or
+            -not (Test-Path -LiteralPath "tests\$name" -PathType Leaf)) {
+            throw "Unbekannte Testdatei in frontend/tests: $name"
+        }
+        "tests\$name"
     }
-    $env:PYTHONPATH = Join-Path (Split-Path $PSScriptRoot -Parent) 'src'
-    $geometryPython = Join-Path (Split-Path $PSScriptRoot -Parent) '.venv\Scripts\python.exe'
-    & $geometryPython -B -c "import json; from pathlib import Path; from market_garden_planner.prototype.presentation import payload; Path('.test-build/demo.json').write_text(json.dumps(payload(), default=lambda d: d.isoformat()), encoding='utf-8')"
-    if ($LASTEXITCODE -ne 0) { throw 'Scheduler-Testdaten konnten nicht erzeugt werden.' }
-    & $geometryPython -B tests\export_project_fixture.py
-    if ($LASTEXITCODE -ne 0) { throw 'Projekt-Testdaten konnten nicht erzeugt werden. Geometry-Extra prüfen.' }
-    & $geometryPython -B tests\export_season_fixture.py
-    if ($LASTEXITCODE -ne 0) { throw 'Projekt-Saison-Testdaten konnten nicht erzeugt werden.' }
-    & $NodeExecutable --test --test-isolation=none tests\interactions.test.mjs tests\forecast.test.mjs tests\projects.test.mjs tests\labels.test.mjs tests\editing.test.mjs tests\precision.test.mjs tests\polish.test.mjs tests\cultivation.test.mjs tests\cultivation-checks.test.mjs tests\project-season.test.mjs
+    $tests = @($tests | Select-Object -Unique)
+
+    # Tests refer to generated inputs by literal paths in .test-build.
+    $inputs = foreach ($test in $tests) {
+        $source = Get-Content -LiteralPath $test -Raw -Encoding UTF8
+        foreach ($match in [regex]::Matches($source, '\.\./\.test-build/([\w.-]+\.(?:mjs|json))')) {
+            $match.Groups[1].Value
+        }
+    }
+    $modules = @()
+    $components = @()
+    $fixtures = @()
+    foreach ($inputFile in ($inputs | Sort-Object -Unique)) {
+        if ($inputFile.EndsWith('.json')) {
+            if ($inputFile -notin @('demo.json', 'project.json', 'season.json')) {
+                throw "Unbekanntes Test-Fixture: $inputFile"
+            }
+            $fixtures += $inputFile
+            continue
+        }
+        $entry = [System.IO.Path]::GetFileNameWithoutExtension($inputFile)
+        if (Test-Path -LiteralPath "src\$entry.ts" -PathType Leaf) {
+            $modules += "src\$entry.ts"
+        } elseif (Test-Path -LiteralPath "src\$entry.tsx" -PathType Leaf) {
+            $components += "src\$entry.tsx"
+        } else {
+            throw "Kein TypeScript-Einstiegspunkt für $inputFile"
+        }
+    }
+
+    $null = New-Item -ItemType Directory -Force .test-build
+    try {
+        $buildLock = [System.IO.File]::Open(
+            (Join-Path $PSScriptRoot '.test-build\.lock'), 'OpenOrCreate', 'ReadWrite', 'None'
+        )
+    } catch [System.IO.IOException] {
+        throw "Testausgaben konnten nicht gesperrt werden. Andere Frontend-Testläufe im selben Checkout zuerst beenden. $($_.Exception.Message)"
+    }
+
+    $timer = [System.Diagnostics.Stopwatch]::StartNew()
+    if ($modules.Count -or $components.Count) {
+        $esbuild = Get-ChildItem -LiteralPath node_modules -Recurse -Filter esbuild.exe -Force |
+            Select-Object -First 1 -ExpandProperty FullName
+        if (-not $esbuild) { throw 'esbuild.exe fehlt. Zuerst pnpm install ausführen.' }
+        $bundleOptions = @('--bundle', '--platform=node', '--format=esm', '--outdir=.test-build', '--out-extension:.js=.mjs')
+        if ($modules.Count) {
+            & $esbuild @modules @bundleOptions
+            if ($LASTEXITCODE -ne 0) { throw 'Test-Build der Module fehlgeschlagen.' }
+        }
+        if ($components.Count) {
+            & $esbuild @components @bundleOptions --packages=external
+            if ($LASTEXITCODE -ne 0) { throw 'Test-Build der Komponenten fehlgeschlagen.' }
+        }
+    }
+    Write-Verbose "Test-Bundles: $($timer.ElapsedMilliseconds) ms"
+
+    $timer.Restart()
+    $repoRoot = Split-Path $PSScriptRoot -Parent
+    $env:PYTHONPATH = Join-Path $repoRoot 'src'
+    $geometryPython = Join-Path $repoRoot '.venv\Scripts\python.exe'
+    foreach ($fixture in $fixtures) {
+        switch ($fixture) {
+            'demo.json' {
+                & $geometryPython -B -c "import json; from pathlib import Path; from market_garden_planner.prototype.presentation import payload; Path('.test-build/demo.json').write_text(json.dumps(payload(), default=lambda d: d.isoformat()), encoding='utf-8')"
+            }
+            'project.json' { & $geometryPython -B tests\export_project_fixture.py }
+            'season.json' { & $geometryPython -B tests\export_season_fixture.py }
+        }
+        if ($LASTEXITCODE -ne 0) { throw "Test-Fixture konnte nicht erzeugt werden: $fixture" }
+    }
+    Write-Verbose "Python-Fixtures: $($timer.ElapsedMilliseconds) ms"
+
+    $timer.Restart()
+    & $NodeExecutable --test --test-isolation=none @tests
     if ($LASTEXITCODE -ne 0) { throw 'Interaktionstests fehlgeschlagen.' }
-} finally { $env:PYTHONPATH = $previousPythonPath; Pop-Location }
+    Write-Verbose "Node-Tests: $($timer.ElapsedMilliseconds) ms"
+} finally {
+    if ($null -ne $buildLock) { $buildLock.Dispose() }
+    $env:PYTHONPATH = $previousPythonPath
+    Pop-Location
+}

@@ -8,8 +8,7 @@ import {geometryFields,numericDraft} from '../.test-build/geometryForm.mjs';
 import {rotatedBed,snapRotation,rotationHandle,screenToWorld} from '../.test-build/editingGeometry.mjs';
 import {commitDraft} from '../.test-build/editingClient.mjs';
 import {BedGeometryForm} from '../.test-build/BedGeometryForm.mjs';
-import {RotationReadout} from '../.test-build/RotationReadout.mjs';
-import {tooltipPosition,cameraView,fittedView} from '../.test-build/interactions.mjs';
+import {cameraView,fittedView} from '../.test-build/interactions.mjs';
 import {projectToMap} from '../.test-build/projectView.mjs';
 
 const project=JSON.parse(readFileSync(new URL('../.test-build/project.json',import.meta.url),'utf8')).project;
@@ -52,7 +51,7 @@ test('Rendered inputs are compact without triggering preview or mutating model v
   const editor={busy:false,draft:null,preview:()=>calls++,clearPreview:()=>calls++,finish:()=>calls++};
   const before=JSON.stringify(bed);
   const markup=renderToStaticMarkup(React.createElement(BedGeometryForm,{bed,editor}));
-  const values=[...markup.matchAll(/value="([^"]*)"/g)].map(m=>m[1]);
+  const values=[...markup.matchAll(/<input[^>]*type="number"[^>]*value="([^"]*)"/g)].map(m=>m[1]);
   assert.deepEqual(values,['0.75','7.12','17.12','5.12','9.99']);
   assert.equal(calls,0);assert.equal(JSON.stringify(bed),before);
 });
@@ -104,14 +103,12 @@ test('Shift snapping preserves absolute direction across zoom and viewport sizes
   }
 });
 
-test('Angle readout is upright HTML, compact and bounded near viewport edges',()=>{
-  for(const shift of [true,false]) {
-    const value={x:1279,y:719,angle:shift?45:44.23456789,shift},viewport={width:1280,height:720};
-    const position=tooltipPosition(value,{width:156,height:58},viewport);
-    const markup=renderToStaticMarkup(React.createElement(RotationReadout,{value,viewport}));
-    assert.ok(markup.includes(shift?'45°':'44,23°'));
-    assert.ok(markup.includes(shift?'Shift · 15°-Raster':'Frei · Shift für 15°'));
-    assert.ok(!markup.includes('<svg')&&!markup.includes('transform'));
-    assert.ok(position.x>=10&&position.x+156<=1270&&position.y>=10&&position.y+58<=710);
-  }
+test('Legacy angle suffix is hidden and renaming produces a name-only patch',()=>{
+  const legacy={...bed,name:'Testbeet 06 / 320°',rotation_deg:320};
+  const existing={...project,geometry:{...project.geometry,beds:[legacy]}};
+  const fields={...geometryFields(legacy),name:'Testbeet 06'};
+  assert.equal(projectToMap(existing).beds[0].label,'Testbeet 06');
+  assert.equal(numericDraft(legacy,fields).draft,null);
+  assert.deepEqual(numericDraft(legacy,{...fields,name:'  Tomaten Nord  '}).draft.changes,{name:'Tomaten Nord'});
+  assert.match(numericDraft(legacy,{...fields,name:' '}).error,/Beetnamen/);
 });

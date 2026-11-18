@@ -1,4 +1,5 @@
 import {useLayoutEffect,useRef,useState} from 'react';
+import {bedDisplayName} from './projectView';
 import type {SpatialBed} from './projectView';
 import type {Hover} from './BedTooltip';
 import {tooltipPosition} from './interactions';
@@ -14,8 +15,8 @@ export function ProjectTooltip({bed,hover,viewport,season,seasonMessage}:{bed:Sp
   },[]);
   const p=tooltipPosition(hover,size,viewport);
   return <div ref={ref} id="bed-tooltip" role="tooltip" className="bed-tooltip" style={{left:p.x,top:p.y}}>
-    <div className="tooltip-heading"><strong>{bed.name||'Beet'}</strong><span>{formatGeometry(bed.width_m*bed.length_m)} m²</span></div>
-    <p className="muted">{formatGeometry(bed.width_m)} × {formatGeometry(bed.length_m)} m · {formatGeometry(bed.rotation_deg)}°</p>
+    <div className="tooltip-heading"><strong>{bedDisplayName(bed.name)||'Beet'}</strong><span>{formatGeometry(bed.width_m*bed.length_m)} m²</span></div>
+    <p className="muted">{formatGeometry(bed.width_m)} × {formatGeometry(bed.length_m)} m</p>
     {season||seasonMessage?<ProjectWeekSummary frame={season} bedId={bed.object_id} message={seasonMessage} compact/>:<small>Keine Saisonplanung hinterlegt</small>}<p className="tooltip-id">{bed.object_id}</p>
   </div>;
 }

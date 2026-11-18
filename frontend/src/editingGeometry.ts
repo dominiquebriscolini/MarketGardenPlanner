@@ -1,7 +1,7 @@
 import type {Point,View} from './interactions';
 import type {SavedProject,SpatialBed} from './projectView';
 
-export type GeometryChanges=Partial<Pick<SpatialBed,'center'|'width_m'|'length_m'|'rotation_deg'>>;
+export type GeometryChanges=Partial<Pick<SpatialBed,'center'|'width_m'|'length_m'|'rotation_deg'|'name'>>;
 export type ResizeAnchor='center';
 export type BedDraft={kind:'create'|'move'|'rotate'|'delete';bed:SpatialBed}|{kind:'edit';bed:SpatialBed;changes:GeometryChanges;anchor:ResizeAnchor};
 export type Tool='select'|'draw';
@@ -15,11 +15,14 @@ export function screenToWorld(pointer:Point,bounds:ScreenBounds,view:View):Point
 }
 
 /** Two axis endpoints plus an explicit width determine a freely rotated rectangle. */
-export function drawnBed(start:Point,end:Point,width:number,seed:SpatialBed):SpatialBed|null {
+export function drawnBed(start:Point,end:Point,width:number,seed:SpatialBed,shift=false):SpatialBed|null {
   const dx=end.x-start.x,dy=end.y-start.y,length=Math.hypot(dx,dy);
   if(!Number.isFinite(width)||width<=0||!Number.isFinite(length)||length===0)return null;
-  const angle=(Math.atan2(dy,dx)*180/Math.PI-90+360)%360;
-  return {...seed,center:{x:(start.x+end.x)/2,y:(start.y+end.y)/2},width_m:width,length_m:length,rotation_deg:angle};
+  const freeAngle=(Math.atan2(dy,dx)*180/Math.PI-90+360)%360;
+  const angle=snapRotation(freeAngle,shift);
+  const axis=(angle+90)*Math.PI/180;
+  const target=shift?{x:start.x+Math.cos(axis)*length,y:start.y+Math.sin(axis)*length}:end;
+  return {...seed,center:{x:(start.x+target.x)/2,y:(start.y+target.y)/2},width_m:width,length_m:length,rotation_deg:angle};
 }
 
 export function translatedBed(bed:SpatialBed,start:Point,end:Point):SpatialBed {
@@ -64,9 +67,9 @@ export function candidateGeometry(project:SavedProject,draft:BedDraft):SavedProj
   const before=project.geometry.beds.find(b=>b.object_id===draft.bed.object_id);
   if(!before||before.geometry_locked)throw Error('Das Beet ist nicht vorhanden oder gesperrt.');
   if(draft.kind==='delete')return {...project.geometry,beds:project.geometry.beds.filter(b=>b!==before)};
-  // Only explicit geometric changes can enter a candidate; never copy metadata or IDs.
+  // Only explicit editable fields can enter a candidate.
   const changes=draftChanges(draft);
   const dimensions=resizedBed(before,changes.width_m??before.width_m,changes.length_m??before.length_m,draft.kind==='edit'?draft.anchor:'center');
-  const changed={...dimensions,center:changes.center??before.center,rotation_deg:changes.rotation_deg??before.rotation_deg};
+  const changed={...dimensions,name:changes.name??before.name,center:changes.center??before.center,rotation_deg:changes.rotation_deg??before.rotation_deg};
   return {...project.geometry,beds:project.geometry.beds.map(b=>b===before?changed:b)};
 }

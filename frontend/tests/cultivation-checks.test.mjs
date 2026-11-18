@@ -66,12 +66,18 @@ test('Review is compact and expandable, explicitly permits mixed cultivation, an
   assert.ok(preview.includes('Entwurf')&&preview.includes(' open=""'));
   assert.equal(renderToStaticMarkup(React.createElement(CultivationReview,{...props,analysis:{...analysis,relations:[]}})),'');
 });
-test('Compact project rows retain date labels, small actions and collapsed geometry/identity without changing geometry',()=>{
+test('Plan modes preserve culture dates and expose editing only in culture planning',()=>{
   const p={...fixture,cultivation_plan:{schema_version:1,revision_id:id(22),entries:[a,b]}};
   const before=JSON.stringify(p);
-  const markup=renderToStaticMarkup(React.createElement(ProjectDetails,{project:p,selected:bed.object_id,onClose:()=>{},onSaved:()=>{},onCultivationBusy:()=>{}}));
+  const props={project:p,selected:bed.object_id,onClose:()=>{},onSaved:()=>{},onCultivationBusy:()=>{}};
+  const markup=renderToStaticMarkup(React.createElement(ProjectDetails,props));
+  const cultures=renderToStaticMarkup(React.createElement(ProjectDetails,{...props,cultivationMode:true}));
+  assert.ok(!markup.includes('Anbauvorgang bearbeiten')&&!markup.includes('Anbauvorgang entfernen'));
+  assert.ok(cultures.includes('Anbauvorgang bearbeiten')&&cultures.includes('Anbauvorgang entfernen'));
+  assert.ok(!cultures.includes('geometry-section')&&!cultures.includes('identity-section'));
+  assert.ok(cultures.includes('01.03.2027')&&cultures.includes('30.04.2027'));
   assert.ok(markup.includes('cultivation-row-head')&&markup.includes('cultivation-dates'));
-  for(const label of ['Direktsaat','Pflanzung','Ernte geplant','01.03.2027','30.04.2027','10.04.2027','10.05.2027','Bearbeiten','Entfernen'])assert.ok(markup.includes(label));
+  for(const label of ['Direktsaat','Pflanzung','Ernte geplant','01.03.2027','30.04.2027','10.04.2027','10.05.2027'])assert.ok(markup.includes(label));
   assert.ok(markup.includes('<details class="geometry-section">')&&markup.includes('<details class="identity-section">'));
   assert.ok(markup.includes('title="radishes-spring"'));
   assert.equal(JSON.stringify(p),before);

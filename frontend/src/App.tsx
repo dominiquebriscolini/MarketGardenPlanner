@@ -10,12 +10,30 @@ import {getJSON,listProjects,loadProject} from './projectClient';
 import {useBedEditor} from './useBedEditor';
 import {EditorControls} from './EditorControls';
 import {DeleteBedDialog} from './DeleteBedDialog';
+import {CreateProjectDialog} from './CreateProjectDialog';
 import {deleteShortcut} from './geometryForm';
 import {useProjectSeason} from './useProjectSeason';
 import {ProjectSeasonBar} from './ProjectSeasonBar';
 import {SeasonSlider} from './SeasonSlider';
+import {IsometricGarden} from './IsometricGarden';
+
+function initialDarkMode() {
+  try {
+    const theme=localStorage.getItem('planner-theme');
+    if(theme==='dark'||theme==='light')return theme==='dark';
+  } catch { /* Storage can be unavailable in private browser contexts. */ }
+  return window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
 
 export function App() {
+  const [isometric,setIsometric]=useState(false);
+  const [creatingProject,setCreatingProject]=useState(false);
+  const [dark,setDark]=useState(initialDarkMode);
+  useEffect(()=>{
+    document.documentElement.dataset.theme=dark?'dark':'light';
+    try { localStorage.setItem('planner-theme',dark?'dark':'light'); }
+    catch { /* The in-session theme still works. */ }
+  },[dark]);
   const [data,setData]=useState<Demo|null>(null),[demoError,setDemoError]=useState('');
   const [mode,setMode]=useState('demo'),[project,setProject]=useState<SavedProject|null>(null);
   const [catalog,setCatalog]=useState<ProjectSummary[]>([]),[listError,setListError]=useState(''),[listLoading,setListLoading]=useState(true);
@@ -48,7 +66,7 @@ export function App() {
     return ()=>controller.abort();
   },[mode,refresh]);
   useEffect(()=>{
-    const onKey=(e:KeyboardEvent)=>{if(e.key==='Escape'&&!e.defaultPrevented&&!cultivationWorking.current){setSelected(null);setForecastOpen(false);}};
+    const onKey=(e:KeyboardEvent)=>{if(e.key==='Escape'&&!document.querySelector('dialog[open]')&&!e.defaultPrevented&&!cultivationWorking.current){setSelected(null);setForecastOpen(false);}};
     let narrow=window.innerWidth<=600;
     const onResize=()=>{const next=window.innerWidth<=600;if(next!==narrow){setForecastPosition(null);narrow=next;}};
     window.addEventListener('keydown',onKey);window.addEventListener('resize',onResize);
@@ -69,12 +87,13 @@ export function App() {
   useEffect(()=>{
     const remove=(event:KeyboardEvent)=>{
       const active=document.activeElement;
+      if(document.querySelector('dialog[open]'))return;
       const input=active instanceof HTMLElement&&(active.isContentEditable||!!active.closest('input,textarea,select,[role="textbox"]'));
       const bed=activeProject?.geometry.beds.find(b=>b.object_id===selected);
-      if(bed&&!editor.busy&&!editor.deleteTarget&&deleteShortcut(event,input)){event.preventDefault();editor.requestDelete(bed);}
+      if(!isometric&&bed&&!editor.busy&&!editor.deleteTarget&&deleteShortcut(event,input)){event.preventDefault();editor.requestDelete(bed);}
     };
     window.addEventListener('keydown',remove);return ()=>window.removeEventListener('keydown',remove);
-  },[activeProject,selected,editor]);
+  },[activeProject,selected,editor,isometric]);
   const geometry=useMemo(()=>demoMode?(data?demoToMap(data):null):(activeProject?projectToMap(activeProject):null),[demoMode,data,activeProject?.geometry]);
   const day=data?.days[index];
   const occupied=day?Object.values(day.beds).filter(b=>b.stage!=='free').length:0;
@@ -84,12 +103,25 @@ export function App() {
   const title=demoMode?'Versuchsfeld Nord':activeProject?.name||'Gespeichertes Projekt';
   const synthetic=activeProject&&/syntheti/i.test([activeProject.name,activeProject.geometry.parcel.source_reference,...activeProject.geometry.beds.map(b=>b.source_reference)].join(' '));
   const mapError=demoMode?demoError:projectError;
-  return <main className={`map-app ${forecastOpen&&demoMode?'forecast-open':''} ${demoMode?'demo-mode':'project-mode'}`}>
-    {geometry&&<Plot key={mode} geometry={geometry} data={demoMode?data??undefined:undefined} index={index} selected={selected} onSelect={selectBed} editor={activeProject?editor:undefined} season={projectSeason.frame} seasonMessage={seasonMessage}/>}
+  const mapProps={data:demoMode?data??undefined:undefined,index,selected,onSelect:selectBed,season:projectSeason.frame,seasonMessage};
+  const switchView=()=>{
+    if(editor.busy||editor.draft||editor.deleteTarget)return;
+    if(!isometric)editor.setTool('select');
+    setIsometric(value=>!value);
+  };
+  return <main className={`map-app ${forecastOpen&&demoMode?'forecast-open':''} ${demoMode?'demo-mode':'project-mode'} ${isometric?'iso-mode':''}`}>
+    {geometry&&<div className="plan-layer" inert={isometric}><Plot key={mode} geometry={geometry} {...mapProps}
+      editor={activeProject?editor:undefined}/></div>}
+    {geometry&&isometric&&<IsometricGarden geometry={geometry} {...mapProps} dark={dark}/>}
     {!geometry&&<div className="map-message floating" role={mapError?'alert':'status'}>
       <h2>{mapError?'Ansicht konnte nicht geladen werden':projectLoading?'Projekt wird geladen …':'Daten werden geladen …'}</h2>
       <p>{mapError||'Die Karte erscheint nach dem Laden.'}</p>{mapError&&<button onClick={reload}>Erneut versuchen</button>}
     </div>}
+    {creatingProject&&<CreateProjectDialog onClose={()=>setCreatingProject(false)} onCreated={saved=>{
+      const {geometry:_,cultivation_plan:__,...summary}=saved;
+      setCatalog(items=>[...items.filter(item=>item.project_id!==saved.project_id),summary]);
+      changeMode(saved.project_id);setIsometric(false);setCreatingProject(false);
+    }}/>}
     <div className="top-left-stack">
       <header className="project-title floating"><span className="eyebrow">MARKET GARDEN / {demoMode?'SAISONATLAS':'PROJEKTANSICHT'}</span>
         <h1 title={title}>{title}{demoMode&&<span>2026</span>}</h1>
@@ -102,6 +134,18 @@ export function App() {
             {catalog.map(p=><option key={p.project_id} value={p.project_id}>{p.name} · {p.project_id.slice(0,8)}</option>)}
           </select><button aria-label="Projektliste neu laden" disabled={editor.busy} onClick={reload}>↻</button>
         </div>
+        <button type="button" className="new-project-button" disabled={listLoading||editor.busy||!!editor.draft||!!editor.deleteTarget}
+          onClick={()=>setCreatingProject(true)}>+ Neues Projekt</button>
+        <div className="view-switches">
+          <button type="button" role="switch" aria-label="Kulturplanung" aria-checked={isometric}
+            disabled={!geometry||editor.busy||!!editor.draft||!!editor.deleteTarget} onClick={switchView}
+            title="Zwischen Beetplanung und Kulturplanung wechseln">
+            <span>Beetplanung</span><i aria-hidden="true"/><span>Kulturplanung</span>
+          </button>
+          <button type="button" role="switch" aria-label="Dunkelmodus" aria-checked={dark} onClick={()=>setDark(value=>!value)}>
+            <span>Hell</span><i aria-hidden="true"/><span>Dunkel</span>
+          </button>
+        </div>
         {listLoading&&<p className="catalog-message" role="status">Projektliste wird geladen …</p>}
         {!listLoading&&listError&&<p className="catalog-message error" role="alert">{listError}</p>}
         {!listLoading&&!listError&&catalog.length===0&&<p className="catalog-message" role="status">Noch keine Projekte gespeichert. Demo ist verfügbar.</p>}
@@ -109,14 +153,19 @@ export function App() {
       <div className="map-secondary"><div className="legend floating">
         <button aria-expanded={legendOpen} aria-controls="legend-items" onClick={()=>setLegendOpen(v=>!v)}><span className="legend-icon" aria-hidden="true">◫</span> Legende <span>{legendOpen?'−':'+'}</span></button>
         {legendOpen&&<div id="legend-items">{demoMode?Object.entries(stages).map(([key,label])=><span key={key}><i className={key}/>{label}</span>):<>
-          <span><i className="planned-week"/>Geplante Belegung</span><span><i className="overlap-week"/>Zeitliche Überlagerung</span><span><i className="uncertain-week"/>Ende offen / unklar</span>
-          <span><i className="unplanned"/>Ohne aktive Planungsabschnitte</span><span><i className="hole"/>Grundstücksaussparung</span></>}
+          <span><i className="planned-week"/>Geplante Belegung</span>
+          <span><i className="overlap-week"/>Zeitliche Überlagerung</span>
+          <span><i className="uncertain-week"/>Geplantes Erntedatum fehlt</span>
+          <span><i className="inactive-week"/>In dieser Woche laut Plan unbelegt</span>
+          <span><i className="unplanned-week"/>Noch keine Kultur geplant</span>
+          <span><i className="hole"/>Grundstücksaussparung</span></>}
           <small>{demoMode?'Schematische Planphasen':'Wochenplanung · keine Wachstumssimulation'}</small></div>}
       </div><button className="floating forecast-toggle" aria-expanded={demoMode&&forecastOpen} disabled={!demoMode||!data} title={demoMode?'':'Keine Scheduler-Ergebnisse für dieses Projekt'} onClick={()=>setForecastOpen(v=>!v)}>Ernteprognose ↗</button></div>
-      {activeProject&&<EditorControls editor={editor}/>}
+      {!isometric&&activeProject&&<EditorControls editor={editor}/>}
+      {isometric&&<p className="iso-note floating">ASCII-Pflanzen · schematisches Wachstum</p>}
     </div>
-    {demoMode&&data&&selected&&<Details data={data} index={index} selected={selected} onClose={()=>setSelected(null)}/>}
-    {!demoMode&&activeProject&&selected&&<ProjectDetails project={activeProject} selected={selected} onClose={()=>selectBed(null)} editor={editor} cultivationBusy={cultivationBusy} onCultivationBusy={onCultivationBusy} onSaved={onSaved} season={projectSeason.frame} seasonMessage={seasonMessage}/>}
+    {demoMode&&data&&selected&&<Details data={data} index={index} selected={selected} cultivationMode={isometric} onClose={()=>setSelected(null)}/>}
+    {!demoMode&&activeProject&&selected&&<ProjectDetails project={activeProject} selected={selected} onClose={()=>selectBed(null)} editor={editor} cultivationMode={isometric} cultivationBusy={cultivationBusy} onCultivationBusy={onCultivationBusy} onSaved={onSaved} season={projectSeason.frame} seasonMessage={seasonMessage}/>}
     {activeProject&&editor.deleteTarget&&<DeleteBedDialog editor={editor}/>}
     {demoMode&&data&&day&&forecastOpen&&<ForecastWindow data={data} day={day.date} position={forecastPosition} onPosition={setForecastPosition} onClose={()=>setForecastOpen(false)}/>}
     {demoMode&&data&&day?<section className="season floating" aria-label="Saisonsteuerung"><div className="season-head">
