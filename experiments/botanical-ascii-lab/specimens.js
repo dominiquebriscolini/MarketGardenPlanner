@@ -80,7 +80,7 @@ function createEggplant() {
   if(i%3!==1) continue;
   const center=point(joint,angle,.05,-.145);
   stem([joint,point(center,angle,0,.068)],.004);
-  berry(center,.081,'fruit');
+  berry(center,.081,'eggplant');
   berry(point(center,angle,0,.062),.032,'green');
  }
  return forms;
@@ -94,5 +94,5 @@ export const SPECIMENS = {
  chard: {name:'Mangold', scientific:['Beta vulgaris','(Cicla-Gruppe)'], create:createChard,
   note:'Eine grundständige Rosette mit langen Blattstielen, breiten Blättern und ausgeprägten Mittelrippen.'},
  eggplant: {name:'Aubergine', scientific:['Solanum','melongena'], create:createEggplant,
-  note:'Breite Einzelblätter und hängende Früchte in den warmen Fruchttönen der Studie.'}
+  note:'Breite Einzelblätter und hängende Früchte in gedämpftem Violett.'}
 };

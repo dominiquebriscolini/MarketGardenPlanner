@@ -214,3 +214,7 @@ Lokale Architekturentscheidungen: siehe [DECISIONS.md](DECISIONS.md).
 - Leistungsprofil ist geräteabhängig; konstante 60 fps wurden nicht nachgewiesen.
 - Keine Freigabe oder technische Anbindung an den Haupteditor, keine produktiven
   Kultur- oder Planungsdaten, keine Änderung an bestehenden Planner-Dateien.
+
+## Einzelpflanzen-Ansicht
+
+[Einzelpflanzenstudie öffnen](http://127.0.0.1:8773/?study=single). Zur Auswahl stehen Tomate, Basilikum, Mangold und Aubergine. Intensity und Kontrast steuern die Pflanzentöne mit neutraler Stellung bei jeweils 100 %. Eine höhere Intensity hellt die Zeichen in Dark auf und dunkelt sie in Light ab. Der Glow bildet entsprechend einen hellen oder dunklen Saum. Die Zeichengröße reicht von 3 bis 16 px und startet bei 5 px in Hybrid. Mit „Bewegung pausieren“ lässt sich die Detailansicht als Standbild betrachten.

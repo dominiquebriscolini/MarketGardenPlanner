@@ -139,3 +139,13 @@
 - Begründung: begrenzter Vergleich der räumlichen Anordnung ohne Darstellungswechsel.
   Leistungsgrenzen wurden gemessen und nicht durch zusätzliche Optimierung bearbeitet.
   [Abschlussbericht und Abnahmekriterien](VIS-001-ETAPPE-1.md).
+
+## EXP-007 — Auswahl und Tonwerte in der Einzelpflanzenstudie
+
+- Datum: 18.11.2026. Grundlage: Nutzerauftrag zur Erweiterung der ursprünglichen Einzelpflanzen-Ansicht.
+- Umfang: Tomate, Basilikum, Mangold und Aubergine im selben Renderer. Helligkeit und Kontrast steuern die Darstellung der Pflanzen. Beide starten bei 100 %.
+- Früherer Versuchsstand vom 18.11.2026: Die Bedienung erlaubte 1 px. Bei genau 1 px nutzt die Sichtbarkeitsprüfung eine Probe je Zelle. Vier dicht liegende Subpunkte werden bei dieser Größe flächengleich zusammengefasst.
+- Die vorhandene Tomate bleibt Standard. Die neuen Formen sind gestaltete Studien in derselben Ansicht. Wind, Schattenberechnung und Perspektive verwenden dieselbe Pipeline. Die Beetansicht behält ihren bisherigen Bedienumfang.
+- Prüfung am 18.11.2026 im Arbeitsstand: 16 Szenentests und 44 Renderer-Prüfungen bestanden. In Chrome alle vier Pflanzen, beide Tonregler, Neutralstellung und 1 px in Dark und Light geprüft. Windregler und Pause funktionieren. Die Tomate benötigte bei 1 px und 1350 × 920 Browserfenster rund 0,7–0,8 Sekunden pro gerendertem Bild. Gemeinsame visuelle Abnahme steht aus.
+- Ergänzung am 18.11.2026 auf Nutzerwunsch. Helligkeit 0–250 %, Kontrast 0–300 %, Glow 0–100 % mit Startwert 25 %. Die weiche zweite Zeichenebene folgt allein den Pflanzenzeichen. Geprüft in Chrome in beiden Themes, einschließlich der Neutralstellung und Glow bei 1 px. 44 Renderer-Prüfungen bestanden.
+- Aktueller Bedienstand vom 18.11.2026: Die Einzelpflanzenansicht bietet 3–16 px und startet bei 5 px im Hybrid-Modus. Die Mindestgröße von 3 px begrenzt den Renderaufwand im interaktiven Betrieb. Die Prüfung bei 1 px dokumentiert den früheren Versuchsstand. Der Helligkeitsregler heißt in der Oberfläche „Intensity“. Die Aubergine verwendet in beiden Themes eine eigene, gedämpft violette Fruchtpalette.

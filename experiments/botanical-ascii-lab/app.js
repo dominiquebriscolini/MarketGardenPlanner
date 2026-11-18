@@ -1,7 +1,7 @@
 import {createTomato} from './model.js?v=light03';
-import {SPECIMENS} from './specimens.js?v=single01';
-import {PlantRenderer} from './renderer.js?v=single01';
-import {readTheme,setTheme} from './themes.js?v=theme04';
+import {SPECIMENS} from './specimens.js?v=single05';
+import {PlantRenderer} from './renderer.js?v=single05';
+import {readTheme,setTheme} from './themes.js?v=single05';
 import {createScene,initialStudyView,VARIANTS} from './scene.js?v=vis001';
 const canvas=document.querySelector('canvas'),renderer=new PlantRenderer(canvas),template=createTomato();
 // Compatibility entry for the original single-plant lab; the normal entry is VIS-001.
@@ -10,7 +10,7 @@ const scenes=new Map();
 const sceneFor=key=>{if(!scenes.has(key))scenes.set(key,createScene(template,key));return scenes.get(key);};
 let model=single?template:sceneFor('A').forms;
 const startView=single?{zoom:1,pan:[0,0]}:initialStudyView(template,canvas.clientWidth,canvas.clientHeight);
-const state={mode:'hybrid',size:5,wind:.55,zoom:startView.zoom,pan:[...startView.pan],grid:false,time:0,theme:readTheme(),variant:single?'single':'A',specimen:'tomato',brightness:1,contrast:1};
+const state={mode:'hybrid',size:5,wind:.55,zoom:startView.zoom,pan:[...startView.pan],grid:false,time:0,theme:readTheme(),variant:single?'single':'A',specimen:'tomato',brightness:1,contrast:1,glow:single?.25:0};
 const cleanURL=new URL(location.href);if(cleanURL.searchParams.has('view')){cleanURL.searchParams.delete('view');history.replaceState(null,'',cleanURL);}
 const $=id=>document.getElementById(id);
 const variantButtons=[...document.querySelectorAll('[data-variant]')];
@@ -22,7 +22,7 @@ $('studyControls').hidden=single;
 if(single){
  $('specimenControls').hidden=false;
  $('toneControls').hidden=false;
- $('size').min='1';
+ $('size').min='3';
  const select=$('specimen');
  const models=new Map([['tomato',template]]);
  for(const [id,specimen] of Object.entries(SPECIMENS)) select.add(new Option(specimen.name,id));
@@ -38,7 +38,7 @@ if(single){
   $('stageTitle').textContent='01 — '+specimen.name.toUpperCase();
   canvas.setAttribute('aria-label','Isometrische Ansicht: '+specimen.name+'; zum Verschieben ziehen, zum Zoomen scrollen');
  };
- for(const id of ['brightness','contrast']) $(id).oninput=e=>{
+ for(const id of ['brightness','contrast','glow']) $(id).oninput=e=>{
   state[id]=Number(e.target.value)/100;
   $(id+'Out').value=e.target.value+' %';
  };
