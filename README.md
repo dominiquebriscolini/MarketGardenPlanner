@@ -60,7 +60,7 @@ Die bisherige reine Demo bleibt über `start-prototype.ps1` auf
 
 ### Schreibgeschützte Saisonvorschau
 
-[Öffentliche Vorschau auf GitHub Pages](https://dominiquebriscolini.github.io/MarketGardenPlanner-Preview/)
+[Öffentliche Vorschau auf GitHub Pages](https://dominiquebriscolini.github.io/MarketGardenPlanner/)
 
 Für den lokalen Vorschau-Build:
 
